@@ -1,0 +1,2201 @@
+<!DOCTYPE html>
+<html lang="en" style="overflow-y: scroll;">
+<head>
+  <meta charset="UTF-8">
+  <title>Newman Summary Report</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.2/styles/default.min.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/v/bs4/dt-1.10.18/datatables.min.css"/>
+
+<style>
+code.renderMarkdown table, code.renderMarkdown th, code.renderMarkdown td {
+    border: 1px solid black;
+    width: max-content;
+    padding: .75rem;
+}
+
+.theme-dark {
+    --background-color: #222;
+    --bg-card-deck: #444444;
+    --text-color: #ccd2d8;
+    --tab-border: solid 1px #444;
+    --success: #3c9372;
+    --failure: #c24a3f;
+    --warning: #d28c23;
+    --info: #4083b6;
+    --badge-outline: #3c9372;
+    --badge-bg: #cdd3db;
+    --badge-text: #ccd2d9;
+    --failure-row: #c24a3f;
+    --warning-row: #d28c23;
+    --card-bg: #444;
+    --card-footer: #4f5758;
+    --form-input: #ececb5;
+    --hov-text: #d2dae5;
+    --h4-text: #ccd1d9;
+}
+
+.theme-light {
+    --tab-border: solid 1px #fff;
+    --text-color: #000000;
+    --success: #42a745;
+    --failure: #dc3544;
+    --warning: #f4c10b;
+    --info: #49a1b8;
+    --badge-outline: #040411;
+    --badge-bg: #f8f9fa;
+    --badge-text: #fff;
+    --failure-row: #f5c6cb;
+    --warning-row: #ffeeba;
+    --card-bg: #f7f7f7;
+    --hov-text: #fff;
+    --h4-text: #ffffff;
+}
+
+body {
+  padding-top:30px;
+  background-color: var(--background-color)!important;
+  color: var(--text-color);
+}
+
+#execution-data {
+  padding: 10px;
+  border: var(--tab-border);
+  border-top: none;
+}
+
+.nav-tabs {
+  padding-top: 10px;
+  height: 105px;
+  overflow-y: auto;
+}
+
+body.theme-dark .card-header {
+    background-color: #444;
+}
+
+body.theme-light .card-header {
+    background-color: #f7f7f7;
+}
+
+.card-footer {
+    padding: .75rem 1.25rem;
+    background-color: var(--card-footer);
+}
+
+.card-deck {
+    background-color: var(--bg-card-deck)!important;
+}
+.form-control {
+    background: var(--form-input);
+}
+
+.custom-tab {
+  padding: 10px 15px;
+  margin-right: 0px;
+  height: 47px;
+  width: 69px;
+  text-align: center;
+  border: var(--tab-border);
+  border-bottom: none;
+  cursor:pointer;
+}
+
+body.theme-dark .text-white {
+    color: #ccd2d9!important;
+}
+h4 {
+    color: var(--h4-text);
+}
+
+body.theme-dark h1 {
+    color: #ccd2da;
+}
+
+body.theme-dark .bg-light>td {
+    background: #4f5858!important;
+}
+
+body.theme-dark .hljs {
+    background: #0a0a0ab0!important;
+    color: #8d8787!important;
+}
+
+.bg-info {
+    background-color: var(--info)!important;
+}
+.bg-success {
+    background-color: var(--success)!important;
+}
+
+.alert-success {
+    background-color: var(--success)!important;
+}
+
+.alert-warning {
+    background-color: var(--warning)!important;
+}
+
+.alert-info {
+    background-color: var(--info)!important;
+}
+
+.bg-warning {
+    background-color: var(--warning)!important;
+}
+
+.badge-warning {
+    color: var(--badge-text)!important;
+    background-color: var(--warning)!important;
+}
+
+.table-warning>td {
+    background-color: var(--warning-row);
+}
+
+.alert-danger {
+    background-color: var(--failure)!important;
+}
+
+body.theme-dark .alert-dark {
+    background-color: #636467!important;
+}
+
+body.theme-dark .text-dark {
+    color: #d1dae4!important;
+}
+
+body.theme-dark .badge-light {
+    color: #212529;
+    background-color: #cdd3db;
+}
+
+body.theme-light .badge-light {
+    color: #212529;
+    background-color: #f8f9fa;
+}
+body.theme-light .bg-danger {
+    background-color: var(--failure)!important;
+}
+
+body.theme-dark .bg-danger {
+    background-color: var(--failure)!important;
+}
+
+.table-danger>td {
+    background-color: var(--failure-row);
+}
+
+body.theme-dark .table .thead-light th {
+    background-color: #4f5858!important;
+    border-color: #dee2e6!important;
+    color: #ccd2d8!important;
+}
+
+.itPassed {
+  background: var(--success);
+  color: white;
+}
+.itFailed {
+  background: var(--failure);
+  color: white;
+}
+
+.resultsInfoPass {
+  color: var(--success);
+  padding-top: 4px;
+}
+
+.resultsInfoFail {
+  color: var(--failure);
+  padding-top: 4px;
+}
+
+.badge-outline-success {
+  color: var(--success);
+  border: 1px solid var(--success);
+  background-color: transparent;
+}
+
+.badge-outline {
+  color: var(--badge-outline);
+  border: 1px solid var(--badge-outline);
+  background-color: transparent;
+}
+
+.btn-outline-success {
+    color: var(--success)!important;
+    border-color: var(--success)!important;
+}
+
+.backToTop:hover {
+  background-color: var(--success);
+  border-color: var(--success);
+  color: var(--hov-text)!important;
+}
+
+.btn-outline-success:hover {
+  background-color: var(--success);
+  border-color: var(--success);
+  color: var(--hov-text)!important;
+}
+
+.btn-outline-secondary {
+  background-color: var(--success)!important;
+  color: var(--hov-text)!important;
+}
+
+body.theme-dark .env-heading {
+    color: #ccd2d9!important;
+}
+
+body, html {
+  height:100%;
+}
+
+.card {
+  overflow:hidden;
+}
+
+body.theme-dark .card-body {
+    background-color: #444;
+}
+
+body.theme-light .card-body {
+    background-color: #f7f7f7;
+}
+
+body.theme-dark .card-body .bg-danger {
+    background-color: var(--failure)!important;
+}
+
+body.theme-light .card-body .bg-danger {
+    background-color: var(--failure)!important;
+}
+
+.card-body .rotate {
+  z-index: 8;
+  float: right;
+  height: 100%;
+}
+
+.card-body .rotate i {
+  color: #14141426;
+  position: absolute;
+  left: 0;
+  left: auto;
+  right: -10px;
+  bottom: 0;
+  display: block;
+  -webkit-transform: rotate(-44deg);
+  -moz-transform: rotate(-44deg);
+  -o-transform: rotate(-44deg);
+  -ms-transform: rotate(-44deg);
+  transform: rotate(-44deg);
+}
+
+.dyn-height {
+  max-height:350px;
+  overflow-y:auto;
+}
+
+.nav-pills .nav-link.active {
+  background-color: transparent!important;
+}
+
+.backToTop {
+  display: none;
+  position: fixed;
+  bottom: 10px;
+  right: 20px;
+  z-index: 99;
+  font-size: 15px;
+  outline: none;
+  cursor: pointer;
+  padding: 15px;
+  border-radius: 4px;
+}
+
+.card-header .fa {
+  transition: .3s transform ease-in-out;
+}
+.card-header .collapsed .fa {
+  transform: rotate(90deg);
+}
+
+.single-line-tabs {
+  padding-top: 10px;
+  height: 60px;
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* The switch - the box around the slider */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 44px;
+  height: 20px;
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* The slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  left: 0px;
+  bottom: 4px;
+  top: 0;
+  bottom: 0;
+  margin: auto 0;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+  box-shadow: 0 0px 15px #2020203d;
+  background: white;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+input:checked + .slider {
+  background-color: #4083b6;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #4083b6;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(24px);
+  -ms-transform: translateX(24px);
+  transform: translateX(24px);
+  background: white;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+table.dataTable td, table.dataTable tr {
+    vertical-align: middle;
+}
+
+body.theme-dark code {
+    color: #ccd2d8!important;
+}
+
+body.theme-light code {
+    color: #000000!important;
+}
+
+.text-wrap {
+    word-wrap: break-word; 
+    min-width: 600px; 
+    max-width: 600px; 
+    white-space: normal;
+}
+
+</style>
+</head>
+<body class="theme-dark">
+<script>
+    function setTheme(themeName) {
+        localStorage.setItem('theme', themeName);
+        document.body.className = themeName;
+    }
+
+    function toggleTheme() {
+        if (localStorage.getItem('theme') === 'theme-light') {
+            setTheme('theme-dark');
+        } else {
+            setTheme('theme-light');
+        }
+    }
+</script>
+  <div class="container">
+        <div class="container">
+            <label>Light</label>
+            <label id="switch" class="switch">
+                <input type="checkbox" onchange="toggleTheme()" id="slider">
+                <span class="slider round"></span>
+            </label>
+            <label>Dark</label>
+        </div>
+        <div class="card">
+        <div class="card-header">
+            <ul class="nav nav-pills mb-3 nav-justified" id="pills-tab" role="tablist">
+            <li class="nav-item bg-info active" data-toggle="tooltip" title="Click to view the Summary">
+                <a class="nav-link text-white" id="pills-summary-tab" data-toggle="pill" href="#pills-summary" role="tab" aria-controls="pills-summary" aria-selected="true">Summary</a>
+            </li>
+            <li class="nav-item bg-success" data-toggle="tooltip" title="Click to view the Requests">
+                <a class="nav-link text-white" id="pills-requests-tab" data-toggle="pill" href="#pills-requests" role="tab" aria-controls="pills-requests" aria-selected="false">Total Requests <span class="badge badge-light">4</span></a>
+            </li>
+            <li class="nav-item bg-danger" data-toggle="tooltip" title="Click to view the Failed Tests">
+                <a class="nav-link text-white" id="pills-failed-tab" data-toggle="pill" href="#pills-failed" role="tab" aria-controls="pills-failed" aria-selected="false">Failed Tests <span class="badge badge-light">0</span></a>
+            </li>
+            <li class="nav-item bg-warning" data-toggle="tooltip" title="Click to view the Skipped Tests">
+                <a class="nav-link text-white" id="pills-skipped-tab" data-toggle="pill" href="#pills-skipped" role="tab" aria-controls="pills-skipped" aria-selected="false">Skipped Tests <span class="badge badge-light">0</span></a>
+            </li>
+            </ul>
+        <div class="tab-content" id="pills-tabContent">
+            <div class="tab-pane fade show active" id="pills-summary" role="tabcard" aria-labelledby="pills-summary-tab">
+<div class="row">
+  <div class="col-md-9 col-lg-12 main">
+   <h1 class="display-2 text-center">Newman Run Dashboard</h1>
+   <h5 class="text-center">Saturday, 26 August 2023 15:03:42</h5>
+   <div class="row">
+    <div class="col-lg-3 col-md-6">
+     <div class="card text-white card-success">
+      <div class="card-body bg-success">
+       <div class="rotate">
+        <i class="fa fa-retweet fa-5x"></i>
+       </div>
+       <h6 class="text-uppercase">Total Iterations</h6>
+       <h1 class="display-1">1</h1>
+      </div>
+     </div>
+    </div>
+    <div class="col-lg-3 col-md-6">
+     <div class="card text-white card-danger">
+      <div class="card-body bg-success">
+       <div class="rotate">
+        <i class="fa fa-list fa-4x"></i>
+       </div>
+       <h6 class="text-uppercase">Total Assertions</h6>
+       <h1 class="display-1">5</h1>
+      </div>
+     </div>
+    </div>
+    <div class="col-lg-3 col-md-6">
+     <div class="card text-white card-info">
+      <div class="card-body bg-success">
+       <div class="rotate">
+        <i class="fa fa-plus-circle fa-5x"></i>
+       </div>
+       <h6 class="text-uppercase">Total Failed Tests</h6>
+       <h1 class="display-1">0</h1>
+      </div>
+     </div>
+    </div>
+    <div class="col-lg-3 col-md-6">
+     <div class="card text-white card-warning">
+      <div class="card-body bg-success">
+       <div class="rotate">
+        <i class="fa fa-share fa-5x"></i>
+       </div>
+       <h6 class="text-uppercase">Total Skipped Tests</h6>
+       <h1 class="display-1">0</h1>
+      </div>
+     </div>
+    </div>
+   </div>
+   <hr>
+    <div class="row">
+    <div class="col">
+        <div class="row">
+        <div class="col-sm-12 mb-3">
+            <div class="card border-info">
+                <div class="card-body">
+                <h5 class="card-title text-uppercase text-white text-center bg-info">File Information</h5>
+                <span><i class="fas fa-file-code"></i></span><strong> Collection:</strong> OMDB API<br>
+                
+                
+                </div>
+            </div>
+        </div>
+        </div>
+        <div class="row">
+        <div class="col-sm-12 mb-3">
+            <div class="card border-info">
+                <div class="card-body">
+                <h5 class="card-title text-uppercase text-white text-center bg-info">Timings and Data</h5>
+                <span><i class="fas fa-stopwatch"></i></span><strong> Total run duration:</strong> 4.9s<br>
+                <span><i class="fas fa-database"></i></span><strong> Total data received:</strong> 91.88KB<br>
+                <span><i class="fas fa-stopwatch"></i></span><strong> Average response time:</strong> 1219ms<br>
+                </div>
+            </div>
+        </div>
+        </div>
+        <div class="row">
+        <div class="col-sm-12 mb-3">
+            <div class="table-responsive">
+            <table class="table table-striped table-bordered">
+                <thead class="thead-inverse">
+                    <tr class="text-center">
+                        <th class="text-uppercase">Summary Item</th>
+                        <th class="text-uppercase">Total</th>
+                        <th class="text-uppercase">Failed</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Requests</td>
+                        <td class="text-center">4</td>
+                        <td class="text-center">0</td>
+                    </tr>
+                    <tr>
+                        <td>Prerequest Scripts</td>
+                        <td class="text-center">0</td>
+                        <td class="text-center">0</td>
+                    </tr>
+                    <tr>
+                        <td>Test Scripts</td>
+                        <td class="text-center">1</td>
+                        <td class="text-center">0</td>
+                    </tr>
+                    <tr class="">
+                        <td>Assertions</td>
+                        <td class="text-center">5</td>
+                        <td class="text-center">0</td>
+                    </tr>
+                    <tr class="">
+                        <td>Skipped Tests</td>
+                        <td class="text-center">0</td>
+                        <td class="text-center">-</td>
+                    </tr>
+                </tbody>
+            </table>
+            </div>
+        </div>
+        </div>
+    <hr>
+   </div>
+   </div>
+  </div>
+ </div>
+        </div>
+            <div class="tab-pane fade" id="pills-failed" role="tabcard" aria-labelledby="pills-failed-tab">
+                <button id="topOfFailuresScreen" class="btn btn-outline-success btn-sm backToTop" onclick="topFunction()">Go To Top</button>
+
+                <div class="alert alert-success text-uppercase text-center">
+                     <br><br><h1 class="text-center">There are no failed tests <span><i class="far fa-thumbs-up"></i></span></h1><br><br>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="pills-skipped" role="tabcard" aria-labelledby="pills-skipped-tab">
+                <button id="topOfSkippedScreen" class="btn btn-outline-success btn-sm backToTop" onclick="topFunction()">Go To Top</button>
+
+                <div class="alert alert-success text-uppercase text-center">
+                    <br><br><h1 class="text-center">There are no skipped tests <span><i class="far fa-thumbs-up"></i></span></h1><br><br>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="pills-requests" role="tabcard" aria-labelledby="pills-requests-tab">
+
+            <button id="topOfRequestsScreen" class="btn btn-outline-success btn-sm backToTop" onclick="topFunction()">Go To Top</button>
+
+            <div class="btn-group float-right" role="group" aria-label="Button Group">
+                <button id="openAll" class="btn btn-outline-success btn-sm float-right" style="text-align: center; width: 140px;">Expand Folders</button>
+                <button id="openAllRequests" class="btn btn-outline-success btn-sm float-right" style="text-align: center; width: 140px;">Expand Requests</button>
+            </div>
+
+    <div class="text-uppercase" id="execution-menu">
+        <h5>1 Iteration available to view</h5>
+        
+        <nav class="table-responsive">
+        <ul class="nav single-line-tabs" id="iterationList">
+        </ul>
+        </nav>
+    </div>
+    <h6 class="text-uppercase text-muted" id="iterationSelected" style="padding-top: 10px;"></h6>
+	<div class="tab-content" id="execution-data">
+            <div id="folder-cc96a45c-b7ad-4766-b5d6-668860caadb5" class="card-deck iteration-0">
+            <div class="row iteration-0">
+                <div class="col-sm-12 mb-3 iteration-0">
+                <div class="card iteration-0">
+                    <div class="card-header  bg-success iteration-0">
+                        <a data-toggle="collapse" href="#" data-target="#collapse-cc96a45c-b7ad-4766-b5d6-668860caadb5" aria-expanded="false" aria-controls="collapse" id="requests-cc96a45c-b7ad-4766-b5d6-668860caadb5" class="collapsed text-white z-block">
+                    Iteration: 1 - GuardianOfTheGalaxy <i class="float-lg-right fa fa-chevron-down" style="padding-top: 5px;"></i>
+                </a>
+                    </div>
+                    <div id="collapse-cc96a45c-b7ad-4766-b5d6-668860caadb5" class="collapse" aria-labelledby="requests-cc96a45c-b7ad-4766-b5d6-668860caadb5">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-12 mb-3">
+                                <div class="card-deck">
+                                <div class="card border-info" style="width: 50rem;">
+                                    <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Request Information</h5>
+                                    <span><i class="fas fa-info-circle"></i></span><strong> Request Method:</strong> <span class="badge-outline-success badge badge-success"> GET</span><br>
+                                    <span><i class="fas fa-info-circle"></i></span><strong> Request URL:</strong> <a href="http://www.omdbapi.com/?i&#x3D;tt3896198&amp;apikey&#x3D;357d6210" target="_blank">http://www.omdbapi.com/?i&#x3D;tt3896198&amp;apikey&#x3D;357d6210</a><br>
+                                    </div>
+                                </div>
+                                <div class="card border-info" style="width: 50rem;">
+                                    <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Response Information</h5>
+                                    <span><i class="fas fa-info-circle"></i></span><strong> Response Code:</strong> <span class="float-right badge-outline badge badge-success"> 200 - OK</span><br>
+                                    <span><i class="fas fa-stopwatch"></i></span><strong> Mean time per request:</strong> <span class="float-right badge-outline badge badge-success"> 750ms</span><br>
+                                    <span><i class="fas fa-database"></i></span><strong> Mean size per request:</strong> <span class="float-right badge-outline badge badge-success"> 1.04KB</span><br>
+                                    <hr>
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Test Pass Percentage</h5>
+                                    <div>
+                                        <div class="progress" style="height: 40px;">
+                                            <div class="progress-bar  bg-success" style="width: 100%" role="progressbar">
+                                            <h5 style="padding-top:5px;"><strong>100 %</strong></h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 mb-3">
+                                <div class="card-deck">
+                                <div class="card border-info" style="width: 50rem;">
+                                    <div class="card-body">
+                                        <h5 class="card-title text-uppercase text-white text-center bg-info">Request Headers</h5>
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered">
+                                            <thead class="thead-light text-center"><tr><th>Header Name</th><th>Header Value</th></tr></thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td class="text-nowrap">User-Agent</td>
+                                                        <td class="text-wrap">PostmanRuntime/7.29.0</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Accept</td>
+                                                        <td class="text-wrap">*/*</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Cache-Control</td>
+                                                        <td class="text-wrap">no-cache</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Postman-Token</td>
+                                                        <td class="text-wrap">e43290f9-e985-467c-8db4-4526ad768224</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Host</td>
+                                                        <td class="text-wrap">www.omdbapi.com</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Accept-Encoding</td>
+                                                        <td class="text-wrap">gzip, deflate, br</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Connection</td>
+                                                        <td class="text-wrap">keep-alive</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                        <div class="col-sm-12 mb-3">
+                            <div class="card-deck">
+                            <div class="card border-info" style="width: 50rem;">
+                                <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Response Headers</h5>
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered">
+                                        <thead class="thead-light text-center"><tr><th>Header Name</th><th>Header Value</th></tr></thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td class="text-nowrap">Date</td>
+                                                    <td class="text-wrap">Sat, 26 Aug 2023 05:03:38 GMT</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Content-Type</td>
+                                                    <td class="text-wrap">application/json; charset&#x3D;utf-8</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Transfer-Encoding</td>
+                                                    <td class="text-wrap">chunked</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Connection</td>
+                                                    <td class="text-wrap">keep-alive</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Cache-Control</td>
+                                                    <td class="text-wrap">public, max-age&#x3D;86400</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Expires</td>
+                                                    <td class="text-wrap">Sat, 26 Aug 2023 05:39:57 GMT</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Last-Modified</td>
+                                                    <td class="text-wrap">Sat, 26 Aug 2023 04:39:57 GMT</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Vary</td>
+                                                    <td class="text-wrap">*, Accept-Encoding</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">X-AspNet-Version</td>
+                                                    <td class="text-wrap">4.0.30319</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">X-Powered-By</td>
+                                                    <td class="text-wrap">ASP.NET</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Access-Control-Allow-Origin</td>
+                                                    <td class="text-wrap">*</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">CF-Cache-Status</td>
+                                                    <td class="text-wrap">MISS</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Server</td>
+                                                    <td class="text-wrap">cloudflare</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">CF-RAY</td>
+                                                    <td class="text-wrap">7fc987879db0a3f4-SIN</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Content-Encoding</td>
+                                                    <td class="text-wrap">gzip</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                        <div class="row">
+                        <div class="col-sm-12 mb-3">
+                            <div class="card-deck">
+                            <div class="card border-info" style="width: 50rem;">
+                                <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Response Body</h5>
+                                        <div class="dyn-height">
+                                                <pre><code id="copyText-f2b615aa-2954-4055-b765-3020e4c182c6" class="prettyPrint">{&quot;Title&quot;:&quot;Guardians of the Galaxy Vol. 2&quot;,&quot;Year&quot;:&quot;2017&quot;,&quot;Rated&quot;:&quot;PG-13&quot;,&quot;Released&quot;:&quot;05 May 2017&quot;,&quot;Runtime&quot;:&quot;136 min&quot;,&quot;Genre&quot;:&quot;Action, Adventure, Comedy&quot;,&quot;Director&quot;:&quot;James Gunn&quot;,&quot;Writer&quot;:&quot;James Gunn, Dan Abnett, Andy Lanning&quot;,&quot;Actors&quot;:&quot;Chris Pratt, Zoe Saldana, Dave Bautista&quot;,&quot;Plot&quot;:&quot;The Guardians struggle to keep together as a team while dealing with their personal family issues, notably Star-Lord&#x27;s encounter with his father, the ambitious celestial being Ego.&quot;,&quot;Language&quot;:&quot;English&quot;,&quot;Country&quot;:&quot;United States&quot;,&quot;Awards&quot;:&quot;Nominated for 1 Oscar. 15 wins &amp; 60 nominations total&quot;,&quot;Poster&quot;:&quot;https://m.media-amazon.com/images/M/MV5BNjM0NTc0NzItM2FlYS00YzEwLWE0YmUtNTA2ZWIzODc2OTgxXkEyXkFqcGdeQXVyNTgwNzIyNzg@._V1_SX300.jpg&quot;,&quot;Ratings&quot;:[{&quot;Source&quot;:&quot;Internet Movie Database&quot;,&quot;Value&quot;:&quot;7.6/10&quot;},{&quot;Source&quot;:&quot;Rotten Tomatoes&quot;,&quot;Value&quot;:&quot;85%&quot;},{&quot;Source&quot;:&quot;Metacritic&quot;,&quot;Value&quot;:&quot;67/100&quot;}],&quot;Metascore&quot;:&quot;67&quot;,&quot;imdbRating&quot;:&quot;7.6&quot;,&quot;imdbVotes&quot;:&quot;732,300&quot;,&quot;imdbID&quot;:&quot;tt3896198&quot;,&quot;Type&quot;:&quot;movie&quot;,&quot;DVD&quot;:&quot;10 Jul 2017&quot;,&quot;BoxOffice&quot;:&quot;$389,813,101&quot;,&quot;Production&quot;:&quot;N/A&quot;,&quot;Website&quot;:&quot;N/A&quot;,&quot;Response&quot;:&quot;True&quot;}</code></pre>
+                                        </div>
+                                        <div class="card-footer">
+                                            <button class="btn btn-outline-secondary btn-sm copyButton" type="button" data-clipboard-action="copy" data-clipboard-target="#copyText-f2b615aa-2954-4055-b765-3020e4c182c6">Copy to Clipboard</button>
+                                        </div>
+                                </div>
+                            </div>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="card border-info">
+                                <div class="card-body">
+                                <h5 class="card-title text-uppercase text-white text-center bg-info">Test Information</h5>
+                                    <div class="table-responsive text-nowrap">
+                                        <table class="datatable table table-hover">
+                                        <thead><tr class="text-center"><th>Name</th><th>Passed</th><th>Failed</th><th>Skipped</th></tr></thead>
+                                            <tbody>
+                                                <tr >
+                                                    <td >Response status code is 200</td>
+                                                    <td class="text-center bg-success">1</td>
+                                                    <td class="text-center ">0</td>
+                                                    <td class="text-center ">0</td>
+                                                </tr>
+                                                <tr >
+                                                    <td >The Ratings array should exist</td>
+                                                    <td class="text-center bg-success">1</td>
+                                                    <td class="text-center ">0</td>
+                                                    <td class="text-center ">0</td>
+                                                </tr>
+                                                <tr >
+                                                    <td >Title field is a non-empty string</td>
+                                                    <td class="text-center bg-success">1</td>
+                                                    <td class="text-center ">0</td>
+                                                    <td class="text-center ">0</td>
+                                                </tr>
+                                                <tr >
+                                                    <td >The Year field should be a valid year format</td>
+                                                    <td class="text-center bg-success">1</td>
+                                                    <td class="text-center ">0</td>
+                                                    <td class="text-center ">0</td>
+                                                </tr>
+                                                <tr >
+                                                    <td >The Runtime field is in a valid format</td>
+                                                    <td class="text-center bg-success">1</td>
+                                                    <td class="text-center ">0</td>
+                                                    <td class="text-center ">0</td>
+                                                </tr>
+                                            </tbody>
+                                            <tfoot>
+                                                <tr class="bg-light">
+                                                    <td><strong>Total</strong></td>
+                                                    <td class="text-center">5</td>
+                                                    <td class="text-center">0</td>
+                                                    <td class="text-center">0</td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                    <div class="row d-none">
+                                    <div class="col-sm-12 mb-3">
+                                        <div class="card-deck">
+                                        <div class="card border-danger" style="width: 50rem;">
+                                            <div class="card-body">
+                                                <h5 class="card-title text-uppercase text-white text-center bg-danger">Test Failure</h5>
+                                                <div class="table-responsive">
+                                                    <table class="table table-hover">
+                                                    <thead><tr class="text-nowrap"><th>Test Name</th><th>Assertion Error</th></tr></thead>
+                                                        <tbody>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+            </div>
+            <div id="folder-01e5998a-c8c8-4fb5-9363-e93ee14f7840" class="card-deck iteration-0">
+            <div class="row iteration-0">
+                <div class="col-sm-12 mb-3 iteration-0">
+                <div class="card iteration-0">
+                    <div class="card-header  bg-success iteration-0">
+                        <a data-toggle="collapse" href="#" data-target="#collapse-01e5998a-c8c8-4fb5-9363-e93ee14f7840" aria-expanded="false" aria-controls="collapse" id="requests-01e5998a-c8c8-4fb5-9363-e93ee14f7840" class="collapsed text-white z-block">
+                    Iteration: 1 - GuardianOfTheGalaxyPoster <i class="float-lg-right fa fa-chevron-down" style="padding-top: 5px;"></i>
+                </a>
+                    </div>
+                    <div id="collapse-01e5998a-c8c8-4fb5-9363-e93ee14f7840" class="collapse" aria-labelledby="requests-01e5998a-c8c8-4fb5-9363-e93ee14f7840">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-12 mb-3">
+                                <div class="card-deck">
+                                <div class="card border-info" style="width: 50rem;">
+                                    <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Request Information</h5>
+                                    <span><i class="fas fa-info-circle"></i></span><strong> Request Method:</strong> <span class="badge-outline-success badge badge-success"> GET</span><br>
+                                    <span><i class="fas fa-info-circle"></i></span><strong> Request URL:</strong> <a href="http://img.omdbapi.com/?i&#x3D;tt3896198&amp;apikey&#x3D;357d6210" target="_blank">http://img.omdbapi.com/?i&#x3D;tt3896198&amp;apikey&#x3D;357d6210</a><br>
+                                    </div>
+                                </div>
+                                <div class="card border-info" style="width: 50rem;">
+                                    <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Response Information</h5>
+                                    <span><i class="fas fa-info-circle"></i></span><strong> Response Code:</strong> <span class="float-right badge-outline badge badge-success"> 200 - OK</span><br>
+                                    <span><i class="fas fa-stopwatch"></i></span><strong> Mean time per request:</strong> <span class="float-right badge-outline badge badge-success"> 1698ms</span><br>
+                                    <span><i class="fas fa-database"></i></span><strong> Mean size per request:</strong> <span class="float-right badge-outline badge badge-success"> 41.74KB</span><br>
+                                    <hr>
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Test Pass Percentage</h5>
+                                    <div>
+                                        <div class="progress" style="height: 40px;">
+                                            <div class="progress-bar bg-success" style="width: 100%" role="progressbar">
+                                            <h5 class="text-uppercase text-white text-center" style="padding-top:5px;"><strong>No Tests for this request</strong></h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 mb-3">
+                                <div class="card-deck">
+                                <div class="card border-info" style="width: 50rem;">
+                                    <div class="card-body">
+                                        <h5 class="card-title text-uppercase text-white text-center bg-info">Request Headers</h5>
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered">
+                                            <thead class="thead-light text-center"><tr><th>Header Name</th><th>Header Value</th></tr></thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td class="text-nowrap">User-Agent</td>
+                                                        <td class="text-wrap">PostmanRuntime/7.29.0</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Accept</td>
+                                                        <td class="text-wrap">*/*</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Cache-Control</td>
+                                                        <td class="text-wrap">no-cache</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Postman-Token</td>
+                                                        <td class="text-wrap">0fe790c8-909f-4598-89b8-bdee818bc15b</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Host</td>
+                                                        <td class="text-wrap">img.omdbapi.com</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Accept-Encoding</td>
+                                                        <td class="text-wrap">gzip, deflate, br</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Connection</td>
+                                                        <td class="text-wrap">keep-alive</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                        <div class="col-sm-12 mb-3">
+                            <div class="card-deck">
+                            <div class="card border-info" style="width: 50rem;">
+                                <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Response Headers</h5>
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered">
+                                        <thead class="thead-light text-center"><tr><th>Header Name</th><th>Header Value</th></tr></thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td class="text-nowrap">Date</td>
+                                                    <td class="text-wrap">Sat, 26 Aug 2023 05:03:39 GMT</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Content-Type</td>
+                                                    <td class="text-wrap">image/jpeg</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Content-Length</td>
+                                                    <td class="text-wrap">42745</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Connection</td>
+                                                    <td class="text-wrap">keep-alive</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Cache-Control</td>
+                                                    <td class="text-wrap">public, max-age&#x3D;86400</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Expires</td>
+                                                    <td class="text-wrap">Sat, 26 Aug 2023 06:03:39 GMT</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">X-AspNet-Version</td>
+                                                    <td class="text-wrap">4.0.30319</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">X-Powered-By</td>
+                                                    <td class="text-wrap">ASP.NET</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Access-Control-Allow-Origin</td>
+                                                    <td class="text-wrap">*</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">CF-Cache-Status</td>
+                                                    <td class="text-wrap">MISS</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Last-Modified</td>
+                                                    <td class="text-wrap">Sat, 26 Aug 2023 05:03:39 GMT</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Accept-Ranges</td>
+                                                    <td class="text-wrap">bytes</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Vary</td>
+                                                    <td class="text-wrap">Accept-Encoding</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Server</td>
+                                                    <td class="text-wrap">cloudflare</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">CF-RAY</td>
+                                                    <td class="text-wrap">7fc9878c9ada49de-SIN</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                        <div class="row">
+                        <div class="col-sm-12 mb-3">
+                            <div class="card-deck">
+                            <div class="card border-info" style="width: 50rem;">
+                                <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Response Body</h5>
+                                        <div class="dyn-height">
+                                                <pre><code id="copyText-6fde53d5-d14b-4dc0-ad31-29e74be17c12" class="prettyPrint">���� JFIF  &#x60; &#x60;  �� C 		
+        
+        
+        
+        	�� C�� , �&quot; ��           	
+        �� �   } !1AQa&quot;q2���#B��R��$3br�	
+        %&amp;&#x27;()*456789:CDEFGHIJSTUVWXYZcdefghijstuvwxyz���������������������������������������������������������������������������        	
+        �� �  w !1AQaq&quot;2�B����	#3R�br�
+        $4�%�&amp;&#x27;()*56789:CDEFGHIJSTUVWXYZcdefghijstuvwxyz��������������������������������������������������������������������������   ? �N�9�Ye	���p�����z)�#KB�����&#x60;��#+�מ�Y�Mc#Io$��#�Y�*�U�Gb��;�GJ�?go�����I�hZ^���KP�V�66��f�6_8+lbeP	\�&amp;;G��*��b���4hʬ�*{����&amp;Y$3�a&quot;®1�&lt;矦����cP�N&#x3D;�ɯ��/�[����4���χ|K�l��&lt;Mw���ck5���;乄+X�	?�|�����߅�]x_�/úƟ���{��n5)d��,��/�oF2�@��d����Sʱ��F�:��J��i96�7,���{��+��&amp;��(�}.����I������vY��O8���͖b�Hd&lt;N;�#����o�����ĺ���^iv�V�q�֑VbҤ*��.ZE��&#x3D;[
+        {���:�Ã�x���?��?��֯4�q%�I6��QY#���M�,��,��]���KZ�����y���dܺkk�����MZj�&quot;�_^������y&lt;�~w�9����V���5�fUb�v�� ���k�/���&#x3D;���M��^�� ��H��%�P���!k�B!��&quot;��^iVW����AA�l��P�7|}&lt;�kk&#x27;��������gY��Z�[�#�I&amp;�� ���!rJF��e�&amp;��9ί���vM�{�7�;7gecѩ���O�������#�&quot;�m��W��Pq�c&lt;��8����]F5Y
+        ������������_���Ү��;�&#x60;��V�.������B��B�9%GL��&gt;���Q��I�k�zf�c�^j�OmnӖ�K[K�#��US|-5�� �Y�#�~�0��*��qu�����y�mk�6�ZZ�&amp;9^+O��t���&#x3D;7����I����-X�&quot;�0� 8�����۝���y&#x3D;�*����Xc&gt;���jw��ڝb��?f\����T�&lt;Qg�ǅ�f��������G1��c��2�\y�%��&quot;�2�%�&lt;������/�ʎ���{�I�$�R�ӖRz���J�tv��G���,�䚋�]]�K鿑���bn�c�9_��s&#x3D;&gt;Uҿ2�1�#��Q��B�?�_¿^?f��6� �/����3[�H�jd�ޮ� �d� @8��ğ�W�-~8y�z��w�N%�7�vf�#��K�jv��@�2&gt;�F5&lt;˰�G^u��(]������F�u�&#x3D;�����&#x3D;��i��]vgŗ�X�-&quot;�7ɜ�1�z��^}���&lt;��$�� �����_��� ���7���ޥy��2���_?�u*�Y%�,{J�kkIк��GL�?�� h���$�i{��k�uu�q4Z�W�YR��	7H�9{wld�]Or�e~#&#x60;�R��9�ҋ���w{Z�i;k}��� ��l�5�&amp;�ݴ^_����+���c�r��?��*��I7�&lt;� ���e_�[O����msM�V��!��K���zn-��y�3j�?��s�1d�_���۸�խ|�6�Υh�jZ��m�Ӧ�ɖ&amp;H�ܞhi�yP��	s����&quot;xz���ov�mu�W�zk}-��[#�#���EJ-+�w��n�z&gt;��h�۷;�]����s�:u�~�e�χ��m��э��:��Tt�ӥ}i�����_ף��ú�h���gs��&lt;����&lt;V�b�ef��P]_6&lt;Ƿ&quot;�����7&#x27;�� �~������Oz��V�(�YbTY�a�4R�&#x3D;[ t�~#�3LB�a���w�e�*���O^���G�?W�&lt;U{;i��ߙ�|�p�ך�5�xc�����D��-�cLm�+�n��O�7��7������s�H���G��L��x��װ�7�_�&lt;}૆��&lt;f����j�d�e-d��1ub��H�#vO���G�b�5�e�:Ə�_i��cyp��t[�uE��@Yf��|�,�2�+��%��zv����ij�֎ͥoFާ&#x3D;.�Q.uf� �&#x3D;O�S�v����ܳ)h���I9�������7���}��[IdD�,r�n�a��w�&#x60;�}���6���7Z~��xwI���-�e�og��J�m�|W�Wp�*�&#x27;x��r�7�&lt; �����Eo-���o2����G����)\�H��}.�,���2�j*.�w\�r�-W�����\2�qW[����z���H�,n$g�bZ@q�d��~�T��A��l&lt;��kp�q���X@k%�� ��������,�� f�R�Jr��G�ԥ�+�y��5�Y�T\�A��2I��$ѻj�,��o��p��N�
+        .f0�I&#x27;v�����
+        �m0���^0A\��ߧ��x���&#x27;��3lʌ&lt;��N)�K#�֚O�mr�pFs϶y�ӖݎAf$mGNϥM�:ٰ�&lt;g9?{�ڦ4R��s7���/�4��{y|�h�&amp;#�������)�S�8$e��Y�~QxFR&gt;bN��ӑ�c$��3��B� HѸ�����g&#x60;� ӯ����}���ܪ�ʀ&gt;pp3�YǶ(�2n�L#R�FFu+�o;�;6��oC����}jŰ��٤_?ʍ��]�Cq����}�;�E�.���k�f��)�Z����&quot;��-����!X�郋o���.$[{;k�0��Фp�*]�vS�[a2�$�rT|�׺_wo�c����MU�m��l���/aus��6r]G5�&quot;��&#x27;��a�py��&lt;��kj)6��Cm&quot;�nA&#x60;��pw��$�q�I�������xb��&#x27;H.zq����ڒ�Qm[U��3I�S,KlB���}٘����ejxhǒ����t���ԕG�KE��)�4��&lt;M5�ɒ�[k�����z� �פ6�s׆A�� h[GsrW�)� �	���J�W}��o�ݚ�r���b�3��!ߓ�����ƽK�\���O՚�k��l��. nd,X����n�c}�y�e�}���S���:����c�����_�7����f�����ˏ-�q��}k���O�x��t��A��-��ˈ�Uó��;�&#x60;q�88�� �u�ؗ�!Y�\Yܡ���� �W�7��Z�ڂ�|k��y,,����v�p[�z����7���uL.&amp;���j��������V�*�q{;u���z��-r�T��m|6Zd\��%����G�U\� ��t��s��Z���[5����X��YCj��H�F���S�d�te�O1~ʫ:C��v!�ݐ�x�ˏǭG��3����^9�7q�Ί�H���s�F.���Y&gt;_���J�c(�I&amp;��?O����3�����R}�Z+� W�yޭ&#x60;�ڲ�g���x�����3�#&#x3D;p+��� ��x����;&#x27;�&#x60;Ky��Vle��Ę�.���A$]|5�h��ڍ�Je�&lt;㟨��#���@gp��c_�b���ek�&#x27;�����~���ld�&amp;�����)�Լ4چ�o���v��:�	\�-�%��1��9��Y��� �4P�!WeE8� � �9�5�4��o���M�ekې�\�9�،��pZ}�~���ei���,@.����oO�q�g���O����e�&#x3D;�&quot;�eAR�S�4�4�ۙ����ɥ�w�V��CH]�&#x27;*7(9�#;N2��oc�\^�[��q��ـ&lt;d.z&#x60;c8�*����r�˺;e�(� ��y�g�C��K���\&quot;�gRs��r3�ӵ}&lt;qJ�T&quot;�ݾ������MsKe}~��v��&amp;�����f&#x60;�#�Ћ�ѳ���v�Y�&lt;&#x27;�x� ŷ��n�q��������f��c|�Y-��ۡ��!,���pq�8�5�&quot;��,���f�D��x��&#x60;�N9ϥ{�^qF�ogMh�v���D��kK�U�G]���&lt;���©��[[[[x�,Х�ڧ�0O��d���u�%����J��̻I2(#�&#x27;?�{v��]hr����BʻY�g�O# c&gt;�&#x3D;&gt;��7Sͣ�H��|�q���ֿH�a�%%&#x27;�t��;���xB���˪���ku���&gt;H��W˅V?��&#x60;w��:z�Ԑ�4� �5�|��z�+CV��Ɠ~�o�� Bq�8�A�М�l���;Yx$�Ң�\��䥪ɑ���{׷� ��e&amp;��|�����{{� WU��d\�a�p�
+        �TG�6�I���&#x60;�)�:G�j��M��t�/u���%���+��+[��!�ڮ#&#x60;pQے6���u��3����K�� �n�캔�m�t�Q�YBd1h�&#x60;��#���t߲���K���&gt;�;Mz��x���4l�唳!Jp�#t�|d���M3I񎏢�ڬ���kk�Dڥ�0���02㓒����&gt;��e�MV�j:wO_���s��8����]6�G��X���ݶ��_W�{�;��\O��RHnc�n�\�6G �9���g?
+        ��Ek�S��gO)�����5ŢJ�VSo4�$��d*�d�|˹k�������Ι�[��Eᛋ����S�+[�����)S���Rl���Ǩ�O�a|;�kt���*j6�hc{i��u�q���FDy&#x3D;x�x��iapqO�]��&amp;���ۻ&#x27;w}�网�8gNK���JK[�����n�d~Sx����&gt;���L�M�]�����&#x27;��gp��Hn��Y� �b�����u&#x27;�q���Z���{���ƫ�g6�1to��%��X�&#x27;&#x3D;�j��2��P�	�ޤ���&gt;�g�&gt;��3����ϙ�s?&gt;��ݏ�Ͱ�*t��6��hn�ٕZH� �&#x60;/����q���߳��n2�y��A���d~����$�o�4���&#x27;���Y��������;�7��{H�nZ[Wu\t&quot;B�{rƱ�3��?���y�\�� dƯ��^���o�?L� b��?���cH��&#x27;�qk����m���qyss�Ɗ뷕Ŕ�;��8�� M� c;/�~�&gt;)����pH�v.�|�ax0_j:K�Q�� ?�w����W���s�i[��,�s�-9Sm�;K����?��S����y%Z!������,?bG�|S�C����;h�!�:� �Q��1o�����F�}��L�c��E}������
+        �e�����FC�HxՈ� �W���y���+&lt;,�޶{]]� ^����9^��eJ�bڷ]��9� � �$u����O�����By&#x27;���#���1��2���F��	�h���ϯ�����~3xk�� �~�q��[yn���:�����P|-�n�j&amp;���bb�wtv �N�7ן@&#x27;����K,|-��Xu����R��7�W�{��#�1��:�&lt;}.Ji�:n������é��⼖�p��t��d&#x60;�1�_�#��y���I4�)&#x60;�Dx�&lt;�&#x3D;?&lt;W���[o ��v��t�g����	T�#1ی|�&quot;��Y���}.�Q�&amp;����}�A���I!�&#x60;q�?*��#�ܥ��B��m��ͳ���ʪjNN�]�/����c&#x27;�|��]HU&gt;o��c&#x3D;�9�zw���x���$�\�񙦑c�O���Ǿ*�F���i�#Go2��2��c過{
+        �o��%߈�Eu��Mq$w�X��&#x27;�i#�s�[����&#x27;5���|�X~h?~[�ϑ�8u�8�I��q�?-ߚ��m����!��7~6@_?Ŏ���M/�Z]�j푘����g�v��ZGY�!Q4lb�&#x27;�v���5b��mI$i��n�3�^.�]8��Kw�_�?@����ەt�O�_�w�-�|t����Z�_���u�ֽ��ڲ��8�T+gk�:pG&lt;�ҸF�&amp;�~e��}&gt;�*w�&lt;&lt;fCJS�(߹���4_�*�O�L]?RҮ���T�wP�B&#x60;�a\p��I��$vp_����p�\���g^��*�Av%UI;2q�i�(r+GF��H���Y����7�&amp;�4R��9�2������3,ߞ�K����喍�鴿�&gt;&quot;�,�.��Hգ1�g0�q���ʖ\6x&#x27;���x�A_ �ך|�l�5+���7����l�.�:ƥqt�Z���-.3}&#x60;mPȷ�Yi&amp;Y0h�G����&gt;^	�_��|;�F�ֽ�\jw�wS��4�Q�h�#(��\|�D���*�v���S��I�-�����pXJx�(ӓ��֒꼚����G��w𶽥��L��ִ��^F�[�A߱���$�!S(�����&quot;�������F��}����3&lt;�D��[ȍ&quot;�_
+        H8Më������,~x-E���+��R&#x27;أho�N-��C��	Vp�^ա�P�&lt;�WL���|?�ɯ���es�{(��s&#x27;��ZG��08�?���R�*���[�N�/������JV�h���k���^����~��
+        5oͧ��oZj
+        �O~Α�#�%�8�0@r	�*�(���5ˏ�q&lt;�g���E�ik�s&lt;�e�w�pV3��W����Q�9�ӗ,����t�;��6���K�$g�QXW�$�^����� ~%�Y�w��ɨG�.$�$*�9���v�9 g �W��3ꙎC�pRQt�N;;&#x3D;�}[�F�穊�V�Z/��mI�Z5mմ��K�7Moq�jY�+.�cm��|����d�s�z?����[Z�m1��&lt;����ߗZ�o�W�����%���-��]Q�o�*���/�S�+�^�Zn�⛸���^���.�Я��v���~��;�f4��g��.X����od���2�C*R���{��ϥ�{y���[��&gt;׮I���&#x27;L�����c g�����{��?���_��c��af�X�3/��t�&lt;Z�+M���~|couk�i���mr�Zc�2�Ө���
+        �-������UQf�*��{v&lt;�^~c�J�,Eu-,����hҌ6�ޢ���I~��+���hT��r:��J�w�Ê&#x3D;M&amp;IU����UX&amp;N{&#x60;��w�����&quot;�C�-�G?ݘ\��������ӛ���J�Wa&gt;�����k����ϰ񾼍~(�&quot;�*X:�J�������-C�.�a��#4�aq���O~}&gt;�Jxo�f�o�Y������2ͬ/2V������{��z�����q��t#&#x60;f�$G-��u�}j��}�źt����u��j��b�s���~�����ΛoV���];�Zl~��n|��xj�&gt;V�4����r���?��x�Z~���H�p��O�G��W����m���ö�C&amp;�������T]��{.s�Qϰ��mz�O����Id��V�ۊ�|K�M{D�k;w����p��� ��8��|��jx|R�7�9]��K��j�W�h�.Q{l
+        ҕ��m]+���?��￴�o�[�o3̎ः���O�z��O�v� �&gt;�%��z��-87�~�&#x60;&#x60;d���� Z��P� ��&quot;�7��k�B�b�����_C��������f�}k&amp;�rON�z}k�x���B�������z����N����{[M�3g���w�F�M[K�p�,�C���Ob �gޤ�,$���hn�}g�[�7Z��2��BC,� 3	|�d�;�����?M��&gt;�X��g�)��kwl�+��L3�[����?�[R���7�o�A�g����cU@���K�6��YNH&#x27;�dw�p|{&quot;�&#x3D;�&lt;E6�c���;yꭺѻ�~\�F�&#x27;�0��R��Tڋ��m5���w1��a��_�?����CǶ1�� �\Ϗ|@�e�!�c�&gt;��Z���8t�v�� (nKt�C�J�,��u�����5��v�Q�/,��C����˻�z����nm	ڬ��}緉�m�������}m���o*��Kq��0������&amp;�X��FN+��|&#x3D;�x�h��ϗc���n�S����G�:[��w���־��P�J���.��&lt;,���%�?���c&#x60;��h�s�&quot;����L� �{־���?��^2�x���q%��2[_��cxH) #��8?�k�mĞ&quot;���o-bk+�{��/l��0�Hb	��Ѿn�W�N]ŘƇ�pU��4� �����;S�G��_y�x+đxOžt���s[� 
+        W̍��0�vH�8#o�oƍK��w%��5��m5��n�dxu�e�BC+��A��������i����O�}�}���i+�oe��&#x27;&lt;Hxھi4��rFV5&lt;)9P}�O��{�|���Q����ݿ�x�03����O���������_���.&amp;�d�1��]C&#x60;�N?��e2�v�yS����?�x��}g�%�mP��Ѿ�-����&#x27;-�ې&#x3D;Y��|� ��xcᆝ��M$wm���ctQ��F}
+        6p}k�������w���f_������X�,�R*��\�ݳ�W���&#x3D;�eLu�1Mٴ���Y5k][s﯄���巿��յMsO�%̗$pH	 U�ʞI��$w� &gt;h�&#x60;�u�\O≏���ɔ2�TI&lt;�a����}x�?�{��i�؍B��8�8c���/�I�s_V|%�R�����ۧ�Z;�w��,���h� � ��L� 2���x�+xl�&lt;���r��m7��ݵ���q�^��l�YY%}��˧2��6�c�B�o�z]�����g�C!�p�*�o��0p����g�@�ߊ��9����T�T�ԥ�K�&lt;�y$1��Yv���f@6��|k�� ;�Oi�Y��B}�(� ���{׹��ޛ��gů�]��5�l��%���K@�������9���IJ�V�)Y;7�t�ޯ��{y�Q�7g8��;���	n{���Hj��x;W����l3ed�[t�Lc�R��$՟�GC���7������t;q����8�#�	��9�� tI5+�_x�Z�K�eI.��AUu^���Aڃ&#x27;�op��O��[�5K�Mbxu
+        �G��1g�f9��5�U8�S&quot;��߿+�������4|$��NCV�Q��8�K��&#x3D;�����|�ͫGw��+eT�O-�����w�O×7� �� �����*��U$%~�+����&gt;��ĝ^��V�+�x~�0�5��#�$(����&gt;Q�жJ�Vu�C��� K����I��u��ؗ���g ��W1��E~y�&#x60;��C��UzCG峻&lt;� ���
+        �(/���s�J�����I?�&#x3D;�Em&amp;�c��t�x��&#x3D;�Zk�#+F��l�ݰd�t��&gt;&quot;~Ȟ(�ƭ�X[�Z�5�i �Fhf�\d:������?����!���;x໸UyP�Z08�� g?BB+���XL�	)Ғ�]������W��1jQMI.�l��}�7���V��&#x3D;J;�߱w1D�a�z��y���ml�4mem�09Ef1��&#x3D;I&#x3D;�q�u�/𦚂Im�%Y!�qD�U�d�/�I {�6�&quot;���.�f��gGl�QR(�ɈՈ�NëĚ�c	�{IJ�!���/��w��Va��B)W��k��D�i����5�6�F&lt;���0�&#x3D;H�;��N�E�I�MYa�4Ю݊�FT0#�ӧ?�z��� j?
+        t�:�}���	㐕����g�W �&#x27;��[6o�a�mJD��#E(j�
+        8���X�
+        4�&lt;e����:h^O�ӡ���$���//^�g����\M6�~�w��v�8���w���2ǰܘ�m��ߴ����_&#x60;���/��Moum|�5�i��RQ*m��Y&lt;���#&#x3D;����?~��������۶�؎�l� ��v� �4�{�Vz���_i����Ξ�w�̲F��#����a�9��&quot;�������.n�J�QW�5ek;麵����u�p̱Q�0sm�]-�uk�����O���CI����e���,�&quot;��i�E#�%O� ����+��g��/��*����A��9��B#�&amp;���EìE�i�q��������߁����O�Y��,��:�����������&lt;�^��O��YZ����kW6���k ��0Hܩ��n&#x3D;k��W��je����K�TWU��˳��&lt;&lt;W{l����QIY��+]]u�[��ϖ&gt;~�ֿ|k���ݬ&lt;��Ɖ$� ��G�޴&#x27;��9�E�&#x60;+ޟ�sZg�o�|\�止hW�v���-�ݣq$���c�2+U�.w����L�^��)��-�o[&#x3D;Ϫ�:�)�vr�|��u��tox_�X��T�oS˞��Vh� ����W�O�|#�Ehw�#��&#x60;f�ĸ��z��s�����t���}��u����A�*�Q^Ӭ���w�O�̓|Nԙ�]�7M;H��x!4�8Pņѹ�Xe�2�陖����J���$�Ik�կx��W-]z?��|&gt;�d�����-�t�ujϢ{#���G���sT���[��l�ɾ&quot;����������dW�����[��N�O�V/-��������R�}S�I�v|Y�Hx&amp;�A:-��j��4�&lt;���ڎ�Z�#q�8��E|�m�i�&amp;��Iy4�Gx��}Tz�t&gt;�k�o�s)��?�4��������}|���~_���K9��y����e���{5evyo�}~_x�dkv�����n�S�	��� &#x3D;��U�[�jV���$�L�5T���P&#x3D;��D�&gt;_�D�[U�.&amp;�0y���8� pø�F�&lt;&#x27;����;���g6�.�9d»��y�X�
+        r�f%YV�S�Ŕ0x{�f����|���|�~�����K�n�V�����|�����	��52�ƺ���;�Z�8�g��KH܁�2F� 6���#�(���&#x27;�n����՗X�Фmp���c����$�b�c�y�/|C��w�W�T��]&amp;��|�bT}��Kı��ҝ�����|7��शMY�����ZDָ��*�**�O�ON9�b��Yf��6��KD�e�U���]]���A��i��RN4��߫k���1���6���%�Դ��+����sد�S�g�mw��y�A���i����됈&quot;Y�8C���&#x60;s�4� 2J����^Ois���V�^�����;�
+        C�[��0�k�~���ω-�2�gp�Џ�
+        �ߦ{eM|fXLNq�_��[���}S&#x3D;�g�G��/N���|	�~���O�/�5-RK�2&lt;��5YRB�,�U��:�܀1��k�/�?�w�+��7�v��W�^�X�P���i����O5���S|��#� ����k��ui�[��.�F��N��@9�FO�]}~���~4�|x�Bg��;�������3�\G&#x27;��m�$�_ϙ��~e��[o���D}d�f8
+        9�%w�&#x3D;u[Y������m/�U���� ����Œ����Q��ۅp�1��+)P����C��w�w�_���8�5��6Ϩ@DweF֓�S� ��l��c���������z�z������(��&lt;��JӺ��1����� 5� a���^���|3�﴿4�a��c4�,s2����9���etd�J�e+�ti-��z�-&lt;���N5����5��[j����F�y�&#x27;Uk�y&amp;M9-�i��dm�Otm�\8|�1�����_�|&lt;�3�R�5B��M6�M6�K�&quot;)|�$)
+        G��GPj���g�������Ö�&quot;�ӯ�_��X�@��Gy,��z~�3;QP\�y�UX�Kp3��/�J���&lt;��Z���4&amp;��[��.!�&lt;�	{�� ���\��U�^��ue^�Z��iZ�]�f�Mm���yd��C1S�t�����.۞	�SM��I1��ځ!H��?�טhVv�v��[����h-�����n��8��k�ڣ���+v��Dm;;[�ZnǞ� �z�n&#x3D;@&gt;��gY��� �^&gt;&gt;+���l�d�����T(T�z �/8�~�[0�g�.���yuV�OW}�^m��q��k��]F�1��[�������q���%�ΡyM���F�[������&#x3D;F$�W��5ۙDcd@�Q���zWI�/Z�ɸ�K�����ˆd���9�Q�]G��g�{�ڔ&gt;]���0ǚ���I�������W
+        xu���SV����L��V���Z��u}_�����&lt;:lV��|�#���m��|O{&gt;��{�&#x27;�!�q�W��� �\��źڛB�k��wAq�9s�C@�9��9��&gt;� �!�M�²j�����IBG&#x27;t��tU���}��&#x27;�Tja�.w{h�����c��X|�F�a��l��n�����_x/^��]�yn]��d�%9� pA�5��[��i�S��Y�i��v�cn�yc&amp;ñ�YF�~
+        2	 c�ɺ��&gt;�ҡ:��w��B�2��iv� &lt;��2�p77͸q�ںσ�K⏊f�����������ۻ��G� �&#x3D;�����e�No�c^q�ƭ���%��Y�5��չ/5��x�4����0�)&#x27;��%�V|���&amp;��/^�����J� ����ɷ��f����5n��ܷﶮ���7g��&#x27;�d�&amp;$���)*ّ��׵}�?R� �*�&#x3D;&gt;�\�,��y�^v�/����#��c�)��;d���Ã�ֿb����%�f�����.v]��lכ��]��x����I��EN��&amp;ӽ� �D~g��?���|o��k�Mqy
+        �}�dl� x&#x27;�k��8�Zm[����,Ub�Ж#p��&gt;��s��u���,~x��a�^]��D�Cyw1�̬?�X�� W�_�iK�&gt;�sm��7ڋ+�0�������z*���x_�iK��0/ܡ4���^&gt;K�����&gt;ۏ���Ef䜓Jڧ���|�x��I�HF�9���}3�)| �x��F�4�o��w��&#x27;U{�� �w#א��9��(�&#x60;���yo1���7#�۴�1��&#x27;9s��?�+⏃��tl�������&#x27;��{���, ��p� ��&#x60;~�f�1���I��]�z/?��7�8Zk:����Q��wV^K���~(�����q��vz]��A��;���r�!�I&#x3D;t?� c�x�y/&lt;U�h�w�/QC�j׈�����C��1�p��q�~;�֣$&gt;s}�W3\�������^&#x27;�ŨO���X���X�J��	2�v���u�#���÷�jXk_��6�z�O��eSۼF2.W�-WV�Vz^�7�3��w���|���Zh�U-��^k}��$O:��y���t�� �C^Kw�x�i�A���(�eҤӖ8�ks�!e*�ċ&quot;����S����I�߀�xWU�c���b�8�e�Xt ��z�_ �7��jM��3��f������9 V2�fX� �㤭]%��{��&#x3D;��?�GK��ѷEd������e����#�з���χz-��}H�m���2��l��.��a��#���N������ޛyd��� ��.e�\t���z�s_�_�O� �����u�kVַ�#�� ��ty��й|��h&lt;Я�Y��������~&quot;�&#x27;��Ccu���2�iv���&lt;�r��G�� nے1�H�R�U�?uJV�\�}-�������K4����j��r�K��m�լ�M��zuu���o��� xG�Sx��v����$��m�I ?�F�/���P~��� j����9�uv�u*�7�{}��al�Rr�9&lt;�k��X�e�)�뛨��D� �Z�.�O~���� i���� c��~$i�Z-���+	���C%��:�1F�w�����H��ΜY�xh� ��JQ�u���&gt;�O5�K�U������mf�{h����t_ْ�P��ku6���X�i�U���]�m͵�Ss F@����&gt;��� �#�Ԡ��Z}���|��U�$g&quot;PLXr�T�˕��1��7�/����e狯�𯄖X�0\[���8OEd�bp��Aܛ�������\���\��9[}���K!��
+        ��I�T���u�F��X&#x60;���N��ƥ��W�ߕ������n�\UZ�hsP��v��u]������?�V�#���ox]���uhC:��L��nd�#bB&quot;FB�h�!�xq6?��&#x60;&#x3D;/���^+��ŬV����˓r��)���I���9G���&#x3D;���7�,����&#x3D;;�0ɨK�]B�}�*̾Z �ym�ڧ�#�u�f���|������ �Ω43]���5�RM�˹�{F��*�G�L��uR�(��:w�U�Z�}:�t��k�\����h�;&amp;���nɶ�z$���M�z�����@j��M4�w�%�����T@l��澊���&#x3D;��:5���kyo
+        �J���q���~k��O��&gt;
+        ��?�.�d8��M�BL,{2~��:��&lt;g� �񟌴y���:�mn������U�F�ܫ*2�#5��W�U��T%d��K�m}�ϡ�g΄p��Q_�I���Ndߕ� �ҿ��h�xz�^�o�����!�&lt;Ci�)1�+�,\9.�.K$g�i���ϊ3��i-��)4��^^4��{\�,yr_�
+        [i�x&#x27;����j��!������Ozi,����g��Y2�&amp;�G8F9$��yǫx&gt;� �� ���Dڷ������&#x3D;.K�k9�҄1e�
+        �a��k��WYC8�����{&gt;��^�6? �Wup1�NV�n�i���V�&#x3D;/����� ��]��?��a�p�v�,�3�ųcM�8��0kk���|�Y��⯈�v�[��%���#��}��ß�#�
+        a�S�W�a��x�T����gmt�P �r��r:�oS���&#x3D;G�wz���ǃ4�ď&#x60;NOS���8_��RS��Y����3i��M;��[��}o1��r����J[}������*��_�Z�z��W����K��K���l,�o���_&gt;�� �^�S���5����eH�i�!A�#	� �J�_�?�B�� ���R��h_x�&lt;�A&lt;q� &lt;� �p�|&quot;������忘����C���0WbȀ�Q�i�(/�~!V���5N�u����oD���xe�}s���S7{9��ܬ��v~�~�.�?�� ���&gt;4����aO�j��5�y,6�$�ǩ8#&lt;��w:is&quot;��b1��k�� �?�m���L�n�1���I����߈卢Rd�-��^;W��� ���w��������1ʾ��ĵ	JR���2m��_ki���\v_�a�J�%y^I%�b�������}[�a|E���~&gt;�&amp;���H�����Lm�2It�l)��Wo����_iF{yu�{K{����&#x60;��0�䁕9�E~�xW⧎~~�Vw�x��ZύEݕ���,#�hX�G�f&#x3D;�s_�$����Z]ׄ�Ti�dk(v���� ����}&#x27; �f#��Ut��NRv��\�����{�ko�]Ó�)�.�J�&lt;�|�gv��i�V������9�o9s�&#x27;����ֻ���!�?�������I�l�B��8����½�f�i�-�z��-;3a�_F6v�9S�8E#��]�m&#x27;Qֵ;�&#x3D;a��·��ml-���aR3;�i�I!�� ��~����ܪ얷��ڟ+��u��&amp;���4��R�����w����+���+&#x3D;�f
+        �a���/�O|�&#x60;������o���x�ú}��ҥե�ۙH�C���r��a���;����֮�z&gt;��q5��y@�wB�0�K����߷g�+�_������f���Il䋛{�U�M�ga�1�G���3Z0��8i.Ui7ko��]{�V�Q�&#x60;&#x27;�W��]+����M�)�&gt;����� ���5������|� �ݟ� {cۊ�r��&gt;���j�iK���R Fҧ��&#x27;�s����H���
+        ��q��z��Y��.�� ���8IvB�iPnŠ ���+��ڟ��!���(�.���]i_�6�&#x3D;��ꅥ�U|IF 7��Aʎ��,�O����Kmv�t?���&gt;���0w�� ��q���/&gt;�(��������	|ȯး��r0�&lt;�a������H�yy��EK��Z/L��,L2���L���x�%?�-7^�\𿉧�;���y*Y�xP�A��&#x27;y�L#�y�P��ko
+        x�Z��ö6w:n��.�&quot;�J���t��&#x60;�������[��jъ�iw���U�x� �&#x3D;�c4� �9;F:om�j�y�?@~+�S&lt;�{���&#x3D;��ڄv��D�8����&lt;�Qߡ�v�����o�L?h�k⧊]�G�\iw���t��+ &#x27;j�+8¿ϳxp[&lt;��ٯǟ�P�j�Ʃw6��?�o�{��+cn��� �f��&gt;�0�z���� ���tك�F��n|?n��+���Q/cY�t��Ɋ1����rq&amp;.���u!�y��wv��}�K�s�����W��֨���%���1[B:_�^ONm,���w��
+        F5�R��M����^����K��� � ����02�)�k���C���ڥ�Cig�ʦ4&#x60;�#+��y�7��~�~�f�e�ik����{u�]��*a���&#x27;�A߯�|�_���m�6��V�Z�y��L�s� 0�k�|m&amp;�7M{ײ~V_�@�}i�i���?�����J~!�|(�p&lt;�kW��j�,���褍�v;&amp;���ޱ�I�����g����㦖���Z����s&lt;Q-�FO�x$H��z�������e��&quot;[�&gt;V��,�j�� O&amp;�f��c�� �N��T�I��RԴ�n/n�&quot;;�X�@ �[
+         ������.�h�hFemU���ߥ��|b��A�s��rV�ok��o~�s�����/�ٯ��Ie�;K��Vu�]ă/BA��Fz�^���	���F�.���k˥��R�x��c(�L�_dE����-�٬G�����K8%[����7��n,y# &#x60;|���s�����c��ZO���X4�.�&#x3D;B�k;;_&gt;�|y̒�*�-��r��Ã�XZr�EJS��o[&gt;�%d�~�y����5�)R�jQ��(�:&#x3D;SZ/~�?�G��&gt;�G�?��Pk�#M�����SJ�G(F�|�៏]�ӌW�|a�,|I}%Γ�C�Iu�R��.��㵉&lt;mW,Oj�5�-�Z�P�Qܧ���߯�^��*��m{E���:F��3A�-���K�l+�&gt;�UR�&gt;��壗W�V_V��^��e��D��B&#x60;�l��^��Q��+D�&#x27;�b�W�ե�7����~��o����K��k%�p}0Fk&quot;hz����jg��i����ā���$׭|T�Ȗ�5�4�gF��0�I:u�o��@�e�uda���5��&#x27;�{&amp;��ɪx.K�ZD}�q�yhX���\� �ps��/�+J}�Ϩ�8(S����զ�֝V�W:@�}�����/X��M�biOL��e�wg&#x3D;��O&#x27;��s�]f��n/-e�Z�\(Yq+� �~eS�� &#x60;&#x60;��G��	�xB�;x&#x27;U�n��󭿴��,��C��w*����Ez��n����O�EuH� ߹&#x60;ē�����5�g嵩Қ����E���Y�9�1i:2�������[ѽ~���o��� ᔾ��h��L�m�g�2���8���¯�h��c�A�g��b���&gt;C_�߳�����S���&amp;��$��}g��7h��# f���px#$}&lt;���ZӦ��� ����q�ֿ�~*�QJ�_Y�n2��ս�7��_&#x27;ttaj&#x60;۩��5�	����M�[�Izl}��?�&#x27;���w�e���-�鴛Xu#�J~��P&amp;��$ ;t9�&#x3D;� �_�Fo|&gt;�I�x���ޓ&#x27;�l�3�����y@#,��;s���A�s��/��G�[�Z�II&#x60;1�&#x60;
+        g�����&#x27;ÿ�� Þ��}/_�%}B;C���.z�ў}���8�0�����r���MI�/z3��j��v���&gt;�K�&#x60;�P�UŪ����̵���N6w��{+������ �Vv�!�fS�Z���+�f��_�
+        �I&#x3D;�ڜp[�6e�,�O�c��?.:�3ڼ⇊���n-�w��rI��Mo��Hҵ�&#x27;��-���z�_�8��r��2��ѧ����p��-�(C�J�[Mh�Mo�S��z?�D?h�BI�k���l���G��F���Tc�b�����}�]�A���?�4�Xm&quot;;&#x3D;X�mQ&gt;l�&#x3D;�[,�U�O�&amp;���xo��𦰗�&amp;�49��:K�)c��YTd%�� u־d���xK�W�Ԏ�ok��w�b1n�#X���P�ھ#3:5}�E$׼�mS�v�����8��;���-(EES��%&#x27;�ٷ��Yj���O��ğ��%�sg��&quot;jS]B[��$��@��y�+�|/�!�/ْ[����Z��a�Mu}�ÿS����2&lt;�c,V&lt;�����;�xx� ���������w��i� A���Y�|�&#x60;��Ԏj��/�V�%�E~�~M6�mb��j�d�*���&#x60;�+��K&#x60;gw9�r�WZ~�ط���[��������!ex�F:�&amp;���%$���Z�n��kty���z��o��k�k�cԴ� 
+        �M�?7pH��t?1�YpH�k���� �;�]��m�Yq{7��A��5���ӥ,O$jN�*���g+�ᯇ&lt;9� �����Iм�f��yy�[����� &#x60;���x����s^M�]�^�|���o�|��\��.�[��q�~��,KU��+�^�v�g���^w����򊮟��&quot;R�il��v��K7fp� ���o�?h�h2*�����jg�6��Vܖ休$x�Ǹ9�P|t�g�Oq.��������Z�&gt;�7n?�~/� �Vn�C����3Z6�k�e����,݆��lgcF2��ςFy��O�}?QԑWC�m��i����h�p��y�@��J�^*�7,D4&quot;��i��z\&#x27;��C	N�..^�V������� ��|A��y���&lt;&#x3D;�麴:���ͼ�\(0�F@�#&#x27;n���|�lYx;K���(h��7jȰ&#x27;�/�Px�ź����v�&#x60;Kui,_|w\wCv6&amp;�?�~&#x3D;k��U��x�t���w3���hف��&#x27;�d&#x27;�;W�Q��x�K�����s�X&lt;�J�����ĕ��#�+�	)� ��~��g�?|iy��K�Ǭ�6� �Y����u*Ŋ�9%O@���)��1�|#��aoo�@�cQ�Ek9r�c��8#d�FT�$@�&gt;� ��������/�}sK�.�_�^�-p&amp;7��A$T��3�#�3�M|��L�^2��?��������{ĳԮ���v�$�[�����9�,��;�7,:�$�]�vk�����$�L�9�����ETp�kH�����������&lt;�_���?�u���ޠ|y�M@�������m�P��C2}�@�����^�����	mo�I��j� �u��j�,h�n϶Sd�+�&#x60;�� ���&#x27;��~%�k��o5Zx��S�13��8 �~&#x60; ^x&amp;�@�m�cែ&lt;��v�:�1��-f��M��.~����a��t�,�;�\MlF&amp;rs�I��N6����--���?N��嵲��Ҩ��^���앚�(�G~�h����Vr\�A�Y&lt;���$�����5�x�H�_�?�&amp;���:����hw6��Tw�uEXc��d�A�vq��� h�Z��/iZ��&#x60;�tY���[Z���� ��� ٚH�68�ۜb��������&quot;�G�|M��4&#x3D;&gt;M&gt;�k�xp�.bu\��Lr.6��&#x27;�8/8�O�[�yjBܯ[���e}�[[D�9&lt;V����!���*5/̝��-��n�Mn�{]n}#�v~ϖ?�0\x�յ)ln���紷Y��5;�ݍ�B䑖9&#x27;9��O�� ��&#x3D;�΍����R���&gt;���{d�\mln\�T��Fy�� ��|Y��L׼ck�j��&quot;�����D&#x60;���9b��]՗&gt;Fэ���Y?ƍwP�G��MFMM�լ�R�ң2�+��iۃ�@�q_��1���J�T$���N�VV��v{Ӵ�&#x60;��#��SN3����M8�W��Ӫ��o�����g�m��~!A��Vp�C7P���V�#�:�����P���p�A� i_��o�M7A[���լ&#x27;#Щ���+�/�v�q��X���,e��g/BD1��q�(ǧ�zw�;�^��/-żM�n%��ǶI?�x�*e���2�g������vV�����5���e��jN�&lt;�_d��Kw�З���W���cY���IsD�e�H*roq���;��������xf��5���:�Xn8�J���	�&lt;M��7��Ѧ�Eoio
+        � Q�n�q��&#x27;Ҿ���k}4f��ˑ�
+        ~Q��&#x3D;�����hbq���C�8�Rp�rM��:�i��T�u�W�|� {L&gt;gR��JR�+n�&#x3D;��3矀�ς^�&#x3D;�)w&quot;���[�I���� ���7�~.�hi�\jq]Y�0�&#x60;	�f��N8 ���߳W��[a��]�~,�Sա�^���ef1I ���8���5���gş�&#x3D;���[��G|EH�8^@�J�x�a�f�&gt;e �H5���K��x�ԫZ5i�mY�Mͫ��m���Z]�k��a�r8,}lD1/ޏ��WjN͵{i��v���sº���9Z;[��&gt;v�������&gt;�-�E��-i��S�&#x60;AKIH�&gt;���I�9�|5���ukkmb[�z�/������	��%I&#x3D;+�&lt;�_ |����-��˻j5ޟ�&amp;�v?�]S�*���z��i��?4��:��k2�RR��֜�;���?��6��
+        -u&#x3D;KƋ&#x27;��;e�Kq}qz�J����.�Pq����ߍ?����k��ּU�ھ��4��Dv�bO�c�_�ߴ��ۏ��w��|?���}���]�2�(�h��
+        dh�&gt;Q��#&#x3D;��+[��}DA��/�9�Wэ\m\¼yd�Mvf��&lt;�Q�Ӎ��M�:�WW}}c�_ښ�X�&gt;��xz�I��?��QT����YH�A$&gt;x�u_����� kB���\��&lt;6:�0It���_�6��k�r��ƨ������ǶҞ���&amp;�!�f�:�Ѩ��C��~d��d�3�+R�Q����D�w&#x3D;�}��ck;nPY�fl�X2��}�[�a�
+        jW^�[�C�|E��ҫR���k��~�M�-NS�3u�_i�����z��s���9i;O�8�&lt;+��{;�e}?���$�狼�]&gt;�+L�uap�m��@g����[&#x3D;p^񕿅4�CP�A�x�W�H��[/B�.Y��݌�����韴Ǎ-� f���KU�����3.�n��4���L�,��ەQ���b*�E��;uo����d��~��SZ��k�e��s�����o��jZv�:�;G�љ�24���Kt&lt;�����ej�7I;&quot;��-��s����GU�ϩx�L���.�o&quot;� �B�e�3  Xy&lt;��lxg^���&amp;��K�d���$j�m�F��F���� ��fY��9��&#x27;�[&#x27;��_ԏD���T�!e��ic@��8#�!_E~��,�)��_��yq�j���}�3{l�?��^c�/����� �rC�j^�$��&amp;��B���3�G�c�a{w�/ٳ����_���������d]ط�cih#1���H!�2��&#x3D;Mc��B8��o�\��_���oO9�^�����U׫iH�� ��&gt; j��?
+        �X�l�Gis5�����v\y��F֥;g~A�y���O����� �||_�O���K_�v]7K�����M�����&gt;X��T(g�/�|��N?�QK�6��]Qm�2Fd�݁px&gt;aPP 	m������D� �_i�{�&amp;����Ɲ}fd�Z���h#g\I2�$řpr��p&#x27;?��N�&amp;3���˽� N��.8��X�j�Ҝ�2�G{k�����w���~��~��ӭ|E�&amp;� L�M�v� B��3�&#x60;Hl� e$&#x60;���?|D���X�Ə�*��S������ɨK#���*g:Ǹ��^8�9��� �O������_��&quot;su��M�M��NK۔E��yn�.�gw��j��~�[�n�����ķZ����-�����btͰ*�̘���&gt;W�����h�ݷ��߯�?jnx�*�.O�:B+���ޚ/&amp;켏����[[�u[{+��&gt;�n�r[�j&gt;T[�ߑ��F+�&lt;�x�O��0�����Gog�Io#XG*(�
+        �ݔ~3�� U{��Þ-���H�W�y�,]�7��:y��d�VBǁ����{��c�{�:��g࿅�����y��gy�����������HJ��@&#x60;@?�Ά*0���Fԛ�卵~o��キ*3�K�QJ�wv� �X�� f�ZK�j� �e��!�M�&gt;���2P��j�+ *	�&#x27;�+(�$د��#�&#x27;^�gj�hi��~���Zܰ?h�@900����8$��?|�&lt;�/h�726��k����S&amp;�c�� � v�t�&#x60;�_�n/&gt;h7SL���D%;?w���UPB+�\�O���Ϧ��K�۟�e�(g�}��q�����o��]7J������������5�Oj��}�X�n�;&#x60;�@o��o�&gt;:��A�l�%���
+        ��rk��!�ڧ�]y�f՛R��
+        ��,��W-�  �WQ�j���Z�v	&lt;��Y&amp;pB��&#x60;����2�өM��\��� ���|+��a��P��(F��4��s&#x3D;����߱�٩~ǿ���,�)$��œ�ܽ�V�&quot;5@}w�?B&gt;��z���SMb�c�c��N:���߇��� �����!z�h���v��^N2�3�&gt;Q�&lt;c�f�#����w+&amp;�T��3�_̹�&lt;J�c3��R�#	6����^��i�o�z��Q�p4��K�R����oU&#x27;k�����o�m�+C��mt���!�2&#x3D;���?�T�x�ᧅ�Cæ�K��hc�vҾ%�� ��X ��і�O��_��z������V�t��|l�K����b܊}��ף����ÿ]��y�i�]�ivO���mn6�&gt;Y�7g�Ǔ���xw�c��	GU%&amp;�w�|����v�m5N���N1ՕJQ�&#x27;9+)�&amp;��V�ZkF��u�G�z/�����x� P�/��m���nd�p�I�j6(�gT�^����#~��xGR��S�����&lt;y(^^s��{��A�Fi^
+        �K|:��f�i.�k��&amp;��l�Wo��2���Xr�!?/89�&#x27;��&amp;���q&gt;��-�z�����]v��yk�0�[,��Ί�4�{;+�vM]�޽�ϡ�8&lt;}H�$���W�ս�M���5���A�Iu	���e�\ư)BT�bc�20\�H&lt;�������Ex��^\]�p���w�f�wtD����|�s�x_�&gt;/��e�V���0G���En����&#x3D;����W��C���� �	$-����ݭe����Q���$x��RK&gt;�R�|�����U�c}���$����֗�6�� ����GB��������O��+���9O����}���־�����z-�|t��m� G
+        �ݏ&quot;����w_�� ����O�?hmz���u�]j7Q|�dr�PY��,��q����&#x27;�	s���?�?�u/|V�|w�X�k�����V�d���ӧ�q�Æ�q���E|�� ���|a��*g�f�t[3��j.�ZXn7�p���:@X�p���&quot;���xL$������ܤ�u�^wg�y�:�&#x3D;O����]&#x3D;�.�h���f�n$�Z*�X�b3�Oṁ |��]�kq��&gt;�n�˫�F)�۸��V5���o���[w9�s�������f���7��SN�ķNg����T��]���0��s�(U�@� p~3��ǟ�}��� ��{V;�$;�)��.�K|�a���.t�\�pu�I&gt;��s��飾n�*�#y~�WI�Y䙊�İ�����u_�\x��[Z���gi����YAF眖�&#x3D;���\�����o�X����D�t ���
+        �]_��׹&amp;��I_����&#x27;S��s��~�����)��7��Qy�^C�LZI���ʅ���KrP+#�t-��{A$�����d\�W703�~���T~j�?��bY��k�mu1,Uar�P~V9�5����c��1��7ͨCxd��\�+��}|n&quot;�v����O�2�M:4�;7��RK����s��j�0x_]���Z�!�m&gt;�1&gt;\�R;�e�,��	p&gt;&#x60;H#�&#x60;{�_�f�i�n�E�Ԥ���t������6~#�n�2ܪv� Pд��l)�8�KW�n&gt;�y�m6�m�5f�[�eo�q���,���X�
+        �F����s�Rk&#x27;M��|���CI���ޤT�2A\�̧�m�&#x60;������)�_hT��ꮶO��?+u+0�Ύa�����|&lt;��_K-��խ�i�^�� ��� �e���������[_
+        �Z\�aX�;���be���R+�_���K�NM��֥�k�幰�/7K�&gt;�wRY��\A?���^����&gt;�~���^m\k�H|���*�J�ZBs 8��~R|N��� �ˬ[��M�K�[��1u۱��y&#x27;�ח���R�E�N��;;���S�kb*�vs�%�b�V��j^w[&gt;��&gt;��u�O Zx�� Y_j|�P�h��P�7�rڳ?��	\��@����^��R���
+        ,��&#x27;��ͧ��&amp;�}ela�0�;*�.��?1��� r���?��v���E���o��{��m�]M\)1Lht+�� �:s����&lt;#�����߁��t�8_92�q]MAwH��v� �|*�ԛ������6�Zj�}���i�~�i(�߳���e~��� ���ϫ~�|I�g�t��A!�&amp;i���0]����� �6~���:6�Y�J�t[�I��c(%_��&#x60;�U�&lt;ǘ�E��$&gt;&quot;כrx��ҿ����6�
+        ��$� ��g~�2�x{�~(�$_��]i�u;�Yh���Q�@[�?J�BU�	�ڤm��w��s��SO���S�Q�8�/۪k[Yܿ�?�ڷ��kH��.	!���-��:���^���~ѯCg|�I���2{@��Տ��7�&gt;!Co��,m&amp;dt�����c���_b|)�����{��ծL�v��ʏ���ظ ��H���d6܃�|ogX�%&#x27;F���F��sn���C���#��װ�xzt�hM�w��n�[O���&#x3D;��
+        Q�)x����0��$d���2]4�P��qk&amp;�eSѼ�;�n¿?�4/-ā����,�o~��Wǯ�+w�?h�&#x27;G��g𥮎���Kpׅ�V#���nzu&amp;��k�����Zn�:��*�׀��e�\p���/&#x27;�V��{Ŵ޽���}Mv�b9*�.e��97��Nֿ�V�&gt;��ī{�ՙI��s��nq�j�M/㶙�xN��[�����g��i6GH	%��}OJ���խ֡���|�du�� ��~�:��4/�;���-��1w��H����&#x60;�ͅb�~�w��(x}K;�h�tݜ�ܿ�+V��E��&lt;k�w[z�&#x3D;����|�x���~���+V�k(.&#x60;�f�C��I+����]���;@��M�&#x60;i������� ��&#x3D;������&#x3D;�I�+A��ff!��0en#
+        +���a���_�K�� c��&lt;r�I�C[:��p~Rn6���H���bk ����⧃�&#x3D;a�C�����f�o4�l@η���U!&#x60;|�&#x60;@v�?���SFP�k��_]�J��e�ڟ�؈��&quot;�yVɧg��{��M��&gt;4��������&#x3D;��Fn
+        ��/vw�Q}OOz������{�-�&lt;@�7��Ű���K�b��a���)W�� ����$��u{��y�ZR�O��b� ��Mz�5;H���͵GVP�f��v�1��_��D֗��j.����&#x3D;�t� 0��\�������(������cW�w���j����/�MOײ��cpt�㩪����o��޿�gc�7���&lt;)ḵ-V�N�u�E�M�bL��*m�K,-��&gt;a����֝�� �a�ǣŭ[\��ˡ\��uV���+��*�,i�0H�%p�_R�{����_7��$k�&gt;��Ľ����{���8�LQr�P������࠿
+        ��ռ�?hz_�d�I&quot;����J$�ўv��� �n�v�8g�I�5�����K�m��?;�\�,�W���T�-���%羖^OC����+����uy�;���a�#�hZ���i@��D���.�2;S�&#x60;���~&#x27;�u�|3�&lt;�2�|M��1q~n����9&#x60;eè���r	�^Ƶ�S����~8����&#x3D;���Y�Ht��LaU|���B�2�$q�_���6��K���D�� �A�����6R0Q��8��8&#x3D;k�jrr��~E(�O�Z_]O^�&gt;h&gt;2����i�|�$�cK{��h�gR��.e��4&amp;Hx&lt;�N Ȉ����𽾅�;A_ʸ��In0�$d(��W��/�c�k��&#x3D;�&#x27;�s�T1��xzIc�&#x3D;��cMЖ�͂���#�������lk�?S�?��7�:��f��i^ �q&#x27;$n�p�� f��gU�&#x60;cnE�WW�{y��c��:�|��Wk�Y�i+����ߥ�Gmm�n�NK ߁�c?�wڵ�x�x�Sj�����8�o���a��a�c���y���_�C/��#�ޓ�����;�ú��䓌g�?�r9��nM|���⏄#��|I��׬Y�VRY�B:�Ѹ?.Z��8/h������2��j(U�.�tkf�����d���|}�(xs��Z�%� �smz�~a8s�2c� ����k�vm��I!�n�ʺo����;��� $�U&gt;��_������	�m)m�9�&#x60;�u�W&#x60;�r4B�}����g&#x27;O�#�%�_��P�_9�t�X�k}5�T��r����99�����N�Q|�wK��z�� ���F+O6yJ�T�G�R�F�#x9/�,��m�z�B��/�+����ɩ�OĚC��z۹���C&quot;�� �4�&quot;*(����O�~#��y�W[&#x27;Z��n5!4��Mimmێw8X�����g�P|J�^���� �t�B��OӵK���(��Y��TVr!��˰g���� ���X�C��?�R���%��鰷]�q�&#x60;yY�8
+        ��_}EFTU;�E[�������9c1S�������&#x27;&#x27;mO�{%��ǚ�ďx:�ηSCky,��&#x3D;����������z���z�xoS�����1�k���37�t����
+        ��u�&lt;%��WI�T�E�SN�[k�r2����&lt;��A� g{M����?3M��-�e��ъ���e~�q��r|��T!N��/������be%8&gt;x�쟟��� ���X������i��&amp;m����4���c�h�p�1�&#x60;��m&lt;5�rx�Ė�M�&#x27;����� �������C����kݼ	�i���5��()n�&#x27;HI���9P�O���{î|q�U�gyg�I�I�X� Y��p�A�����q�ib&#x27;YO�WK�K�Mt���F�I��&quot;i������_�������o�6��j&#x60;r�Ż�����W��x���᣸c/�s��?����J�¾�݌3G$�i��2��x́�RU�� ��:���Q^Uݹ�j�����2,*�*�%�K禟�Ϫ��T��jTf���D�����ٷ�ԏ�o��4y?u����v�ĺZA�L��@�;����	 L�zםAu����c�#�&#x27;�N�&#x27;�� ޯ����-���&#x3D;f� �����|��~]��*�2e&gt;g�W�i� ��R�\�?�ua
+        nu-&quot;��b����?U�k{yV�ƚv�8��$2\���徽|V��I� ��m4y�MJY�/�h_|69&#x3D;o%&lt;��B��?x�0˸d9�i:���ҥM&gt;j͸�+�Z�����}R�?��,T񿻚r��K��.��+��N� �|����yc���j��oC�ّ� 6�P��Ó�^����k���w��E�k��c|����D��8�*@�A��#��p$g�?�_��ߵ���֚�E�G�&amp;��hXp�@�0ZB�T�X�E�5��F��|%�m�p%�S�x�\��g_���X���?T�&lt;�	�e��u�9�v��櫈�&#x60;�\���wI�1ri�ç��P�
+        �ULDݜ���f��NR�V�mw��c�d��o�&#x3D;���[���ܺ#�k~٤ߍ���Z�^~f�O��B����T���L��5�4�&#x27;EO�L�d�� NK�&amp;?���C���eY4�� �~-��vz� �Y�|R���x&amp;�;��&amp;�&lt;�\�Y#�02&gt;$��3�s�\����+I����(����k_g���b_��Z�b+��ٴg&#x27;��I�~�ùvO��㈧$�*|�	Z�|�����5�O����(˪Ӓ���S�wI9&#x27;�Z�N� 6�O��⏌�$��&lt;G�jZ��ۙ$��v���RM&#x60;�x~�Pp�E#�8 .k鏄�|q��Eզ��� \�yM��0H-�9
+        ���ۗi����&#x3D;3�~���t[{[U�b_&quot;5Y%rz��Q�2�W%(���8�&gt;ⱴc��WK�&amp;���߷�x����p	k��}�;-kN6���t+�&#x27;�m�ݍ����O@.�9�*��_�7ŲG��]C)���&gt;�$:n^Gz�� k���O�7Z��Eg4i���ʯ٢XHᘬ&#x60;�:�k��&lt;a���[F���0��P!�5���Yϡt*�Fǽo���:VRծϿ��\��G�����}\o�~��k��7�g\�㿋���z�Ƈ�l+m�c�̮%ROUO�x����ߎ� ����%~Ҟ0�V��_C���K$0ܰ�	X���N�7�� �k���,��Uִ;�e��	&lt;�S����� c85�y���
+        x��i����Z���u��h�3;�$L̻�D�G	a�&#x3D;+�x�O)��9S�n6_���༧��]J�*�y���h�� C�߄��_Ǎ�+��D�]�i*�;�a7�d�d���!� x-z�� U��^������֩�H����6�#��f{�[�:��d�3�Q���o���o��!�6�����W�&amp;���C��P��k[O�&#x27;Y;���9N�����&#x27;��9V�-&#x3D;T�M՚�s��x�&amp;��M&#x60;�w���i�&#x27;���E�&#x3D;�?�wJ��Ý��+y;��J�-��e6Rx�7id�Y	k�Y[�v�^��Xx� ��� �^���-1#���VkŮ�&amp;$	+)���&gt;CC(�u������u�٫�H��փ�~��u�ǅc��������8���+���º7�#~,��^�٥�&lt;\����;Ƿ$�_1�lc�~	&lt;��_��6��v���������،���ۦ�{?��^�kk4�z��yN�vڂ^Y��zn���Mm	&amp;֌0\�q�|�)��J�H�5��7�٥��������&amp;���VU�Y^p�|���	5��d�w�m��	�ŭ�������ݳ�$ S�� �A�\��7¶�]�W��k%��֯j]��S�ٚ�@@J���FN&gt;\�0wAI��	;Y薝�^�Y~��0�Iөk]{����kk��g�|*м3�_������:[�F���{���g4o����ĩ4���O$��ɀ� �����&gt;��&amp;��߇�,�v�⃪[���
+        ��k]~SP�/�#]��J�9e���ai��|�Cq��iْ&amp;�,��!ּ�M�s�dH_���$�&#x3D;��n��u��/B�t�r�L��#�[YMokk����&quot;������D�gv�I����e���0R�c�۔��ь%���M��ͫy��W����}K�T��ո�}w�O+��ӿno�:������QG.����:D&gt;��eM��E����YaUfV #*����࿆������Bh�H��K�U������%����^��� p��W_Ţi���6��]CUi%h�1G
+        ۷��DH����^^�T�������7M��k��A��C~�T��v&lt;v�&#x60;M{�;�a偖U:���?����&#x3D;��J��ci�G$�m鮩� v������4���[�1�͑3n�F�7�ԮP8�F~e���[�e1��!s�O�?*���ך7�Z���I��ǘ��� d���R�m|D�m��$ध�#��?���p���_��~g�ǘ��3
+        ����Mw��,Z�2�{T��Z��~K	�g�#IR9�#Ӄ�&gt;�&lt;�&quot;�q��O�
+        ����7?(�IX��&gt;�&#x60;������i7�����I��7�q�N�n&#x60;��z{�:e���7���fRm�K���x��$��� �/���sxg���Ƶ&amp;a�|L������vv2���^�K����� fo
+        �}y7��댈m�J���o\�S�N����׍&lt;�	Ֆѧ����i�}�N��oZ��*�-�V��VN]c�&#x3D;_T�g������ீ��|Q�[jKf	Ӭ�X$��3��7u�rF	 u�W����_��%��⸷��ܝ;J�1ox�p�F&gt;cۀ ���~1��z�����	��{]��l�az�9%�%�����˨hn�oy,wL1�����B��}��⧉i&#x27;-�V��d��쬴&gt;c	�N���f��V[�[K���ݟUZ~�ڇ�&#x60;���6��.~X�L� ��A�8�t�� �����c�ί%�6�kg.���C�:�1J�;f�J±�שh?�o/����Y���S��l㿧Z���3�� o/����u�-Y�*����8_�^���+�L��h᪬E�������&lt;&lt;�7-�&#x27;7�-Tl�kݦ��M�#Ӿ	�r_�ͷ�M�q&gt;��$��g�|E-�;�V�Y�V��ϚJ�����u��� o&lt;nlfX�e��\��\3H�\/,H�*2{V_��T���q��{I��[��Z��r\G�!�l4�T7ʄ��&#x27;8i�N�G�u(�����*�#��wtaP� 8�{��YK����~]W��c�h��he��Ҍ�IGݶ�O�����	��)n�i&amp;���r�e�x&lt;��qp�Kl�h�k�F:���}c�O�+ľM6-z�t�I�$S��T�#�8�mx��a�&lt;x^MK&#x3D;6tqk��h��NXI� ��J�ju(�z:ú��|��C��S���^�ѽ�|/�� �C�qot$�b�Cwh�x�!׸��;A���_㏄�zg���kKb��4�o���PHB�4����]���8!~\���S�	�s�+E�t+��42� �_���IH��v�z��z��|y��N��}6��-g�q� ��1���W�ֆ&lt;�ʃם�m��;�x\󃱿YT]�Wvn6j�-�&#x27;f�����������P]oq6�!�6�ߜ�7�&#x27;8r��_��Ƴj:Ņ�_5��9,�ڥ� rs�s_|	� ���^��4�;ĺ��#�y�U���L��&#x60;UX��n7A�$W�j�� �@�+y�ꚧ���&lt;�6�m;Ea������}��Jҫ+|��
+        ���p�5	]s��?+�u�&gt;��8���٪j�W��F�}/mn��x��9&lt;w����}�m�ʒ��T��2|���M|w���&lt;�v{;�C)��&#x3D;�с�����*��B�&lt;A��*4w��x�Y#��2�I��:�F�����n�e&amp;��i!Q�
+        ��e���6��ws���X¤%k��v��;Ě&gt;ֽTmw��i/F�� �;������v�+�O/ė3嘘�ɢ�d8�l�d�pO~�|� 	��o	����e��]9[�^b ,�������]�Ǚ]|NՎ�&amp;���2���|�&#x60;0
+        ��&#x60; 8����K·*ڝ��\)Vxe]�U�G_Q��릴�G���3����?�bkU�� �$m�K���&#x3D;��ƫ?�&gt;�.5mKC�-Ckz&#x3D;���]]3���p�DC~2[9�U5���u�T�����|CṮ���]ޱ�[���ʬĜa�
+        �APF߼&gt;-�g���T��{��Ij�:&#x27;F�U�+��0}M~�~��rO�7}�5k�����_:�읪J��Cg&#x27;w��¼D�0�Z�
+        �4���}:٫�uw�v?n��ujY�{_�tI�ꗑ�����П���qkuk�V�Rqf�7�rP; �8��!�^� bo��x�M�;�����&#x60;;}^d��c��I2O�B��	�#�؋��ǀ�-l�l���7P�X��r7�s�� {�wd��q���j�_�6mcLVڿ��[P&quot;��F�p�#�$c����AEn���r�&lt;.�m���[���r�\��Y���읞����8�t�P����[Z��w���f�g��H��|Y{3��Z�.P��9d�קJ���M���l��k�� �� �-���i�����d�	$���~L�X |�&#x60;+W��� &lt;Q�xf�P��f��������*H� y�m�	&#x3D;2k�3�s�&gt;?/��M+�&gt;w�xw���pNPz��n� �r�_�U�vV�e��n�8�SE��&quot;99���ea�n�ޝ��P����W���N�h~UW.kKS��o�A�|���+-ơ ��HO�&#x60;�������\�G��3���|B��T֦�U�|��)�Fpv���ם����5���Z{��Bft�y~����&#x60;���Zg�v[��I,8����^	��B�sT{��^_���x�[6���������w�l���u�w�h�i��9�x�&lt;t��U[+�o:�t ����8�I��\�ܴ�no�� � ����R�#G�sr6�&#x3D;&#x3D;:�����v�&gt;&#x3D;疗��M��hx����G���|��+�|Ie�|&gt;��/�n�d��&gt;&amp;�E��N%R������C��\���r��鶟ڷ/&quot;D�z��(8��s�8rjo�m&#x3D;� �+93�����V�!oߘ�,7 q��9�+���1����������&amp;������&#x3D;��D�ͯ��F%�Y�v�:		����8�{ӥu��.a񼗑����_&#x3D;�?�;��^8&lt;�8W�~�~&quot;��&#x27;��E�&#x3D;R��y�������&#x60;ːX���m+��&#x27;%��O���}�yy}ood�qs,�@�t HIs�(�b@k��&#x60;�p��b�[n�����e�?U�4��^Ɔ.�UH���M읓�޾���T�����ܗ�&#x27;���V�5g��gp�\i	Vp1�n88���|��Ĳx�U��l���XP��zc&amp;���#K]k²Aq{�՚[������$frL����x6����&#x3D;@���T��&lt;���|�p�]�&gt;�d���k�&#x27;�k&#x60;��a�����TZ��n+k]�n��{X�rJ��14�1�&amp;����S~J+�����ďFӴ?�Co}w_ί(�&quot;}��X�?� ��{��:�O�~��;�%��Z5��5�_f�m�K;K�&quot;wu!B�zw��?�O������� ��d�Z�� g�ed��ا&lt;�rOw�%���Qh�c�V�ѐ@WIJ�۷���&gt;�t�+)��f��:�YߝY���S�T��Bx�ƌ��*~���IIŨFjj:&#x3D;$Ւ�mV����
+        )� i�s���m�&lt;g�j^ ����Ne���Q	��X��$+�{�v���#q_�?���	����A�2&amp;���i�Sy�Y��@&lt;�xK��dy����(��+��E�T�γ�h��kV$�C-p���U�3�� �y�,���?�Q�]+Q���ε+C�+��.]����B�q�&#x3D;���eØ�?;�77k����I��4�~;�qvA�N�0�#�\�����u�� wf�&#x3D;�������?�E�as������5�d�˞%��v�&gt;ґ,fB��eiV?�&lt;k���#�gR�]&#x60;X��[��X�LK�
+        �	�9&#x3D;O�&#x27;�-R_��9�f�{�ѤPI�4du�y�1����ޤ�oړ�Ǆ|��RK�No��&#x60;�{�۱7�VF&#x27;��s��� c��q�I�6��&#x27;gh��}4�(qFT��bӓ�&#x3D;~(�%��Z�?�+����M���^Cf��)�|l݂�}��&gt;9|d��ϊ��/���*Ak��|�ԅ���#v&#x3D;+c�_�q�iQx��T��+����e�1�Rbv��m��s���py�]7�?j�����5	�+�V�}&lt;�����3�p#g~3�#��[D����V�z)k��N����ˈ�P�(Cgy;�Y���뫯4xׄ~&quot;\�p^i���[�^&lt;p��(��?.滟�_�V������ᣲ��V�ۣG�$�&#x3D;}�o�?��x3E��5\���4��tD_),�3�2I� �
+        �#~.���xC&quot;�U�n��VG��)a��N2�5������/֦�R�Ma�w齾W�O�o�_�溸���K�&#x3D;ͷz��T��gp۹���ޕ�)���v�w���a�%�״؁��pIJ�щ8&#x3D;2z���������o����U
+        	lt?�}���[���u���f��;9��c�vلQ�18Q��{q���^T�㜰+I�m���]j�z�Ѥ��F5��&amp;\��Q�S����ѣ�o����li���tϰ��I��W�b�&gt;��s�N0TW��-o|Q7��-hx�7�Y�&lt;V��/he*UTu��&#x27;�&quot;�[d�.?�� �&quot;��|P��%d�Gu{T��W����랧5��S�&#x27;���v�)��ׂ4�{��J5�4���$���Fz�\&lt;�&lt;������}U�mݗU��_}��U����[�v��oh��2�� �^��wu�A�&amp;h��f,1�T�V�4UN&#x60;f&#x27;��v_~j&lt;]u��Z��,�2I���s�������?^ٯ��Z1�M�&gt;���o����N�E��n�_w&#x27;�iG�M#���zU;MK�{�C�žc�# �Ё����^fd�8o,}܌㯦O_z����Znxt��6Q\ݴ�f�K�Q�L��޸��zO���*��6�%�֕{q��I�M,1;3K��Hzݏ&#x60;{+��W�^�
+        ��¸i&amp;�^s�:��z�#�&gt;&#x27;~���0����t�?$@�۩i�䲗&#x27;&gt;d�Y���.&#x3D;�R����Ui��v?0�ZKCw�캿�9?�Z��/G��Q���E�����3|���8P��zd�����m3\�O�t�.[KѠ1F�Zy�M�����	��E��6�o��l�OR?�5&amp;�ỿ&lt;�Y���\G�L#��Xc�I�EP��1���y���[�Tײ�{4c&gt;P����_3��%æ����@�t��j���Ƀr�(�F��Ǟ������J��/�O��xB�F���M���h�r�̠d�s���&gt;�����X��i��v�%���!�#ddd�Gz�|K�Oĉ�Y�w,����8z�#6���)]��*��5O�xO٩��J��N��$���j����V�\_��㰸�EV�R�����iEFjq�2����&gt;���������y�g\�n�kwi��&#x3D;��K�H���v��93�q�nx��� _~)|C���t߇����2�Ȣ�+%�BǍ�\��&#x27;�{b��������Tڷ���g�s����|Y�_�����h���Z����#y�qB	���b���� �7�_~���&gt;+xW\�5�����n��]gRkkuk�*��K��F�%�wsԱ��_Ĭ^V�L�og�RS����X�c~w����kS�x��h��Z4�S�$�J�&#x3D;��T��74�2��v��m��\�� f�?h��G���&amp;��#��1]���3�t��Y�q��c� &#x27;����48?m-�~4�چ��Z͡Iy̗{��g�͵pGu�+�� hO�S�օ��Ko�&gt; |5�֯���Y�����Z����:H��Tnmf�$WԿ�o�������_T���/i������x@|�1�,�z�ۏ���,���:XJU)�e�&#x27;�q���8��)��M���O�̲��/�*��ejWu��R��psw��BQ��-&amp;�ўQ�߀�0���7�V�� ��.�kg�kj��f+�;�h Hd\Uc�x�~�&gt;8��c�o�6��d��na��� ~���dR��|�ֳf� Ac�2�c�&lt;D|A�x�M��M6�}PK�c��o+:���|��0}M|���^*��~(�s�Z߉�U�i���&quot;��^��&#x3D;���ʻ�ʀH㍣�5�*�j�F5(BS�*(��7��eQJ\��]�JVW�zh���	��_�iP��R�:�}���!NQQ��~�U����� E���WY�����چ�uk��o�2jW3MX#��j��T�{b�|)�����&lt;Q�h�(�ߌ&lt;M�[&gt;���s�3�-��H�&lt;�,e�\�1�/�R�wį�������kDռ#v��,^#Ԯ�������:�(c�~�_Z���[Z��@����4x�|]Ғ6_蚍ݬ��
+        ��V]��v�����T����r��_,j6��h�+/z&gt;��V~�vգ����C�!��V+��I�I��n�r��䛫y4���3�h�[��� ~��Lpxo��mu_!�۪Hs�9��z���|yc�[���_�Zo�#O	�����شѽĊ���|Ü�q�Q��� ��ς�~	�&lt;+��I�1ψ5�{X���q�Oٰ��� I!�.��rN�V��o�j��&gt;���m[Ğ�Bh�����Q� �3&lt;cq*�0]�0������V��{HJ��W���m8��nWV�r~�[d�{&quot;�a0��&quot;��*����m�N��NQ�Ԕ��lӒ��i&#x27;�~��5��a���^�K� \Z�6�3Y���+ȿ(�Z��� �N@�!Z�C��@�w~ �A�rs�ߩ�?����|E�Fk:օ�Bմ���Kq�\&lt;̱�5��p�eAHQ�2��|[��^�Eզ�n�ڄlH˫�A���	��W�&#x60;s�f8�Q���YF�m)7�.X�7����R���o�&gt;U|���5d��8�A9E%�Jv�7�&lt;���&gt;��ewz�#� �]�&gt;!�a��b���%\�������s&#x27;��̌	e�LL	��g�Q�&quot;�t+�8���ː1�{���bR�M֩�&#x3D;�;���4�Q��g�b�����7V�o����u&#x60;�� s|�}ӌw�޿��a��1|,��0|?�d�@���I��	���}���,L�J�[&gt;�&amp;���d_�t+���ٿ�MO�)���e��T�ڕ�V�8+,�He��COǰ������ʪ��&gt;���KM��K�F�����̗���Xz�J��7�d����;4}�� \� �Txs���i�|Z�_éG�MOJ��!���t���Z�Q���Y_M�}�����Bz��4���}����b��&#x27;�J��)��#(���	]��h�����&#x60;@�xs�g�0�ҟMխf�?�d�mbe���*p	�}���?�19E	&#x60;����NJ)t�|��9]Ֆ˻1��c�jb��V�8��Z��E�&#x3D;%��g�� �[��5E�I&gt;�#����p��  �-�xw@_��]R�dē�iu�P���#�9�� �8?�{�&#x27;K��Q���&amp;�|ˉ$�V;8��a�@��9&#x27;�����H��DqF1���u�s�G&lt;g�k���^ڪ���� _����ZK��&#x3D;:�� SЮ�0Z�E�:n���Ǝ����������/�o|�,��rK��{��+&gt;�\���^ ����}{�G5��C{��i�N�$ȡW�c�%�$a:��9&#x27;9��I�J3�_�т�ӣy-�/��k�&lt;�~�ur�TE-�Ņ��3y���g�J���Z(7�Z9  g&#x27;&#x3D;s����z���[̪a���;�~��-�H�χu-�7w��.ѳy,P�~�O��A �z��jb#&#x27;�Yz�t~��t&gt;�4��Ż[�D�L�:&quot;����	��G(A##� ����G_|:�ċX�A}�C�ZZC���!�{��ى$1����.�f� ����2�&lt;��#��Ry���
+        &lt;^a���U.2y�H�V4o���8M��4!$�X�l����H��ǯ�2&lt;qJX\}�4��o)-��I�]�3iᢞ���׺k�dݼϰ��a|�g�|o���&quot;��[�WN��i#�o�ܩ�ɞ�0W2�T 	�5�&gt;������������!�%��	�����e�6��݌�D&lt;��W�j��E�i,�d�fly�Xc�{�*��7�C$vL�q�F|����я���{W����r,Ez�MI:ьe��j:n�����le�c!�ѥK�g.x����~�zF���x?K�������4K��-��Q���%2.Oٺn9��qޢ�� j.��֭�;�GV�ŝ����R+d\$U2���*��&lt;W��oᾯ{��-�F]��#�F�0T��O���tk��4}[�V��;Ũ���/ɀP�t��&lt;�+�̯.�Z��[�-�IEY�5�kD�k���H��fS��&amp;�&#x27;&#x27;&gt;d�w|�9l��5�t�ծw��&#x27;S�����ڗ�K� ���Y�B��f��s�䳌����K�x_��&gt;��mr8���������\ۨWEF��B �{���A���vZT�[�o�C|���V��Y�$w�q۵t�-?�h��N�%�7,��A�[�۾�nBo��ќ�x� ��+�7�,nK�Q�Ь�NQn�I&#x27;��~].�c���X�S��1����Iң	�5���^ͥ%}\���4�i9-4l��Wԧ�|A����o3�f�5[Vy���+�If1�e5����4隴�I�k#�6z(�{Cz]��TH�e��{8PV޼��&lt;�&gt;��t�6�Ś&#x27;�#���_�\��1.H�� ^IPU@�J��/���G�Oh�&quot;e𗆧��+��$��h�� ��@������F��)9:
+        qQQ���ys%u&#x27;%����^��J���[N5ӥ��Fn��98ڒ��(S�/�Tn�*V\��lt�w⤑j^&amp;���#Kh�9nV�f�G/�L6���&gt;BG˴($�|_����|��� ���ү�J��)��F��Q���� m6�w�������o���&#x27;g{su3&lt;�Ϊ�\4�I;��o/�M�&#x3D;k�Ԡ�|m�:����ɨ]XG%�LQT^�L�s�UN2���A���|�0�t��UO��I�V����z�����{�Z��x�Ù5l}lFt}�	�
+        t��~��G�PJ�8��)l�b�[��#�:?�uA�mjE�h~���+5�0��F�1�������|c}���&#x3D;7O��
+        �������6F����P�mx���Sg-�]%��F{YQe�nT�[&#x3D;A��q~�{�jz���;�r��&gt;\��&amp;��6Uz��9�y�3ù�37�b!N�m髲oef�������}O�G�������Õ�n1NQI)I&gt;yI%�b�8�h�wn�Q4�۲�����{v[[��m�&lt;����ix��:��ݯ�JZ��@�����9݀��G�j���qeg#�Y�Y���U�##&#x27;�q�&#x27;�c��ةԧ�OU��^�Tt�&gt;�ŵ�w�D�[ۆ���i��NU����#�s�����ڂ�k�@�f��C�J�Ḍ������#��g�T��^�&lt;�m����B|��O}���!�����q�ĺ�/$��&gt;�&#x27;��X���td�\)�p�NG$9���?�o�~$�mu46:�)sn�n�vF�2�2d&#x60;�濓� �^5�A���&quot;�y������4_�WW}ѿ�(�~hP��ʧ�#�@5�������*p�g�WV}�+O^��K��� �xe���j��J�X�I�^e���[_���� �&lt;y�k�bi�n���g̦&#x3D;�d�� &#x60;�# rOd�i_
+        uk[�&quot;լ�ۮ��kl\��W7�]��v��m�2
+        ���Py���[��V�ǣ����%�i�o-�� 1� �k�k�FP�j��&#x3D;��NQjRQ�tK��ÿ�ɧɬ�}�o��q c�����sϵU��V���Z�&lt;Ik�q�7X呷!�&#x3D;O��]7��;����ݷ��ٕ��f
+        c~�A��3_F���7�h,��xvD	�~R�����rz��+©9tw:����L�!��đ��y2Jd�%�D��7;�� _��Q�ޫ}e&#x27;�#k8P\# &amp;I&lt;�(�cb���Ҋ��OY��g���!ܷ�Xy{��}��k[�|4ԭ�٧����� W��P{޲W{�� i/�#�^���E1���(&#x60;&gt;T{�	\&#x60;:��LӴ{�F��[x�l�$p��&#x60;Q�8�(z7��qP���X�&#x27;��O��s�}�H����䶅����6#�܂xP��I����
+        iw^*״�&amp;mT� ӭƟ������K��uh�&gt;RF3�i�&quot;e(�����&gt;���K%�ּ���HАЦ��B��9��zv5j���]?O_��~�t�����IT�W&lt;�[$�j��/�ɴ�g��Ė��ƍ��H��BO�&gt;�2����AU���YY}��������-�X�H�&gt;E�q�&#x27;8�1�[�����mt���Y��e�i&lt;�J����� ��ִ��{�E�m}�F�&amp;X~u�����Y�\�ƹ�{]sNԇ�� �׬�ɢ�����F��� �s&amp;������H���T����6���ɨy�]|�N?vq�|Á�	溫f�|a,]Uk��-���v[�ٖj����k�E��vW�w�����$Y,�Ayc��H�h���H���6����\���J�6�5��MCQ���x����7(�T(�U$z����μ�1��׶���4���BZ5������\�B��&lt;�&lt;ot���K��Z��$��T��+ ������qy�U^���H9��i�^6���|�s����Q�*P��T�8+ZJ3����͵$��Һ��&gt;xoR�T6�k�.��;yщ\�~n�9{d�j� &lt;7��F���R3M�R/����X�����J�|Y�]x�S����������{��Kܘ�� �Ȥ���.O�N*Ƶ�x���Qi�|5񍭼��gĚt�%�vr��cl���ĩ�R�?��I�+�u^�OOB���/A����[��ߡ�x�� �u����.,�+l�y�Y�� ��[&gt;�f��x�ݢ׾��Ź.��v���J�#s�� W;ڦ��K�wϛᯌ�� ��{�?����!�Vm���/-�u�&quot;�6-����ZE���|M%�*�pG�ϻQ�r��1���&#x27;�G&lt;��L�uV���օ�jS�d�k�^Oٌĩ�9�nb&gt;l��&lt;�n�j������&gt;�x�C%�D�Ȭ	�� ���Ҫ�B׵��&#x3D;׈&lt;	�/î[ks�ZIj�2nvdރqU�3��&lt;n�����E�V����b�&#x27;���
+        �8��_��3����P���P� �fW�����o!VA��\)�*�s�J�U�iז�0_k���U�h7$���A�%�ϵun�,�g$v�n��6�̷�&#x60;��C�N�(\{��{��ucu�����At�,�Gl���c�̓�ׁ�jY��mጻ�~�-�j�����k�wnP
+        �����J�|{�}/���T�f���/�f�ZT&amp;�p2Ku��z���/$��T��1�,�&gt;ה�q��y|}v�5�_�}��}Z����pL;��p� 9�O�tU�vi�	K��14˿*P���s׭u����&quot;U�v�3\�Rn�h��&amp;�����^f&quot;�*k#�2�Ү-Sv�]�V�����7�H�&#x3D;zUm#U�EԢ����C���G ����m�ܒ	sg�&#x27;i�@������6�N��׷���-4G�S���E�[T����k�@Qe6�9&#x3D;N�����x�mkZ�2��e��S&quot;6ӆ1������m��h�X��1�\z�U����z&quot;�7�ĭ^���cY&amp;89&gt;~������{�iZ[�i#�tF[��pUw�OA�9�OZŌ�*��׊�#�/��V�&#x60;��&#x3D;��5/x*��z&gt;���Qʗ�Q��&quot;��c�y|�P��k���� ����C�Ic�-������[4E-��±@��**�6����Z�ۖ���y��ݎ�3��V&quot;JMioC��ߙ���a���&quot;� fۖ�}ԏc&quot;�h���I���VB�����\��1n~6x��;�{��N�-.�x^dH�e�0wyR�pC2;)%x��i���cq$��8��@�$�V���{;}5&amp;V��M&amp;7e&#x60;v� m�Jږ4��R�]�#t�h�E� �������Ja�K(����1��ʌ2�8r.�,+#M��!R8|��;���m�N9&#x60;
+        �孽���ے�Ig3L�7�\����@� 3� �3N��
+        x�s(�ڵ��z�G�9�L�&lt;���s�쓽�m��.���B�K�,��������H1*un�O�1�̴�mƙ�+���g��d3���+���#��4�T���g3C����q�W9!̍����|&#x27;�a&#x27;:t��%g��پ�l�Z�gX�g:���Ԗ�ѫ��k;)4���mc�������#�5ok~��!�����E&#x60;��0%��?+pp��/Ꟶ_ď���w�B鴉 ��f�&amp;�3��2���p���[���l��d�Z7�v���T��ҡN4i+F*�����O���6�vZ��궟��ń����#A�eݷ�3��p�w�� � Ͱ���qo�mX&gt; �MCö��K�[X%�ρJ�� �U#B����� �&#x27;�[ɥ�HIK4q�;P� z��Q�&amp;��Lr3׊Ѥsƍ4��#�&lt;e��s��}r�T֭-d���&#x3D;:5�1H�gs��
+        �
+        �r�W�
+        ���5-[K��u�����(eU�i��?�x���B-�ǖ�8O5��h^��*��U}WR�T��K$�۹ر��2y�wIStS����gm,� �46�&lt;7W��(cV*��&lt;c��5sI���[�B�k�6(198�k|�Yp��l�Lw�I�[�)�0m7� ����s��շ�hR���.h�d)!����r	��䎝��J��ώ?�-�[u��5�@��I� �@����:����Zj%���~rѫ~�WF1��#)AE�&quot;�|����1�jƳre�~Hԅ^Q�A�Ҫ���Z�,�N�N����</code></pre>
+                                        </div>
+                                        <div class="card-footer">
+                                            <button class="btn btn-outline-secondary btn-sm copyButton" type="button" data-clipboard-action="copy" data-clipboard-target="#copyText-6fde53d5-d14b-4dc0-ad31-29e74be17c12">Copy to Clipboard</button>
+                                        </div>
+                                </div>
+                            </div>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="card border-info">
+                                <div class="card-body">
+                                <h5 class="card-title text-uppercase text-white text-center bg-info">Test Information</h5>
+                                    <h5 class="alert alert-success text-uppercase text-center">No Tests for this request</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+            </div>
+            <div id="folder-ab5dd0b6-519c-4a31-8381-ba36fb1a92ae" class="card-deck iteration-0">
+            <div class="row iteration-0">
+                <div class="col-sm-12 mb-3 iteration-0">
+                <div class="card iteration-0">
+                    <div class="card-header  bg-success iteration-0">
+                        <a data-toggle="collapse" href="#" data-target="#collapse-ab5dd0b6-519c-4a31-8381-ba36fb1a92ae" aria-expanded="false" aria-controls="collapse" id="requests-ab5dd0b6-519c-4a31-8381-ba36fb1a92ae" class="collapsed text-white z-block">
+                    Iteration: 1 - Jailer <i class="float-lg-right fa fa-chevron-down" style="padding-top: 5px;"></i>
+                </a>
+                    </div>
+                    <div id="collapse-ab5dd0b6-519c-4a31-8381-ba36fb1a92ae" class="collapse" aria-labelledby="requests-ab5dd0b6-519c-4a31-8381-ba36fb1a92ae">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-12 mb-3">
+                                <div class="card-deck">
+                                <div class="card border-info" style="width: 50rem;">
+                                    <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Request Information</h5>
+                                    <span><i class="fas fa-info-circle"></i></span><strong> Request Method:</strong> <span class="badge-outline-success badge badge-success"> GET</span><br>
+                                    <span><i class="fas fa-info-circle"></i></span><strong> Request URL:</strong> <a href="http://img.omdbapi.com/?i&#x3D;tt11663228&amp;apikey&#x3D;357d6210" target="_blank">http://img.omdbapi.com/?i&#x3D;tt11663228&amp;apikey&#x3D;357d6210</a><br>
+                                    </div>
+                                </div>
+                                <div class="card border-info" style="width: 50rem;">
+                                    <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Response Information</h5>
+                                    <span><i class="fas fa-info-circle"></i></span><strong> Response Code:</strong> <span class="float-right badge-outline badge badge-success"> 200 - OK</span><br>
+                                    <span><i class="fas fa-stopwatch"></i></span><strong> Mean time per request:</strong> <span class="float-right badge-outline badge badge-success"> 1293ms</span><br>
+                                    <span><i class="fas fa-database"></i></span><strong> Mean size per request:</strong> <span class="float-right badge-outline badge badge-success"> 19.77KB</span><br>
+                                    <hr>
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Test Pass Percentage</h5>
+                                    <div>
+                                        <div class="progress" style="height: 40px;">
+                                            <div class="progress-bar bg-success" style="width: 100%" role="progressbar">
+                                            <h5 class="text-uppercase text-white text-center" style="padding-top:5px;"><strong>No Tests for this request</strong></h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 mb-3">
+                                <div class="card-deck">
+                                <div class="card border-info" style="width: 50rem;">
+                                    <div class="card-body">
+                                        <h5 class="card-title text-uppercase text-white text-center bg-info">Request Headers</h5>
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered">
+                                            <thead class="thead-light text-center"><tr><th>Header Name</th><th>Header Value</th></tr></thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td class="text-nowrap">User-Agent</td>
+                                                        <td class="text-wrap">PostmanRuntime/7.29.0</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Accept</td>
+                                                        <td class="text-wrap">*/*</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Cache-Control</td>
+                                                        <td class="text-wrap">no-cache</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Postman-Token</td>
+                                                        <td class="text-wrap">eb0d76b4-5ecf-4335-9a02-18fdc3fb65ac</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Host</td>
+                                                        <td class="text-wrap">img.omdbapi.com</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Accept-Encoding</td>
+                                                        <td class="text-wrap">gzip, deflate, br</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Connection</td>
+                                                        <td class="text-wrap">keep-alive</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                        <div class="col-sm-12 mb-3">
+                            <div class="card-deck">
+                            <div class="card border-info" style="width: 50rem;">
+                                <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Response Headers</h5>
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered">
+                                        <thead class="thead-light text-center"><tr><th>Header Name</th><th>Header Value</th></tr></thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td class="text-nowrap">Date</td>
+                                                    <td class="text-wrap">Sat, 26 Aug 2023 05:03:41 GMT</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Content-Type</td>
+                                                    <td class="text-wrap">image/jpeg</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Content-Length</td>
+                                                    <td class="text-wrap">20249</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Connection</td>
+                                                    <td class="text-wrap">keep-alive</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Cache-Control</td>
+                                                    <td class="text-wrap">public, max-age&#x3D;86400</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Expires</td>
+                                                    <td class="text-wrap">Sat, 26 Aug 2023 06:03:40 GMT</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">X-AspNet-Version</td>
+                                                    <td class="text-wrap">4.0.30319</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">X-Powered-By</td>
+                                                    <td class="text-wrap">ASP.NET</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Access-Control-Allow-Origin</td>
+                                                    <td class="text-wrap">*</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">CF-Cache-Status</td>
+                                                    <td class="text-wrap">MISS</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Last-Modified</td>
+                                                    <td class="text-wrap">Sat, 26 Aug 2023 05:03:41 GMT</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Accept-Ranges</td>
+                                                    <td class="text-wrap">bytes</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Vary</td>
+                                                    <td class="text-wrap">Accept-Encoding</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Server</td>
+                                                    <td class="text-wrap">cloudflare</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">CF-RAY</td>
+                                                    <td class="text-wrap">7fc987966ed949de-SIN</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                        <div class="row">
+                        <div class="col-sm-12 mb-3">
+                            <div class="card-deck">
+                            <div class="card border-info" style="width: 50rem;">
+                                <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Response Body</h5>
+                                        <div class="dyn-height">
+                                                <pre><code id="copyText-af0a6f3a-6d36-453d-8db3-608078616b69" class="prettyPrint">���� JFIF  &#x60; &#x60;  �� C 		
+        
+        
+        
+        	�� C�� , �&quot; ��           	
+        �� �   } !1AQa&quot;q2���#B��R��$3br�	
+        %&amp;&#x27;()*456789:CDEFGHIJSTUVWXYZcdefghijstuvwxyz���������������������������������������������������������������������������        	
+        �� �  w !1AQaq&quot;2�B����	#3R�br�
+        $4�%�&amp;&#x27;()*56789:CDEFGHIJSTUVWXYZcdefghijstuvwxyz��������������������������������������������������������������������������   ? ��F3JzRWE��A��M �(&quot;��b� *(&amp;�SKތWo����kv��_��� H?y&quot;��s�~�ڰ�b�a��U�8\\L��w�np��ֽ����,66�*y��X��_�;N�FX�m�0&quot;U�}@��Ҽ���6�v����z&lt;/[��j� ?��&lt;U�w���z��&lt;E�;�8_h������C���y�����q&gt;Q^�pF+��b�b#�O���G������F�]�G�4�*֙�]kWkok�3
+        � 2z�k�_�W�4��w��,�m8�$c��9�&gt;��b1�h��&amp;�^�r�e���9��w��$aQX���t�ǭ]�a��k3H�Ď�q�ۭz{h��:�}�E�0�DA?/�A�s�p�SK_��[�m�yT��~C���p+�������O�&gt;�����?�Zk�[#���V� Q�u�dp��a�����&gt;&quot;��M%��&gt;\n��1r� �;�Ybh����}��W�&#x60;��Zlͽ��aV��ʱ��ع�j���R@3��&lt;Px��k&amp;1s�QHb;q@Py�\�t4c4PKҝ$M��nᑟJ&#x60;���-�����
+        ��下�h���IQ����n $�{����&gt;W{N��۵@猞����7�t� � � ���!&#x27;�-NPߝv��uY���� 6W��g8&#x27;�:��|y����&gt;�[_�� �в�é�����433]]|ʬY�H8�ߐ���˷�ذ�$�
+        �l�[�zc�r@9��;?��y{&quot;�o���ݞ�rN{z�dx_㖇��6��6n[jI6lO$�ܑ��yt�b&#x27;R�7(���~[�lV��*�d� Ύ�u/�Ce���PK,���| ��e�3�m}���c�&#x60;�X�U�������$�ܜz�ղ�@�Xg�n����&#x27;���Ce�C��ȡ|��Cq��&gt;��1�&lt;i[�ZRi���~h����J�Uu����崯 Z�v�&quot;��[@���2�a��s�y��8�E�UT�M$�h�F�ېI�秹$�k��5�������N}���r~+�F����q��&quot;q�
+        ���܌�{���&#x27;*�^�[�&gt;�W��&quot;�Mi�ie������)��tR*��r���������מ�����ūhm��̑P�p������o�\���h�ҷ��\�ˌ���r;|��9�yĺ����My$�c�[&lt;� t��2&lt;���X���-�����;��&gt;&gt;̨:oI�7�[-S���nE�ck���1�$1��׍��ړWT�o��6*���4�{nG�8&#x3D;�!�8�_]d��#����P�����ri��ug&amp;v\RI���7w��R�08��Ⳑ�%��W��M#ԈsJM!4������kG�zk������J��Y涼������^O�q�2A���x�~�ZW�7�x���bYJ �p?�gf��k�A5�̠g��#A�;�1I�.q�J8c�g� �AG�|&quot;�K߆�H�˴ʻ�#i�zt��׽w:N�F|�
+        ��8fܣh�$�l|��|�K�4��;Uci�S����WQ�77�z�ğ�q_�f�oV+Oy�g�ym��I��_��~�S��Nա�&lt;2�)�R��7��~����)����^����|Eѭm��;F�_4�]݈��� �\����w*;^�	��F�(��� &#x3D;�����l&amp;�֝��F� $|�u�����JQ���O՞�v�uᦒo2O.��cӹ�����S��V�����:rN6O ���s���7��!�UUT6Í�s�9��c��}����h2iz|�4�G$���U�&lt;/&#x27;&#x3D;�0F6uT� p������ ������V�e�_��8��|3�^32�m$f�4Wi��P�#� �� �&#x3D;x��5ωm�����&amp;&quot;Dv��r��ҽ�?���K����i����%�F�?�ҹˏ��Zx���4��w�����}�G���QN�u)��Iz+o��_C�shfع5
+        N1�uw���ӹ�[	�׊�؂�����z��콫[�嶧��W��w�yNz���H&quot;�+�
+        }X�����ū��}�q�z����m�Ŷ��R����&lt;V]��$�����ӷ&#x60;jG���H�2�&#x3D;��˛m��u�#���ko��Z�ӹ&#x27;�i�3�w�h��[Yd������C�䩆�\f�jʸe�B�dUm�j����S�u����7
+        ��Ex��/��$�������2�[v�Hǯ�NY:1���
+        �Z�BO4���d?wJ��)+���z�,E��&gt;U�p��4�3����{G�6��MX�TrĮIcp&#x3D;&gt;����&amp;��R[V�Uill dlzG&lt;d��L��	e��
+        2&gt;�����Wy&gt;�gml�M���v�bE�q���s_�fS�q5��_���K괹_ُ䈴�v+
+        ��&gt;�2n�r���OOz��k�j�Yn��i�AaRʠ&quot;펀���D2o�Yp�fݣ9&gt;����Z?����׬�RLˏ.Y��Ku�!W_Î8IV��mm� ÛV�ƌ���I~�h�Ib1��#/�v8� g�$pGZ�eh��?1ɸ�1_� �rW� ��� ��BD�&amp;��$rC%� F��&lt;8��9�9�nh٬�5�.v��&amp;EETM�&quot;]�;\�Fs�����{BRSѮ�����s�N���?����Impnぼ���*�9�݀x� V�G��h���؇;S�RXn��l��PO��3�B�&gt;�!�&quot;3 
+        ]��A�&#x27;����)��oism4х�ob���)&gt;Zɑ�	#5�)��%m}t��@�Q�6����V���Q^]J��KC� ��w�r~&#x60;N�@�y��I�X�I������UvS�@p
+        �p{�a엺��E�b�e��@(E\�|3�o�$rF3�g�h��/4և��L�q���x&#x3D;�0s����$�G2�_�_+w��g��HO�z��� _#� ���I��!�-�b��)�eݷ�_�� Z�X���E+��H�4�&gt;�z���Q�;N3Z^�a�#�̓c/�ϭe�;躃�|2���aJ��ej��d�fN�[&#x3D;��.ߥj�YMs�7*Ǯz�w�_�J䐢��S����S�Ӕ���T���2ާ�ͤ���6�k��Q��� ���T�i�2]&gt;�Y��
+        	&#x3D; �
+        a8���iz���*�8�q�A{� *t�c;i������YҦ������EE??���tz/��/C7۵��5m��,22&#x3D;1�Z��ug���;z�G��ַ��|#���$�!��_&#x60; ��3�����J��Qv���_����UAS����~�m�����?���m�/��X��JX��ۨ���|%o/�&lt;_kos�\#�,R&lt;g-����j���ah&lt;Wf�� &gt;j���� ol�&gt;!i�h����1ۃ^����]e�r�&#x3D;l|�&amp;�Ve�~�2V���_��s޺�m�MR3p�C;�X���z���r3ӊ�&gt;)�W�Cg�èx�o�jQ��ndi!&lt;|���^�5�LG�����ON�z8�5���&quot;������ek��wi�n���&#x3D;�z��F��a
+        X��NN��W��ZۻW��&gt;�6���:�{�I]j����Nǅ���T$��FU9�~�z����z����k����)�R9)�Å��&quot;z&#x60;qԜ$�F��cE.�x�}-�x�o|9�aX&#x60;�� i;~�3��q���W��My&#x60;��[�u�~��-����-S��V}_��_���xN//P�u(�e��6 �(e#v3�z!�W����V�e�H$ߵ3��1�	��׿|Tқ��e蝦��HՄe��&lt;68�}1���?��ShZ��n2�&quot;���3�&lt;��힤�|7�K���꬗G�/��םeo��t�w�wlʖ|�g� �C^�-���*��5A&#x27;�s�R&lt;������QV!d��1��� �՛Q��	�F�՝��qS�q�YVB7m&#x3D;*[&gt;�/�D�[��0&gt;����V5�S�F��Wk7v���i��/�j(��IGjuQCzR�Z&gt;�ǭA,�62s�m�R�B(�h4����Tb���k�&gt;Z��2�xU棂�K�
+        ƥ�8����O��Z?�tqۙ
+        ��98�_�Z��Z�Icf�������
+        �K�� �#���4&#x3D;�t�X�C
+        !@~E�?�U�wr��� 3�����7�������k5��� }���G������kw��C��3� &gt;(G��\� �)���.����_����¾�� &quot;�q�L�&lt;d��c_�_�&gt;��i&gt;����+�%}:qU~,�Kq��_UYWe����ρ��?#�j�&#x60;�ʝ�(�*�y�p?�]9߉������J����H���1&gt;f ��^�� /��ܱP}����  �Q,&lt;�ٯ�������3?̫��������L֩gqp׷��,�1��B��&gt;bH&#x3D;�2&#x3D;k�b*w6�ھ��߳E�Z�&#x3D;�fm����&lt;����������/i���}��\/�&amp;����^1�n4}9.-�e�Vq��P�F%�7s������J�������ĭ��H&#x27;#&lt;���M{$Z�f�M�煏r������#��⿴��K�]/3Fm&quot;��䞧&gt;��&lt;*�q���&#x3D;u�M&lt;���&gt;����r���4�_�����&lt;1f���y�j��&gt;��������\�Q&lt;�զn6���j��;��Y�y	/O�b��3b�\0�&amp;��L�x��T�֤�Rǩ�ޕpH�jN�V��m�SInb�,U}�����֐�sUp&#x3D;�O��9f���PI8�?J�94�Ԁs�3�#�59�~�Z�If�br��	�����:��迅P/�!:LŤ.֪�.v�&#x27;�L����	rU�Y&#x60;�|�����t���Z�&quot;}�1��_���&#x27;~��?b�釧o�_�9߉�	-�%k�^^\C$q,�
+        �ȣ&#x27;�z�����Ӿ��CY��-n&amp;����A����A�&lt;g��Un?���^A[��g#�1���߷��N��{����竔a%S�J��2{S���1b�&quot;z�O�bx���w�f���.#h�Y[lq.���9c���|�����e���/�F8X�rX�J��&#x3D;ГK���T}�&#x60;�(�iN�\��-����-H�d���M�_���Պ����� �Jf��H�8)�Ɗ~��Sڵ����n�u��p��7��&amp;Pˇ9�|��~{֞�g��w�[����c�$)�p2� 䊽-�_�e�?����[�1�q�^�#3�զ�Zw[��]�y42�5�R���F���s*��R�V����Ѱ-��&amp;�WoB7.S8$�c&#x27;x��&gt;��_�&gt;�-lO̻O�&#x3D;��ñ������H%.���GU��������� h+u���,ۂ�_���?�&amp;��ʦa�җO�}�G��SP�I%������y�6�RF��$;�Jh�wa_�[[�&quot;��\UyWsg&#x3D;)�B��M
+        e�f���b�� &amp;���hZ��B�{_(g�jngn����S[+3�EHY��zt��ޣ�5�7���qI� �	�c۞)��lw�S�м��]N�����VBCg!Y�*H�n	� 
+        r��ǽ7�#��h;j^��R��[xr��[+�kh�e�n�ƴ����U����#���ב��_G�� ��7{՝n��\4����&#x60;zW�&gt;��Nn.�͞�&gt;#�B
+        ���dz�ߴ����;;��p%���&lt;�����пi���e]3Q��G
+        ����t�5$rL���_j�\3���q{+�f�� 2�������g&#x60;la��&amp;�C��S�3?�?pv��A�&#x27;���_��G{������A^K%���@�dҧ��};�����.$�?���{4� �f�&amp;�mm�x�Y��˱��]:V���f�������\F�iO��[&lt;�� �KV6�M��H]ǹ���&#x60;�oY�j�cޣkg�_3q�1��~��q^nm��p�T�ݵo�o�s���|V&amp;�����%�yv:Ms�W:$P� Ľ���dR�&amp; �����s�Ќ�6�ֱ��m���KU��[![$��s�潛C)4����H9�8��3�p�&lt;6��$�Kx�4�+ɷ�Z&gt;�2}�׭q��&quot;�Ī\�����}ƙ�:����n�i_�&lt;�}9���QIj]6m&quot;8�c��}k��Й&gt;�l�QT�NXa�v�u}ҙ� �d�ڵӥ]�����*[m3�j��q-&quot;ڼ� *zB�r�߅]��G��ڛ&lt;?fm�8��Y\^�[i�����5��6���}��ԭ5�94��(WM��+�S{ӖB�ڛ֙#����qOH�@z�TBBa�hmV@���wE&quot;��ք]�V,�� w�K~l�����u҅@?���V�K�h�33F�
+        OAV��V���i���LO�����A𶬲��cy!o��DHl��kK��ލ~�W�_��|sSMj��wq�z�&lt;;�\�-�}&#x27;P&lt;����W�?�-�!�-�ěC16�}8�U���������Åw��kk�����IU����p��~�V���uSq������n�ץ[�S_i}��j+��B2wUm�cUGE½{�� �!j��6��C��&#x60;��&lt;q�^g6�qgM��E�h�_A�+Ծ��&gt;�n���Hʟp&#x3D;H���rk��9FXD�ў�Cxb�O�ƊV{�H��F?y����c��ϥa|Z���V�C�4v��o����k��t��b�l�#���� ��V����+�Z�� ��&#x60;3�_����%n��&#x3D;����G#��+.�oq22�4A�Td�F*��tb���{D�w�|q�T��X�����J�u�5���_z�
+        �c�%�ot��(_��Ǡ�5U�	!\WM�Z	L�6���;�;
+        �\H�[���t&#x27;���+�]���:���8�֥���ῆ��N󵦍���Ҏ&#x60;f6����tWI7���a{�����P��x��V6Q�]i�����k��v���jh�l��ΊB͓LAV��c��b���?�DLؤ����t4:����w�p��4��9�l� m�g��.��?�&#x3D;��&#x27;�1�c��x�^}*��w���&#x3D;*�x��|�eJ	[�� ֭i᷏Fk��W��c���{�&#x3D;��?�Ԍa&amp;����c��2n1k�Q6��ɣ�+3�a�\���?g�줸��f�r�a���r�aX��-�BN�$O�m;qӯN� ��u;}5&gt;�����6B�����ry&amp;��F��;���&quot;��@�e/ڗa�Ԇv8 7e�&#x27;��ң���l\M�M4��o��8^?/�ɥ{}#&lt;��[��&quot;3���N77#&lt;t�޺Kmnn&lt;��&#x3D;��j���9&lt;w���R�jiJ�g�9�)�����*2���H9 g�3�Ӹ��x&amp;�SG�H��R&#x60;%z|� �� �&lt;�Y��&amp;r�_�Q�����8�� �Mic�[&#x60;���!,[?�9����3Y�\�f��~!�ˮ�ב����R��&lt;c9����];w������&lt;m_��q��w��G$��q�q��� �OP&#x3D;;&#x60;c������Y���P� ����[0����p����D��0[rEe���w�?Jo�%��G����
+        ��&gt;��֙��֯ �[�H��&#x27;�8�1ߟ�K|#�5Q�7�Ėc��oZ�:Z��&gt;���sf�L�י+g:U}G�k�eO-[� ��zEګN߻�nz��]WN܌d�������)�i1[�tm�o2X�}���&gt;�����Yj��69��@�a̍~Z�����Y^-���T���EX��F	%��sU�����:^Yd������QZzf��_���@�8yF��QY�^�̏����f��~���&gt;}ORXmld���+jY�$�v O&#x60;)�z,�%�@��3�&gt;�z׭��&lt;�^9�&#x27;���)�J�J�5Tti����sU�#�l�V�� �0�3�B�&quot;r1����?�&gt;K��
+        &#x3D;�)0؇w�i�F%ϯ�GF�����Pm��4��V�oy�.��;/Q���9�^�G�h���Mv@طr����^��봃]�/�6I�rK��8�ҭY�0yk�Ip��#p&lt;�c��^� J����&#x27;���Z]�}�&lt;�Ȓon�Yxw��1�T,�#i�B�s9��_�&lt;Kqzv�u�ءgdY^�F��^�e��5�*���ݲ���1�&#x27;�ϭ]�gj�.�����8��}�b��7n�F+g�!�T��������:Rq䜭�yD��f��u&amp;����L@�����U�x/Ŷ�,iy�������z���V}.��[¶ӝп�U6��Q��{�	54V�Y[y�Xc;z&#x60;G&lt;�l��#Ω�U�zq����c��� �����Wo0I.rc�?w^;}~���H&lt;L�䉥ۼǐ��q��]w�mn�4��Ԥ���R��&amp;����ޤ��N/�yg�?ُ
+        �&quot;��ςD��X�r?�4���8J��חOS��.6�S��/�MC[_&gt;��v�����&lt;���ߞ��&lt;�7�|0޳9��U��&#x3D;�&lt;ף[ZM��J���wW̀K�� � �8� r�&#x27;���v���i|ȒRX�䏦?/��{�.h�U�2�U�������x��R�:rw��Qx�l��1\�rj���xc��kX27x۞3�i�U�]^�˷��_Q�����ګ Oq�����Z�B{�&amp;y�*�&lt;(�T&#x60;�/�q���C�e�������^f#�o�Oo�s�ޑ+C����Q�(_i��&#x60;��-WO�k���3�b��$�~��}�[f�%�G��IUI��\��&#x27;�r���[��	�&quot;�z �+�7�A�n��M�;�G8b{�j+6?x~��k�io�团�i!�����3��&#x27;�k��&lt;:��6��5֟�[b�d��b;�j�Ϯ;�A�G�x�%Iu�����Դm���PC*��x����j͋��o,�H���N��Q��;�|���e�&amp;��W�|}�ܨ�1�g&#x3D;
+        c���u_�z揠ǫM��� d�!�/�O2Ը8)�Sp��s����M��.�|�|:^�6�x�˷�S ��+����;��XU]&#x27;Ǿ �{|�isj���s(�g�nS?Ą��H��8&lt;S\�i�^c�Q�&quot;e3Le�kӵ�����?xOI�|��k:*g]/@K@���t��ڳ~q��k���� H��ڲjQB�̇ɐ�T3�GBHrx9�g]��C�ˈ�&#x3D;q������pS�s�&#x3D;ME����X���Xި��4ψM��g�{x�&amp;P�����f�-��!�V�292���t�R�۰�N6ܯ��NGz�je��/��&#x3D;�9�X+Ms?��Gаk6���Y�,�fj�]�q�Ga隯�x�uK[���߱�p��&amp;P�NA�{�&#x3D;�¼r].�� �2Mq!��+�q��VbТ���q�&gt;;��&#x27;�?/�����Ky���K�K��� ���� �͡|R��ӭ��H$dh�X�勞z���ں��F�$pywЧ��&quot;�6L�s���k�Ѥ�$M���5y�ʻ? &#x27;�C%���T��\�A@}9�z�/F�������yy��  ��M�,ſ���ٻ�y�^�c�����&#x3D;;؃��J���p�n6�^�z�&#x3D;;&#x60;�&gt;ٯ�t+O�ME��w#%��ܜ����_����Yeik�ɮ_]Kh#d�|���_3�RXc�pF��8o���J����r����&#x60;���Zw��������0���Ƿ�?�g�tn����O^��⇆��|F��C�ƶ�v�jX�$����؛�		�M�Z���{R��:&lt;FCee-����#o�]Ƨ-��f8��Cf~ٿ~�,���|1��H��c�_k%����,2�O�р,I�9
+        �����Mcu&gt;�����k�[z����1��Ö�W��&gt;�ב�G���H̲�[�np�ʹ?��y՝�F��CN��� |������Y������&lt;/���)����%����&amp;�u�s��\����1�p&gt;O������,3�Ş�q�Cz�k�s�}f�+���FN� S�}�0A �+��׋|�Gٟ6�&lt;�P���I��Kw(��ܺ r8&#x27;�EhhZLv�-9��&gt;o�u��d^� �Z���U䉤[��m��6&gt;�$o&amp;�5�v]O�Z�I�PV.�z�1�e�����{��2P� ���O�6�g��m��s��E_��Z���u9����� f���jo�D�:������U�If513��Ny�����&gt;^�����4T�-uI�tٮ�n�U�.\�8����Oț���3�O��B񞦤Ѵ����b�+����U�.̣�&#x3D;+����� ��/O���/-&#x27;��#!��wkmˆUw1&gt;�!����
+        �[�~�h�*�MsK����A��|&lt;3+�#2��p��%��Hy]����mH�l�W����}|u� ��|qjZ6�u�Z��mZ��객����\C$���)�̓�f#�T�ҿ3����/ױن��N3⿆�����4k�.���V��&amp;K[+��b�m��.&amp;��g����3�����G�	���)�	׼m��^��bc:���-5;O�0H�Ym����*e���K
+        �����&lt;g���� �����)�ۈ�|��l|��R�C�@�h뎗�����ǚ&lt;M��׬���Y�f�-n���!+2�9�Y�Tc�Y�)EV�W.�&amp;���n� r:���ۄdw�����FݔՍ*��/�UR͜�
+        �&gt;&amp;�zǅ&lt;m�xT�}2�K���{S��ub*�7�����τ�+�f���IӮ�7��c)�e�$d����W�RIC����7v&lt;��5�*���gǭF�2K��~F�s�߲.��Kj�~!�ޤ�pI: �1ɵ1��N�8⼷]�/&lt;1�Mco%�չ�$n�*�~��ԧS�w��:�M�E&amp;����[�۽�ār�s��-~���p�ͷIķs�@ӈ�r�$�ne�W�n�&#x27;�&#x27;v�����0�[��Cp@W+�|����c^��m7�&#x27;�|mu�xZ�t�@�-��~�.B��#G��Ug9���O8�Z�aS�RI[��oN���ߡ���Ohq� d���n7H����A���F5�o�6_[�v��M4��L��Ý�&#x3D;�? :�������4X�:���_ûcC�hO���]�&#x60;�+	u{B�pH&amp;O1��
+        ��j��� �7��m�O���ymCÓZk6&lt;����?٤Bhc�X3*�!��U�&#x27;/�5g�;���o���&#x60;c�����y�?_�x��� ���:k���%�%��[���8�޽��&#x3D;�}��� ���d6��xBx�ˍ�Y\#|ç�5��-�b�^���#��S���~�
+        �����v��wl���Mn~�� f�G�[��K���R�EGK�(���
+        �B:��e��*^�ԛ^O��s���4�uVv�����?f�ڳ�����]C�&lt;Aj&lt;�E�jr5��uB�U�d��mm���Q7������k�&#x27;���4oC�K�a*_��#�;��;~&#x60;	&lt; ��9(���� ���կ�Q�3�6�k������6V���r+�yl��$����O��� _ڞ�e��&#x3D;���R��������_��S .�*�pgpN2OV�e�B�}���?����5��c�?y���&#x27;K��&lt;m�Z���R�:Y&quot;��լ��	|лٲ9&#x27;$�Fy��&amp;���?�/ő���5�XCe�2kcj5�c,%�lveN8���񮯭�u��-�f��B坾e��{�ɮ�C��|�Ε�Mg�X��)m������Aߥ}�jp�����&lt;�����἟	�/���u�x�m,o�e��l��J��m �&#x27;����G�g2L��������&lt;��|O���kMq�_hZh��TR�2�Ƨv�^@PA&lt;rIɪRxY��ia���H��?�+���&#x27;��]�y��5�m���pd��i�Q�ίZ�.��Y���Rh�S�#b�dQ��}��&gt;�f�Z�E[���&quot;&lt;�� ��;��R�Z�Hb���I�sZ�w��W&quot;��&lt;�yU��Eqڿ�$I�o�+�4ّ�R��\�w6s���;����|3���I��&#x3D;KR�pd6vo0�&lt;rT~5�D��|�,�N������l���$������׊�o|^��&lt;&#x3D;��żs+�(�Cm��*�q�~5�U̪�:���OF84�����|E���Z�w��ZȬ�Ќg�z.���x����u7\�4�As��i5��Q.%F�㼖OB�w���Z��?i[i,&lt;Ugesvc��Y����p7���tl��W�|�?��Û�b�FmJ�$�O�c̲�H�v&#x3D;:����p����o�B�t�Ӳ�y_����X����?��I�O��[��&gt;o�&#x60; �p;ⴼi����:?�����H/H1���&#x27;�0�ӯ�k:�Ʊ��j��uu;\�!���ŉ���g��|e����o��ܰ���?gv�Rs�� x�85�V��ߺ�v�� ;����4����&gt;��E�Ux&#x27;���,|+�G�gK�]�p��&gt;!�����N� Q��[�*r�A��.	#���� ����&#x27;�� f�v��/��QUm��Pk:Bm����4{�c&lt;����]��嵍�i����%��Pz��gi�rF	9�����j��#O�5/��q���B&#x3D;�aA���Mx����rԡ�z���t��Ӈ�1�h���~?�M���埆5?�+�@�����h���)+��;��}���	��� �������V�F���}�4R*��C��FW!�&#x3D; ���M~�4�#�I�^�0�^ �2K�c�w�|W�������Yˤ� ³�����[$q�m�o�5�V�1��^*6��W����N�
+        ����O�_������ �����{����t� 2��K&lt;��2)*���� �%�q_;h&gt;8�4F�h�f�B��cׯl���P��¿�o���[CԭuK{�
+        �?t�.xRO���3_&#x3D;y5e�v&#x27;�W��s�*.X��?$s�#;R��7�o��&lt;C����x]wº����]���&quot;i��&lt;SE%��,LE؈�&#x60;d�N
+        ���x��e��eK��Q�������&quot;8ؒĈSf6o�p�0&#x3D;�:��&lt;a���_�!��O�u���B;�68���h�-��ѳ�U|���z�������ֱ���}��$3oR�^��t��ٷ[JUU��d
+        �:���%9�q�N���M���Ҷ���ؙK�+��v�鶗?&#x3D;!�+i�]\�ac�F�D��ŇV����j�,wR^i���\25���dW&#x60;�	�V�&lt;㡯��m� U���?ZMG���z\��]�oa�{kw��X��aFi0�ɯ��6|Nּ}�k��s�q%�����Lp+K+Hp�t&#x60;� pq]�Ju&#x3D;����k��j��(Ǖz� ��M��~�� �I�M�k�ׄ���-�4�M�_[���fm��n�&amp;#6�� x�&#x60;�Jk�j�h-Վ��1���)9�N	Bs�A�������J�ּE��� ė���k+�����7��0d���9W9V&gt;E�����x��p�+L$Yc�� �&#x3D;r0q��Z�,��&gt;ӕ���M۷��O�}��Ȼ�}�Lu����p��$A��s�נ�^ �Z.�j�ַWv�2�v&#x27;��2@�X�Mq&#x3D;��.��#�G���&#x3D;��zк������kާI�d�� SϫQ&#x3D;#��S~�~$�u��Cou$��h���l�vX#�&#x3D;��e�H;@^6�Y��Z§����Nʿ���c�p�G�O��\� ��m14w[�N
+        ��&#x3D;�U�B�B�p��[[i��.#Q�Hv�ө�	qکr?�?3;&gt;���O��Y�w���Ŧ+v��O���~$՟�Ѿ�%�ۭ+P��KFɩ�җ��Sg�9���O��O�dz����?í#��gT[����3��и�$㟥P_�zƿ6��s�[i��d���&quot;[�� �\g �nq��M{�&#x3D;?&gt;��vZ�����&#x3D;��ź�k����$�:Q\��ַ��M���j��i��h���w�h���rV��woS&#x27;O���x��Վ�Y�+���q׏ʺ�/�7V��H��U�]�P�y�ܗ&#x3D;+�sK��T)O�F��8����z�nE��X�B�$�e$&#x60;��&#x3D;k����m�-�䛼��(�}�P;}z�Rk6mQN��P���iOa����G����ѧx��I5fǾ�RX�$Wp�ryN�X�Ь&gt;޵_��kG#3�&gt;9�&amp;����}�Y,$�7�각�#ԢUc &#x3D;
+        O	2?�_֩��W�^�m7D����&#x60;�b���d�*1���o\s\� �|a��?����:i��tnUdV��2~�
+        Ys�O���ѭu� ��v���Ԁ3!�q���8��y����sZ��OCҧg����ΓN��&lt;I�ɺ�V[�eT�r��������&lt;g�}���Y���� �}5��&#x3D;���M[I�n���$���9
+        Ҙ���6n&#x3D;3\�߂u@�S5���S.$\&amp;x��i�����8��TJ�&#x3D;�ǚ����6�߉�3{k&amp;�osum�i����[r3���2�VA�4����,��*h��X�&#x60;muI����L�p�Q��J��add&amp;&gt;���&#x27;hTHѩ�%A�����1��k�8XZϡ���~�h?�YC��m�?��ZM�����&lt;���K��0��]U�����k������_����/�����y-��,�������n� �j�X���.U���9��Y�\a�~����W��^��~�1��K��.����&lt;�k(eXxE�Q�m?/��9b*K�w?F� g_���/��SG��&gt;
+        �~�uԎ����T��a��b���F��xȍ���ʄ�I������x�X���(�����Β����u&quot;h{e3!x�Hf �l T@Q��g5��W���C �$S�F ��9�K�� isC��g�d�MV��sr&quot;ԁ��Yd�&quot;��O�,s��FsY��&#x60;��Zi���r㈓�,��/�O�~�� �t� �z��f����f�.���Y�$�1B���3ƛ����_?|o�&lt;�R������
+        �O,QI6���2ȍ���j�&#x60;�� ���|B���x���tո��|2�r���E���S#�_���[&lt;�D�r+���� �֛Ƒ��+�Jɒ���{{�(�ld�V}���ߞ��#R�ER�����N�[j�C��R-&#x3D;�3�.U������$d(d?���� [�u�~�?
+        ��������H�&#x27;�Nۨ��T&#x3D;Xt#Ѓ����߳�������㧅��n/n��5.�p&#x27;�c�ߥ�����?��փ�����^xI�
+        ���:�b��R��������5��������0�O�Vh���I�tE����1�ۂ�t&#x60;�m�yr9�!�^���\|ǜ���� �r�_��⯅�K�&#x3D;�Yumi�u�yQ$8Qp��p����thO�^%҆���[,�(����U���&gt;��N�$�S�~�Z���e厥��^C;��mFe�0;�����~0k&gt;&quot;���&lt;C��}Iak���kO2)Q�W��1 ���+&amp;�C��v��[Hف2ě�w&#x60;23������ 2폙�!��{��^.�;A�$�ʋ-����[���Lr1�*kaW+&quot;H@�1�&#x3D;��R��ʌ�H��JN�Lf�Bʌ�q���t��R 9�F����&#x3D;��G�� 1�ݎ?Zu�y�
+        �f �A@�������O�M��jR^*�b�4N�_PH���RU�kZ�6V�m��ݝ�	�I�W�%��GE �N���x�kX�����O(.ᶖ��W?£��~�6��4��V��.�}�����OFa��O&#x27;��5��sq�(�@�z�	�1���6��ww:O��ռO�jK���FӬ源�p��4%r~c��aW|u�GA��7�:����*ܘ�b#h�	�Hbo^����K��}I���f�Fv��̹�&lt;�A�u�-��w��I$7��.1��x�^��}�9s&amp;�j��y-�9$O���uY�t�{t�#��xA]�nf��&gt;y ���\�COӬo-�f�d2�%Yʤ��eH�3�5R�H���I��b��&amp;ӶL����|&lt;�72)��U�&#x27;��� o��A�H�b���1�ϖ�r6�^�8	�xǽE:�����r��֦�vTE�1�[σ���i��}�]鏽�/}Q��nt�n��E���!��#?���TV��++������6�H�����Z���ql��%ż�	+�]�z��g��M}&#x27;��yh�l���j��f�A�Ř}��Y&amp;E�gU}�E�k*��R�N��8]�������1�*𫟕�����
+        ��~�&#x27;�ծ��Ծx���×%X\%�m?gv݂�墮�܆-�����Cml����5&lt;F��}~��@��Ӟ�����iʌ&#x27;ndB�L���u���^x�M��	�&amp;�&lt;K�$3��,�&quot;$��o,�$��_�&#x60;������?�K^��͊|@�#{ٯ~ϩ&lt;J��%tP�*��%��0(G��&#x60;�Z97���������s�4�T?�&quot;�j�I�[�V�,� p}��ן[/����Ŀw�4U[�z]�he�_��� lsW�u+K�&amp;���+�匌N�����V��� �&gt;յ�X�&#x27;�����l-7��~pwm&#x60;p����65{��P��f�/ �F:�����#!����~&gt;S��]�e[l�t�p0��B?���u��SE�3��^6��*��)�5%����&gt;f��u�yN�fNxBGC�\�mi�X鱮�˟@Բ��y;����85��V0�~c���Ո�P}��H�b��בls3�W�;��&gt;B1W4?α�ѫ�41��J�&lt;g��#8�8�����[h�!h��:&quot;S�d� �[O���ݹ�����E���s�c�� {�ԛz�e��G�֖��P�I5��,���,Gl�;���m��X���t���?E��[+x���d���渇̐ns�1$�&#x27; }E����F������q�P:���)rA˲8�MG�����������CM��b�����T��������&#x3D;kѴo��^ �9o��nd]XC�B�&#x60;x\�ns�&#x3D;k��Ǉm4[�������D�%�����,	�e&lt;vz�����-��^��l�Ԣ�R��[y��Y7?�&#x27;����~e�q�6����zYJ� &#x3D;T���y��&#x60;�?Ȗ&amp;N�����L�� f�{uipJ�nc�Ἃb7\Tu�k�w�&lt;/q��5���4v�����yu�2��ʑ�_dx��T�d�?�:�ų[�̉,��ًD�w�K�9�g�����^��M9|9�[5����ٗ&gt;a�ц8�\8n&lt;��k�B:7�j��j��Z�U���X�����{��{��.��&gt;�m�M{oqk��wj�d��� �;K����:�ܟ�r�eό�K&#x3D;�1�ʐ�@�l���$�:�c9�^���ᮓ�mky�[���[�&amp;F������$Ҭi��D��u�G&quot;�ҽ���H�b09S�%������գVp���׌��v��]tOmo���4T�y٥o��&#x3D;��5�3|a���.��#��C����&#x27;&#x27;�;��	�Q��*��z&#x3D;ҋMG�Y[id?�&#x27;�~����$� l�j��]��-��ۿ@�H&#x3D;F&amp;���I��X���6�N�Ivu�0�݂��*P2����FP�N��Mm�ϵ�c��yBR�����G�� �.���Y4�亱�ƾQ�ez��&#x3D;R�l��5?�	��_T_[ُ�Q�m&quot;�j%����J�&#x60;0W )# �v�|�|Qwq��-ѥ-&gt;&quot;�(�O$1&#x27;�� ��v�����xYk����&lt;��/;^��|�!���7���Oˏ��^��oj�&lt;i��R�׈�� .XB1�*�_�yQ׃�ml�9-Ħ;־*�X��wG�V�R��j+2g�YUG�_SE��
+        �wj%&#x27;&#x3D;�h Q��&quot;�&lt;/Vo·��2&#x3D;��ֆ���kuG�4{;�$��fٽ�0�&gt;�^w��&amp;�]��6��׬��&#x27;�_x�Vj���	���}������ֺ/
+        �Z}���]5c�K�L���&#x60;���Er�E�N-�x����An�eI@&lt;?A�gҊ��BkG�Ǘ&amp; �����ɓ������X�^ b��u���b�~�ȿx��4�gi�W�^����3Oh��&#x3D;F8�.UGmƦ��W�n��C�c�+���F���g5r�x�*v���x��4�ʌ�V3��U��f�w1 �~��tz.��T��3~�&quot;!S�G������!M)�UX��F8���M����.��[Ź+�i�����5ʷ&#x27;&gt;����@��n�}/&quot;� ��f��� {�Z��d�YwF��
+        �~5s�4{�J�,��3�K&#x3D;E��M��&#x60;r1�?�&#x3D;��|7���⧆dt�&gt;ɳ��dߌ�6�������S�m�0Ū\m�Gl*(�  �+־~֞$�t���)L��so3�o]��t&#x3D;�{
+        ��8���ß8�&#x27;�w� &#x27;�s�l?�$��K�k~g�|I�#s&#x60;!��Nh$�?xJ���?Zᵛ�{����vOqk4�&quot;�̨K�|��_�a�I���4H��F��ݤg�H�,m�!�RU��pXt�5��������Io�C*��Ca��B��\�!��Tq*J�d����#�0^&lt;�������{%���&#x3D;g}�x��L&amp;��69�mS���c?�j�?_�uaw����[��4�9$�&quot;��QYG���;�c�$�/uH�!�ș\:K$�H9��{�ǉ�h/Y��]J�k��t���&lt;���&lt;�x� +׭���B�M��dו��������Ɇ�|��+o[����/Ð��q���:)%���v8s��u�&gt;(���5	#�K76����#�ߴ��c �0����g[������f%ZH�l$��sZV��k�4֯f�**K,���&#x60;p��&#x3D;y��j�n&quot;PK�o_Ů�Ӫv�T������z&gt;� z&#x3D;������K�J�H�fI�����F�83�95��Ӭ�Mk:��vv�
+        A%rx���O�j_��!�;�6͔O��,J�#� ���v��K�A���c�0��	S*�f�ϥi��_�ߥ�d���� ��sJ8��+�4��o�o��s��Ʃn�$L�N��0��uc� N���������2۬�o�$ba�
+        {�#&gt;ٯ~7v�H��� &lt;���#��&#x27;&#x27;�u&#x27;��y/�{8t�F�;uQ�r�;��9�&lt;wǩ5���&amp;��6�������lrZ$��y�k�Tc8Ͻ74��_]|zg���c��0��m��Np|�� ����ֳy�~�Wn�v�޼���&gt;�a4X���GB;����+{־a&amp;ߗn���&amp;���J�g\]�jR4y���+7ƺ�D�(�4vʫ�8򢴧	5���h����MN��&gt;�WQ�,25�{���� �S�ȥr��E�ީ�天#&#x27;�O�3R�u$h�c�w���͔�F��摚V9���i��.Wz�SZ�-�3I �5��O��FҴ�n�S��*��@�&#x3D;hhDW2��~�v&quot;�9?�u��c{���4�,����F@����\|�����t���ӛ�Ќ�p+�~]h�Z����&#x3D;����y�m�����I�y���,c�����_mv�#��q�f�y|�X���rr���N�d�,������Œ�6l�8����X~-��Y�D�\l�%&#x3D;I � �sp����z�\��1�\/�� NtQ�W1��(ʌ��7Oz�����b�s�U�_t�v_�@)�lt��Wj�rp95��HH��&#x3D;kҴ�Y��-�2F�A�]�H��~��m��N���+�5D��ڱp1�P ⼜�ϒ-u��{Y,ey��[�-�^!����&quot;�BB�$����W��5-BͿ�l�Q]�����i#��p���|g#M�,lIX�Qy���j�s�k\�3���n�����$Ы��O�~��U�_���&gt;&lt;��l�Y�H����c� �^��&amp;���G��}??�^g�#T_q��$�g��[��e�&#x3D;q� ֮j�WGM+�v��j�l�B�02;g�EW2Ӥ���Ҋt�ѭ���</code></pre>
+                                        </div>
+                                        <div class="card-footer">
+                                            <button class="btn btn-outline-secondary btn-sm copyButton" type="button" data-clipboard-action="copy" data-clipboard-target="#copyText-af0a6f3a-6d36-453d-8db3-608078616b69">Copy to Clipboard</button>
+                                        </div>
+                                </div>
+                            </div>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="card border-info">
+                                <div class="card-body">
+                                <h5 class="card-title text-uppercase text-white text-center bg-info">Test Information</h5>
+                                    <h5 class="alert alert-success text-uppercase text-center">No Tests for this request</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+            </div>
+            <div id="folder-0f46c76f-ff59-4d77-ac31-ed8e4119196b" class="card-deck iteration-0">
+            <div class="row iteration-0">
+                <div class="col-sm-12 mb-3 iteration-0">
+                <div class="card iteration-0">
+                    <div class="card-header  bg-success iteration-0">
+                        <a data-toggle="collapse" href="#" data-target="#collapse-0f46c76f-ff59-4d77-ac31-ed8e4119196b" aria-expanded="false" aria-controls="collapse" id="requests-0f46c76f-ff59-4d77-ac31-ed8e4119196b" class="collapsed text-white z-block">
+                    Iteration: 1 - James Bond <i class="float-lg-right fa fa-chevron-down" style="padding-top: 5px;"></i>
+                </a>
+                    </div>
+                    <div id="collapse-0f46c76f-ff59-4d77-ac31-ed8e4119196b" class="collapse" aria-labelledby="requests-0f46c76f-ff59-4d77-ac31-ed8e4119196b">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-12 mb-3">
+                                <div class="card-deck">
+                                <div class="card border-info" style="width: 50rem;">
+                                    <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Request Information</h5>
+                                    <span><i class="fas fa-info-circle"></i></span><strong> Request Method:</strong> <span class="badge-outline-success badge badge-success"> GET</span><br>
+                                    <span><i class="fas fa-info-circle"></i></span><strong> Request URL:</strong> <a href="http://img.omdbapi.com/?i&#x3D;tt0113189&amp;apikey&#x3D;357d6210" target="_blank">http://img.omdbapi.com/?i&#x3D;tt0113189&amp;apikey&#x3D;357d6210</a><br>
+                                    </div>
+                                </div>
+                                <div class="card border-info" style="width: 50rem;">
+                                    <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Response Information</h5>
+                                    <span><i class="fas fa-info-circle"></i></span><strong> Response Code:</strong> <span class="float-right badge-outline badge badge-success"> 200 - OK</span><br>
+                                    <span><i class="fas fa-stopwatch"></i></span><strong> Mean time per request:</strong> <span class="float-right badge-outline badge badge-success"> 1138ms</span><br>
+                                    <span><i class="fas fa-database"></i></span><strong> Mean size per request:</strong> <span class="float-right badge-outline badge badge-success"> 29.32KB</span><br>
+                                    <hr>
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Test Pass Percentage</h5>
+                                    <div>
+                                        <div class="progress" style="height: 40px;">
+                                            <div class="progress-bar bg-success" style="width: 100%" role="progressbar">
+                                            <h5 class="text-uppercase text-white text-center" style="padding-top:5px;"><strong>No Tests for this request</strong></h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 mb-3">
+                                <div class="card-deck">
+                                <div class="card border-info" style="width: 50rem;">
+                                    <div class="card-body">
+                                        <h5 class="card-title text-uppercase text-white text-center bg-info">Request Headers</h5>
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered">
+                                            <thead class="thead-light text-center"><tr><th>Header Name</th><th>Header Value</th></tr></thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td class="text-nowrap">User-Agent</td>
+                                                        <td class="text-wrap">PostmanRuntime/7.29.0</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Accept</td>
+                                                        <td class="text-wrap">*/*</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Cache-Control</td>
+                                                        <td class="text-wrap">no-cache</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Postman-Token</td>
+                                                        <td class="text-wrap">81dc8655-8861-4c6f-a4fa-20a816092dff</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Host</td>
+                                                        <td class="text-wrap">img.omdbapi.com</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Accept-Encoding</td>
+                                                        <td class="text-wrap">gzip, deflate, br</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-nowrap">Connection</td>
+                                                        <td class="text-wrap">keep-alive</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                        <div class="col-sm-12 mb-3">
+                            <div class="card-deck">
+                            <div class="card border-info" style="width: 50rem;">
+                                <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Response Headers</h5>
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered">
+                                        <thead class="thead-light text-center"><tr><th>Header Name</th><th>Header Value</th></tr></thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td class="text-nowrap">Date</td>
+                                                    <td class="text-wrap">Sat, 26 Aug 2023 05:03:42 GMT</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Content-Type</td>
+                                                    <td class="text-wrap">image/jpeg</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Content-Length</td>
+                                                    <td class="text-wrap">30024</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Connection</td>
+                                                    <td class="text-wrap">keep-alive</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Cache-Control</td>
+                                                    <td class="text-wrap">public, max-age&#x3D;86400</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Expires</td>
+                                                    <td class="text-wrap">Sat, 26 Aug 2023 06:03:42 GMT</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">X-AspNet-Version</td>
+                                                    <td class="text-wrap">4.0.30319</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">X-Powered-By</td>
+                                                    <td class="text-wrap">ASP.NET</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Access-Control-Allow-Origin</td>
+                                                    <td class="text-wrap">*</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">CF-Cache-Status</td>
+                                                    <td class="text-wrap">MISS</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Last-Modified</td>
+                                                    <td class="text-wrap">Sat, 26 Aug 2023 05:03:42 GMT</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Accept-Ranges</td>
+                                                    <td class="text-wrap">bytes</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Vary</td>
+                                                    <td class="text-wrap">Accept-Encoding</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">Server</td>
+                                                    <td class="text-wrap">cloudflare</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-nowrap">CF-RAY</td>
+                                                    <td class="text-wrap">7fc9879e9f3749de-SIN</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                        <div class="row">
+                        <div class="col-sm-12 mb-3">
+                            <div class="card-deck">
+                            <div class="card border-info" style="width: 50rem;">
+                                <div class="card-body">
+                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Response Body</h5>
+                                        <div class="dyn-height">
+                                                <pre><code id="copyText-c788b24f-d320-4076-beba-4e413e23fc4d" class="prettyPrint">���� JFIF  &#x60; &#x60;  �� C 		
+        
+        
+        
+        	�� C�� , �&quot; ��           	
+        �� �   } !1AQa&quot;q2���#B��R��$3br�	
+        %&amp;&#x27;()*456789:CDEFGHIJSTUVWXYZcdefghijstuvwxyz���������������������������������������������������������������������������        	
+        �� �  w !1AQaq&quot;2�B����	#3R�br�
+        $4�%�&amp;&#x27;()*56789:CDEFGHIJSTUVWXYZcdefghijstuvwxyz��������������������������������������������������������������������������   ? �袊 (��@Q@Q@Q@Q@,6S\�#��$+�FU$F2O����U������}����}����8�3��}Q@Q@Q@Q@Q@Q@*u�:&gt;�u��1��[�uu1&quot;8�B���OJ��ه�&lt;��S�(��� �g�h�ˇ�&#x27;nN:�	�&#x3D;��&amp;S�U��+Q�Js��*�V]܌���s�� �	&lt;9��&gt;��+��$��6�!�m�ء؄���*�ár:b���_���� �� a�6(���xb��n$��m� U/�$j�+r^h-�����ޑ��鸦�I�_���_5�˖/���-�I��k�@&#x27;��dc�\��ގ�rwW
+        (4PV,m�e�;�N	�;����\W]�_���&gt;:x��Þ��k���V�vP���ǁ���χ��+�2ƽZ&#x3D;-����~_�r|�G�Ol�K����������x���U״͚^�o��&#x60;E3Ȥ�$���7���j��&#x27;�|7�ֵM/K���	$����r�j�+&quot;��3�N3���ߵ���_��V��ƅ�j�6��h�:������2����Q�� �&#x3D;lϟ�~��&quot;�I�;�SHҴK&#x3D;YLz��i�V:�(U��(n�0�99���������֓g��6�D����&amp;�U��B�Um���ެǚ5?�:ƈ췖W�N�6������,�-����+�Y��s�֊{@����&quot;��4��v���/!R�F&#x3D;�z٩�
+        mhK���G�L@&#x3D;�� �n3נ��8���6�&amp;��h_%J8�&#x3D;GQO��z(�� 4�Z���6���J�&amp;�&#x60;������S���&lt;GRt� hW�����)�ڻ���,|\���������,�Ap�+O!Ra��T�~�9��sr����҃�r|(� �A~���� s����A�..�;7�K$)K��%I)p&#x3D;�;�?�A�هV���_�*��T���g�\&gt;l�&#x3D;k��)-���S��&quot;�1���P?๿�D&#x3D;?�,���g�Xn?�����kJfk&gt;�a?1Q�&#x27;��h����R�����%�^Oُ_���m[V�Ҽ-���C�77��6���vG&lt;C��8#&lt;}U� &#x27;���~~���u������B?�
+        � fb���S,� �&#x60;dl\z��o�9��
+        ��㖛on�:������W�Z�&lt;��#���c�6{
+        ���H�?f��vz���:���&amp;Z�7/�x�]�z��t ��*�R�kn�3�4]X�-���W�.l~/���F�98Ԩ+�N?��?J�|Q�]�7W���L8��� ��)�7���3�&gt;׼e�{Ļ,d�]����U�&lt;�H�K�%�EBNާ�� �f��|&gt;��*���xW�	��4�䶷9� V[ĞA�qE&#x27;���I�jN�#���������g�	o�� �_��|s�i7Z���)|�� ���������q�_�N0������ ���Q�%��F���o�[5-opH��IH�&lt;d��� ���� ሿm&#x3D;f�L������/t���}��͒Nݫ��Nu����(�ۡ����-x����5�?�iW�O:��۵{]5DA�0�$A#���E%�z&#x60;�5�&quot;��ڽ֟}o5�픭�J�$�E$2�&lt;� ��k���k��7������h�(��O��ԲIx����pF6ɵ���Q[�\_���k�  �,|1�mn|7�^�[cEܺU�L�,w��洲���3���c�kxZ�e�5gv8UQ�O�K� �h��_��4�������LG�*�d����%i��a��d�ēН�5������j�%�7J�&amp;)Kc�����������;� �|�~{�y�&lt;/�	RE�vlI�FN0	��$����u4�h�n�ղ��_h�z�.��\G ��$a��6�O� Z���&#x3D;k���?�n� �\|�� �����ڊ��{[H��8P3�@l�נ��� ��ҟ��/���/t&amp;I�����N�9e�s���v �^ Bn��kf��i�;�����z��a$�R�D��� 3��׵z]��)�&lt;xK²Z������\���y�������	��Um��fQ�&#x27;��*��֩�ȥ����Mo������]i�ڤ��������GO��~��_��x��Zv��}%�!&lt;�c���� �v�rH�����k��Z�.��;;[g�FhN($�1���@�_ۗ⭗��(��K;�����&amp;�-�h�p���9��w��vakNp�;8}��e�|�NM:ZyTe������_�??����_�#&#x27;�?�^��u���Z꺛ܲ^%�ʖv�yg�!p��;��N
+        ��/c�N���M��K+�R\I��♿�oQP��:}Ŏ�~ʣ�,��
+        I�⿥��k�տ�����H&gt;ȶ�,Q\G��� -_������ &gt;?Z����?�&lt;#�+��66WZn�v�omY,l����$,��]m����%� BxwC����Jӭ���q��^������fyF&#x60;� ]k�hۼ��&#x60;��
+        r��Z#$W;��韥����.���^Ԧ� �����_2��K�!�U��Ǐ?ޅ�j�K����&#x27;�u�N�4� xw�/T�V�F����Vi��fP���v����I� � ���[�� �; ��ǚ�ϯ]Bg���������B���A�T�-�̷-�F&gt;��&#x60;����+��v��n�@���&amp;�������7�&amp;�R����?�y�ɫ�� �p[�8��[)$?�q�sE{�z�F�,�:����� ���-�?��Zw�&lt;;�3M֒��F���C�k��8�%v�� ��� T/?��߳��ķ���a�4� X�1�&lt;��Av��\nI��s���u�v&#x60;� �sV���.���ֵ+��1h*�R����!��*�;���!EK��E�&amp;�� ��e�?��8���O{�i���zs�D71c�8%����6�D������~g�e� �k߱��p�Ԯ6x���Xk��Z���+��H╰��1��Q[_�����b����T���5ӵ�[:l�7Zݠ�~��R&amp;&lt;�{2��0%�V8ھ���&amp;ظ��JI&#x27;ШG�����O�^���kK���M�����X�E
+        �} �?�����:m.����:#+�?y�p3���_�ZF�qq&#x27;e��_��Wu/��6�&lt;A3L�6�I�	W (��s�&lt;s�]�|�/�rc*(r۹�� �����k�~���?]k�&lt;3k��)a��2�y��~�mk��q�Ff�mP�O�G����O�w��񗍚���^�e��Q�s�k
+        ,4��*��4$/ ����/�/��_�_�W�~h�E����O��m���~%�\|����FH�
+        ��Gf&#x3D;X�֕-}��K�~�~�� ��f����s��$k{�6�W����o��z��9����+L�n5�J����n��X��$/$��
+        �$�@ u5�S� �~КG�k�h|L�&lt;o7�-���{����mx�#�lTG��qe��ⲒmYKk��4n�&amp;U����*���/�|��g�
+        ���z*�_x�|7�7uXͻ. c�}�Fs��A$�����&#x27;ß���&gt;��K��AW��̄�a!��0k�Ϩ)&#x27;��4�S��H+�}{RG*�2������6�1�	_�O�r�7�gң�Z��O�FۺD2��������+�w�[���.�4� ��B�5]�k&#x3D;�Q���X�&gt;��� ��� ��&gt;�
+        Z�gon�my�����#��eT�������G-��H���
+        i��O�#�v�/��t��Ы4�&lt;�fI
+        %�1��#i����g���K�#��I.#��d��� �j�$��ບ��O��G��5���[�� j��	81�OY&#x60;6�_��|U7��_y�N��^?��NY��&#x3D;Ͽ�]���K���8��9H��9� S� ���O������g�W�ui.5��-��&gt;[K0/,��y�ul0�������1��_�O���&gt;�&lt;A� 	������υ�Y�&#x60;��nH�Qu$�IT�(QSn�nu%A�g%tt��{��!� ,� �x|�fx��◅l��|u��ֱ�]��o����&#x3D;��v@Z	T/���9�/��Iq�k� �F��}��M�	�Oi$&gt;�74Я�����U�c FCk�K�S��a�����S�ȍm����&#x60;�lTn_��W�K�x�eRqїOm俲������-&#x27;��jW��Z&gt;R\�6]�2��ߩ�#��� ��?࠿����6�&#x3D;x�Py�h�k|�Lb��)Z)X��$� 
+        ,H���� hzW1��}2����U~�;�E�Ĝ�&lt;�2�(��YN;(�&gt;�)� �X~*x�Ē�v1���q�B&quot;��ŭ�66Fc�ͥ�o6W�˕$�I]�ĕ��W1�ZK,�cRĞ1En��;#7O]e���f�����Z����U���sS��Y�^dBb�\*Е1HR{W��?�ZG��^k�!�mt�O��W�.#��Y�v&lt;*�a�x����ُ���W��@��5I���v�nmg��p������*x �޿���%��������w��uk;O}��&lt;M������D(���dR�u#޺+BW�3��k� �� |x_�&gt;𯈾!X����W�6�a}JfB���3�4�+�7���[I{dy#�ݔ���8������,��χ�|#���I����^�o,V�ӡ(eYU%y�����&gt;&#x60;�I���&lt;��~,�{�V^0�&amp;����o&gt;�u�8丆&amp;$(��c2G+&#x60;��A�$��+Z�{� �S4����d��m�_�?�X��:?����T�.�C&#x3D;�-������ *�;���cno���k�/����mo�M���o�im��V�#l�9 �w8�ؚ���59���*����72������Z���~Ϻ�|���v�I��{�Hc���@A�ҹ��&quot;��׊�4}B3͛�&lt;}�FAPk�T��:#R-��_�Q�~�L�|��[&#x3D;1��k��_���7�����ς��OT��/4�%�y%�Y��X����N2k�_�r�l~��&lt;�Lvãk�7�}W�� A��+�\� �k߱��#�_��;	��@�5�m#�ť�_Z��H��b�M��;�C�ǟ���Q�-�t&gt;:�� ���_	&lt;O�߆~�W��H�M��g��}z����&lt;k�H��Y	G�NS( $9}#���_x��ޟ�� S�#M7O�K��k˻���n�R�z� *����p0�~��A���M�/Ogc����{:dZ���pH�@�,����xf�A��6�&#x3D;A��&amp;�&quot;0QV&gt;� �I�����,�����7{e���%�]��D�� ,���d&#x27;j���W�_�K�~����&lt;v�&amp;�q)Q�(�FǾ�܇�����Z����T���A����G�jww��#���&#x27;�Y�G�Y&lt;E�x��&gt;��H��Y�&#x3D;N��ȷ�C�B�I$c���e�y W�|z� �V&gt;)��������?x��َ����-�M��6�I*��P8b�}���7� �#D&lt;5�&#x27;���B�w��P1�0��y��n-Tڲ2�+IՓ~�F\��?��_���c�&#x3D;Ӽ�[�j�1��ѧ�����I��g
+        �a����g��� no�%���b�m*�X��T]Z�_�,ð���T;0��8�&#x60;�濰��o&#x60;�ė�C�RF 28���ϦOAֿ)?��?L�������sOm%�8
+        v�������e7�3
+        ��|Ѷ� ���R������?���7��Ԟ&amp;��|#�n-d�&#x60;&#x60;wg˙G0���$���U%W����߶�����]/E�D�_�5�b{m&gt;��#���&gt;S���{�w�e�R�G�_~�M�ƒx?ƫ��/E��ݭ�Ba�&#x27;�D���w)��7)��E��{1a��q��7��� m�~�Ե�{ឭ�:�y�-�����1��,]��&lt;���nxS�&gt;S� s��/�����3[��������ϰ���܉D��X�7F����?���o�3����k�_��h�|� �mq�����}����D����e�0&#x27;�S]g������?kO��&amp;��C\�����K�kP𥍅ƨ8&gt;U�h��c��� &#x27;7�j&#x3D;&#x3D;K����ϳ�_�P���c�{V�S��5$:u��c�@@&#x27;��E~K� �ҟ����[�։�o�W��i����3���op����V&#x27;�;�]�d��Jڜ�
+        �������|� �q�ܚ���M�8�i�c&amp;�T�F���~c�&#x60;9�1޼�qVk(�+3�1��&lt;�vٵO�� �� �]K��&gt;�uX�W��7~�a��kq+��D�YneS���ҟ��NֿgO]\����x�ǚ���UԼ�&amp;�&#x27;&lt;�V�B�� 3q�@T_���	!� ���� ��t{[�7\����^J�8��B�&gt;\�$�pA ��Ǐ�&lt;��� 𴖾�ge���Sw�]���UQ���r���c8Õj�����W� �+�� ��_�	�����ƥE��h�Ȯ��$���&lt;��&#x60;w#�\����
+        �W4�S]k$�e���f����&gt;���i�ڿ�ߵ����x�Z�յK�ZC��.&lt;�Q�OJ�U� �j?&#x60;u)s�s_�U/��Օ:�v�9�W����)_��U$�����M�|��gK�X�G�Y�%e�n�1����?&#x3D;?���� ��/���o��&#x60;��ǣ}2q������t�)e��x#(��C���~o� �Ul�+�NշIe�����F���A� ��(�����*-њ����k!�uu��r+��� �U� �m��۟���WV�m�ߋ�3�m6���kj�mB�	6�0(ϵ�6�,?�7D�k���6�&#x60;����3޾�� �E�^� �G��i:Mֳo��.�-J�?&#x3D;��?�\��v�f&lt;RkϩM^�&#x3D;�yS|���� �����Z��}��V�k~.I&amp;����M�nѳ�*K0�bH�W� �� �����?Ŀ��^x_����� Jԙ���F����/&quot;&#x27;޻rF��2&gt;���_�JO���t�j񕟇�]&gt;��5���ei�i� �BH��Z3�Z,�\�&gt;WR|w�
+        ��f|�_�_����}�xeּEa[H������fR]Q�@J�r�WYr(�laJ7��N�������ҩx��[� �En}5��g?�A�����?���� ��/�x�Vv�&amp;��E������緅?.�8��������OӦ��h���3,���R4%� ����(���˯�&quot;��-_�?�?�/�&quot;�mu�R���9
+        �d����w�5������� P�?���,�|m��c��{+8.lYZ;�ax�eB�ye��pr�OP~�+���� dc�M�i�&quot;���äX�&lt;ΩHX��_��!�yX�m�֛������rD����ǧ
+        9�8��5� ������dkV�so5ʵ��� �������_�w�ߊ���!^j׳I4�H�9�,O���&lt;T&#x60;�?Dg+Χ/E�ϡ�V�Ï����OC����qq&#x27;,�;!^�ǰ&#x27;¯ � ���Ŏ�o�tպl�8Uެ{
+        �A���d��.�a��ZY���瘎�x��q]X|;��&#x3D;��bU?un}�� �� �qx^�� �N��5+43��$s��dC�X1�� �ֽ��E��|I� ���m�_���� ���^��Z� �a��G \}8&quot;�~���	h0����U �H� M{���C��w��
+        x���V�5$��0/�tn��#����M�k���s�f�̞��]����[�~סa�)����A&#x60;~���� �� ��|5�����/�wzN���&amp;���Odk}(��̔� �P��gҿ0� ��K�_����xƾ2�7û�aY�$֨��W� q��޿3����&amp;]EnV�[��D�����~��p��������UU����&#x27;��W�x�������K{�j������,�K1&#x27;�h��+Sm�AEP )wJ({ᗃ&amp;���E��R�j�����3 O�2
+        ���g�nxO�0��h3j�N�g�Y�
+        �*+9�&#x3D;s�O�+�^�⮭�Ok.�$T֊9�!X�$d��$�kZ�� ��Z�P����n�O)���Mu¥(E�su���n���?�&#x27;��hϤ�F;�Qӏ&lt;)�7nrś�}���_������y&#x27;�֩4v,r-&quot;r� ���{W��Me,D���yK	N��k�u_�j��*�w���k�&amp;�&#x60;��-׬�� �5�Y�����	;� w�k� ��cj�&#x3D;����P�Xu�L��r�k&lt;0���0Pm�\�?���7Öz������K%�z�ԉ�ru��h[겄#�W�����
+        �����ĭ��e]C��$�4��i-ն��&quot;4js�GPz��㓼�w���G��� �H?��~� ���	o	����H���%΅�ڜɦ�2��!�d����&#x3D;v�
+        ��9�&lt;�7��/�Ğ�ǩxsS��n�İ�Ѹ� �������87�R�Ʈ�k�&quot;M.R�U�-��?��Ǳ~�E4� �Y�w�^4� ��|&#x60;������׼Iu�Y�Z�hn�y�T����w�R��&gt;�� �{���?g�|��&quot;����е�[��y�+����F�x1oc��*���K?d��ߴ���C��&quot;�&gt;��&quot;b��Q���P8h�x�+�B�	pq_Ǎ��Yβ+e9��c�� �� ����-�����(��O�v��U��\�zrmH�}��&lt;�r1�ؒ����+�U���̿�&amp;w����PYx��W�4�_xj�o,��#a�ldg���ێ;�O�~�^k����H�c\�E��u� ګ�\S�.��6���v+%ƿ�i�8&#x27;͗9��On��?����EO����O�i�x.Mb��ν��	e�#����
+        �z�51��+\�Z˙�� x�?~�^#���o&#x27;Lp��ɶ&lt;���8?Z�[�m���� ������ �;&amp;�׼I�����0�d��_1��a��� H �����rk��T!#�	&#x27;&gt;i��tR4NY���pEz����7�7»Ku�դ���qݦ�Tz7_֛���&gt;&quot;���&#x3D;�~	���Iq�M��#�v��-$�{*�&#x27;�_�N��x3�ާ���i&gt;o��dQĦ?���Ey1�)��
+        r��y��W�{z3�y,�x�ܺJ�Y��	�Z߅�&amp;�c*#/o&amp;G��}��&gt;����&#x60;Xu[�P[�4lv��~_ҿh�{_Z�V�L��&#x60;)�utC�� �k�|B����^5��$g}��X9&gt;���+����&gt;�П5-{��*�,df&quot;D�D���� ���&lt;Q�#��W/.���.h�ܟR�m6�X���wFە���������QE:8�W
+        �s7 �m��_����|l��R6�����ur  ���P�K@���]��Jҥ)�I�ӭ
+        ��w
+        (��4
+        T�%Kj��_������� �~��&#x27;�q��R���&lt;i�۝;J��*�����d�Q f���k����� &lt;).����&amp;��9{&#x3D;N�.a$t;\���?�lO�۟�!&lt;}}}5���QԵKh���1}���k�Z�����漆͚8��,m�)
+        Xv���W1�mf�2�� ��_t�ͤ��k��ӂ$��9h��0rY~���� -��%�7�~��wৄ�E�m$k_�vo$�[����5fb����� ��.���j��I�汑X��ln��}|�� D��X|/��s��&quot;��M[��Go�3�:y� 3&lt;�!X��5�&amp;�̝IGX����fY}+ѿd���?�7�Έ&gt;�[M���E����H+$2.~h�B���X����h��7���ծn�Ga�&gt;���\h�M�Z�V#�o/�ʞ~��ď�:���h:���V��ʲ?�) �L�uu�t���?�_
+        ��,��|kg��֭&amp;�qlQ�yZ��J�*��PpNW&#x27;$m%y y��G�O���^x�mJ��ImB��4)#�w�($�G��ȯ�� ��� ����[����w�Mx7��M�Γ���r&#x3D;��OFf�	�D����� ���B�7�#�Z}�zsj����,�Ӝ���� ��?]p�J|�&gt;��qԞ�wod~3� �[�9_�M��e�O{uug�{Aky	Or&#x27;oLc��_(�@�3�(�c���ߍ/�!x�� X�d�/5	L��&#x3D; � }+�����~ѿ�;�[4bڕ�G#�����5ǘc!J�OH�7�G��eu1X�X*[ɥ��~���� �5����ǟ�Ku��5�6��N�u���D-#��Πg�&#x3D;�������I�X�sG5ӕc�s_�������2��� ��&lt;�m6&#x3D;&quot;��&#x60;S������ �����e� i&gt;�e���O�Kۄ�fl����N&#x3D;+��Þ*x�%�bkKޭ+Ev����~� �p�y4�ѷ��_݊�������㢤�]���IN�Vv
+        (��B�(����_���u�i|:�ZAI.I� qief�����/i˫kv��T�@���W�~��&gt;��:��F�÷:���&quot;G.�W����4�|���n�2�i+�������&gt;�G��c�B�;v�g%��q)J��hյ��|_o����n��Ldg�����9yf &gt;K&#x60;�w�+��u�5���O���?�_m�&#x60;�K�2M�KB�c���_�,����3�]$k^�k[�C��Eo&gt;5 �	�G�Ox�L�{$:����D���m��QGA�E��8��&#x3D;���9ԣ:�����Y�wd�ﶧt�T��U/��Zi�RW���O;�&quot;4�T�� �^����_�i�j_x]����C&lt;0�ʹ1�б��@a�BrI���?���߆���o�՚������m ��޼i���*��C(&lt;��j�^�K~?v� ;[��eK�W����4~��o}/}/kjp3�ֶ�t�wQÀ|ƌ��ߥ,{��Յ{���ڃT���
+        ?	�_hs[���k��&gt;&gt;���;Ko����?������p�ٞ�k���� 	���Mɴ�L�s7&lt;~���z��qbU8� ���ڝY]j���Ñ���E��n�~&#x27;�A� *�m��$���xd�H� �$��?.�.���30&gt;���7� ]�v�s+-���e�e��� i��h��|!�Q�|
+        �g��7�zl?�&lt;7i���#�4&#x3D;Y�%��NI&amp;��&#x3D;o⏧�y�9��#?�#�Mpr�����u�f(�+0�&lt;ԓ�h��m�c�lg�Yk�9�A��Ⱥ�k�rO&quot;�B9�6�y�A&#x3D;&#x3D;jYH���$�����TnI��� �� ���� �Z������6Z�v�n%���y����̅}�	 ���w�2��Z�čWVע�R�s,�ȅy9�� t����	�J��S�����2h���\Ie����Њ�C?��������������/���@F_�X|���\d�yzR�kmϗ&lt;�S᧍4��RX��%�w�w	���6�&gt;�
+        ��G�&#x27;��2��&gt;&#x27;�ou��W�}�G��\�z	\��3J���a���_�_�m��S�?�D����z~��a��C���,Y��ҿ6?g��SƟgl�[8���8݂ _đ�f����#���_�߱O��i5�
+        ��6�u-���Ѓ�eV�*�{w���RͫP�~��Z�vo{E+�~��4�3�nh�1O�����~6&#x3D;���L.-�3E�6����_�?�q�o|7��KX���[���&#x3D;���/��a��6��VO�rqw�]J�Ks���6�����M��R&#x60;w��_�4&gt;1����t+�GP�&lt;;}��^�5�֥�r�I!��� W�� ��&gt;5�&#x27;Y)&amp;���Z����o��}�Q�Un�T��Zr�{�|KOUo�?������kW�&gt;��֥47��.P�p&gt;��_���T��?�Jt�:u�z�QTdQE Xҵҵn#
+        �Pz^����&quot;��&lt;W�j&gt;!�t�y��?э�r��vN[|��ьb���&#x27;�x�$|N�t��h�n&#x27;W���G�?���|-g&#x27;�|S��w�)&amp;&gt;�gls��:��r��2Rq��&amp;Ҷ��������Y�7^���O٩��+K��j���c��Y�5?i��q*�8m��?��&#x60;�V��m?n]��R�;88�������&gt;+x�RF��4��hZK&gt;�&amp;k�V �\�&#x27;�j���#g�o�f�V�$�S�Y�O,l�b�[�����	J��ϭ&#x27;Y�%~�O�մ�ܾ�G8��ҧ*t���⛻}/��g����+m}|��.-�H���H���d� ���}O:W��jVIikj�SX�D#F�Q����l)�� �~������r���\���$��ao$�a�Ͽ,y����&#x27;�~�����Fk[}Y��aw���q����ON3���cܡJ�]/�[翢?L��p�&gt;��NW����m�H�6�J�����C䫨��)m� �V;�o���b�&#x3D;6�o�ڿL��?��/�*���\hͩM��j:d�7i����7&#x3D;2���8��;�����pr9�%� �x�M�����V��l�֏��i������&#x60;c�A�&quot;��2�K&amp;~[����a9FM�3��#��&amp;k�&gt;&lt;�J�&gt;	��k�]�����c��L���G�*�#&lt;����/����s�&#x27;�^.���������̺�m9�&lt;��V��� ���H&#x27;&#x27;d|������ǿ�ڧ���{�m6�y&quot;�&amp;�sp-���;JI����)�H������8��� l��?��s᷅g�6����,�)o ڗ���F�UɌ6�i$��y��&lt;[����$�&amp;����߉n[�
+        I�2x�Rz��L� �?��c�
+        O�MC�����Z&gt;��&#x60;�X�;���h�R�wӜm����-��%���GC��h[�8���� �/ok��5?��̐�;�� b��O�.���ۗ�
+        &#x3D;�x-3�:}����7�l3m��H�1������� �i6W�yca�K��^�3N�K�u���U&#x60;ǣd�w�IX��*��iI���E�]o���f��ɪ^,j:�����Zm�2��&#x3D;��V�;� ��dL���y&amp;5�b;�U��s7z����Zew�e�� �� :�Z�I��+�9h�~��/�V�����u9yU������C� ���&lt;/�_O��Z��8����&lt;~u�^!���)��&gt;.��?���&lt;]���ڦ�/\h��#\�X&gt;��͋!�m��7�/�/ �{5��Lp���&#x60;&gt;]ĶB:�l���	�m� g���I��Ck7��8�Y��K5����@���pQ�5n����q���^ښ�ڋ���V�{Z���?V��_O�05!�Ф�l����v��d�O������	��v����ԡ�&amp;���ޕ&lt;f�F�^���ݕZ9$���1+���Hl�U�� p����d��7,��$&amp;D�fq�:��k����?
+        x�ῂ�mc�&gt;ִ-N*�_�m�N��)�P��:ya�޲F�
+        �|�ί�+/�A��~&#x3D;�^��������{�kv�\�һ5Ĭ��i��I7|�o�G�.�0L�2ur�Ȝ��g�OV���M��}��r౰�c��4����y��O���N����ëx�QX����2F&quot;WX�a��7^W�Oj�?x]�/snE�;�E�DuY�ퟔ�${ת_iV���2]Gk&quot;�}�%�΍�,�uN �����e� �~&#x27;X�v��O�g&quot;�����*$m���! �������p��:j�k٥�j9�NgJy�z�o����t��:���*��z��Ů�%�RMj�12�0G*������X���7_�!�&gt;�R�-�����hR(�]VD����8P�Nzg����;�w^#��ׄ��Z� ��b�R�E���e����&#x60;r���]񕍜�q��$vd��2����Ԍg� �f�iJ�7
+        �	�i��Mϛ�a��)աRn)�Ѥ�j�M����3m�s�����k������:����|�Ё&#x60;5U��@�*��l���8�Ec�e�pu}�[^�VwM#�0ٮ�8[����I���s�O�5߈v7�6����x5�����6���&quot;Լ3bbO%,#���9 �M|�� ��%g�K���
+        ǒ�w5��t_�Ѭ$�4_]�Z����6�H&quot;,�&#x27;q?.2͐ �q�c��l6WS���o�?X����i�us�|b�I���#��!� [�o�{;�Ė�r5���m�zzA��W��]����c޽�ſ�W��7�ψ?�m_ZծͺX�hUf&lt;�8	UC��u8��M|���:�⧇!�&lt;75��g0Y�8|27/U8����� d9��Yɧ:�
+        �)����+�/��ܛ��8�I*�攣tԜ����)]��ݭ���/��3�����8J)5).T�i5vݒKu�Gu�wx�⾆�O�B�	�kk�[fTQ8��hM+ğ~*�ɥ��R�Mo�_k����Q��$g�Ub�ʫ��B��
+        �S���!g��ê��9�����c�ҾX����]GL����H|7��%l.�5��d��u$�� W�FW���Q�N1�+�ʒ��nֿe��~��/Q�)��a�Ӫ�RM��7򿟏���-���m��E$c��&#x27;� t1��&#x60;��i� �?��� � ��|Ԧb֗^*�Ӽ���.[���&gt;YO��~%Sq��SEq$�F~I?������&#x3D;���%��/�������z�6��o�-�v�@�l��1�F�I���~�v�F2ZU{[T����S��D�,�&quot;��&lt;$]��x�I;�&amp;ލ������A�_�6�&#x3D;ַ��h�1��@wX��%���	���o��G�r� �|x�V��T��ֽ���:Y��6�p��P1��$;N��#� ��� �V?�gֳ��~G�K-��.氉r$�*{�˴	py ����x��Ǌ��f/X�ƥl��j����U�oa26N�-��1&#x27;�OY�oR��7׳~]__#�|&lt;��e�� ��7j+G5�}#um5n�5��?n�~8�2�{Ṽa���-�Ox.U$&lt;�G�A&lt;� �&#x3D;k���&lt;u��%��?�%چ������#��Y��|g�	���0Xc���������N�v�o�S����-��Zf���c�+�� H����� ��^o�x:�(h�����*9^HJ��x�ހ�cUG5���:X�s�^�����Oc��f{�S�rZ/QSqrr�[IN���]]�&#x3D;5��3�����O�ۿ�Z�G�S�Ѐ�MqpI,��^�$�&lt;|~��x�N��UY!V�Ͷ����[�~&quot;E�]5�O�2�*?+�3�rI&#x27;�&#x3D;k[�O�k�E����_/d��&amp;\���ny9�����a({Z�QR�&gt;�/��2X,%)U�K_�����m}~}���c�?~�����^x��o-�d��ѐ+%�^f���H�n�����M���|J�-�֗o���ۤ+$�h�1��S#)9��j���&lt;Y�Z�u�֩�ܰ�8m�/$�x *��zw��+��h���/4�[� ��Gc7��26�݂��v:�X��!G2�&quot;�W*���e-9m��n��L*�5)NQ�� ��֊[[M������g����R�ne�1�d��B&gt;�r� ��Υ�^|1����c��V�����?��.�dp���Yp�&lt;����必�?��O��j�N���h�3������ ǽK�h���������ɏ.��L-ݻ�2�N0?٧�p�ʬ��(]�Z�뺷�rk�:�\��m����էv~����
+        ���3h&quot;�^���suCo���	8h�u(�Y����?;�8xr���&#x3D;GV��$�������-��T$RFs��ק�/�û��1��o�m�d\ȱ�$��8��_A\?�M��+Ƿ��J��gI�2�����a��q�\�p�&lt;���t0�rW��㾶����x��[B�U:y�&#x27;*Q�����٫7ۢ���!����5_�^�s�f�wy��&lt;�X��FG��垬��&gt;�}���J�_�/��f&#x60;�(T���\Ŷ�V��I$����GT!�6� �
+        ��&lt;[m��;T�-�X��[ʷ&amp;&#x60;N�gM�2m!r��3�8?�Yf:~ǖ��������*˨C*�X�E˚�7������\�k
+        �R��iq&quot;7��?{��^�y�xo�?V��E��Ŗ�-@��g����q�.:w� ��o�}Z��B�UHu�C$6�W�Y�#q&#x27;dG��Mك�&gt;�C���-t����8�3F�� ���9�85��Xz��R�Z|�qj�h������s�F����\�SRI;JV�6[��n�]�K};I4�K#ugm�+���~�ZCa6��@a{ueny�M�7t�ӌ�W��b���[�Ӈ�$��Տ�_�������K������_T�G�,:R�՝����\&quot;��Fe �1�\N���D�ݲ� ¿���.�ZI�׭��e���5�O;�(ĸP �;�E��3�Y��j���׈�Qz�[�$�&lt;�N#  �D��N2T�Q��0�-�+�^�������+uk����&gt;�i��L�Z2U�TNs��ב|n�����[I��M�˴�:�m?�^���PH&#x3D;�&quot;�eۧH����n!𿏖�+�,ʹ�i���/�h-��U�) ���!|�������~;�ݦ���mvW&lt;�&gt;�0�Cm��FGc&quot;������FtѭU;�O��g������T�o^��������?��WJ�e�$��ns(*pSbE  �A)�͚����?���⋈�ɱx�m� ۹�9P;���3�ّ}E~� |m� ��+�7�mt�Z�x^�g��8�D��B�Hfp�R�~� ���|C�|:�tO��C�K˛�R��̨��f�E�y:f�k0���38֫��/Gmm��E��9O����9Kݳ��v濔V�v�?+&lt;�����3������Y��x��Y���	�+Ծ�v�����ׯq��r5��@�,P��� 
+        � �	�J��� ������W��&lt;ax���M��&#x3D;�$�d,2�ʡEL�p���xR�¿|O�]��o2�:%������Ꮈ�\��;&#x3D;EaŹ�/��G�˷mZ��IO��E��8W��◴m7���N���&#x27;k�t}!� v��l�ߵ��&lt;&gt;��������!��E8� gy�Fs�� ���%�� n]7�0�ey�xr��Kǚë�o e��@HX�Y�yQѲ	W-�C��&lt;���-&gt;�b$�/�_�%��mq:�?���r+��:��|m}}u��Rկy��I�r̀&#x3D;X�y�?�&lt;d�r�]���+��W����2\7�SP�n��:$��I]�k���Ǻ�Ɵj�1�#���P+n���F&#x27;/,I&#x3D;�s�l�4&#x3D;to:����|&#x27;�mm�H��iq�&#x27;e�&lt;�e �a&#x60;u\7�K�mJ���vMcq��1�3�8󜴲;2l&#x3D;b5\G�3gZOM��;x�-Y7�+�}���.�S��k}Ǖ�oH����U�y;WѾ���?����a\���
+        � ʀ��8㓎���T_���[�&quot;�����&#x3D;U�4�-�94�uy&#x3D;[�+c���+�	˫~���Ri4ox~P���0�&quot;1-�����f&#x3D; &gt;og����J��������7��Y&amp;N��|�e(��e�KW&#x27;.�v�?�!�Ix#�f�d׮��W�0�l�I�Z)WVm���6��J�nmZ��gŏ��C}&quot;����֝廴���) �,�~\����l��F��ey
+        �9׼;��BZ᮵�J{�|��6X�¨py��~� �*|u��Z��������Cusc�XVBa����$��0^9���&#x60;����:o�q��)k���j)Y�k���QS���y���TqI?~�_
+        �+K����&gt;!��bo����mn���N�;�M&#x3D;��.�8/#F�����(p�+�)���q�Q���z?��k��|9xֱ�o��!���8Py9#;�Q������/�+7�~E��y���s]I;�z�� #8�,ik����M���ԣ��.�p� 0��k}�}&#x3D;����f��.Jv�3�&#x3D;��v��.�C��&lt;v7�W��T]��ʵ������U��l�� ���^X�vvS5��b��Q� n�^ư&lt;s�?
+        �i�f�e%� �F�j����B����H��]���O�g����G��GI�!��mA��opr����r  �ƽ�9��&lt;3���.��~	�׈.$O�^x��x:t����F&amp;We��W\I�k���:p�ENRmZ0Zﾺ[�����+���JTc�9�I�|Q�wd丹�?.�__Y�&lt;��60�bk����*�n��zխ���M���,��W�X�:��OL���/۳R�3��SO�P&lt;&#x3D;�|L��wZ���x�Xl쯮Lb[e�[tko�,CI�U~H�s����7�4�
+        �c�zF��,�}��o��L�T�w�*��N�q�	a�����/kR�-]����W��U�3��d�)4��w�s{�ߴ�����n�a����-��,Mǔ�S��8��\��k����!6�o�.f��{���VHP:78�9�J�u����K�&lt;�J�G��;��]r�z�������G�/|s{o5��Y#�w�X.sМ��_AN1��p�3���������qS���wJ��j�RwM���}��S.�}��UVi$#b��#�(�q��x��n&lt;�� Q�ø�� �g�%sƊ&amp;�IJW?��f����~�q�yA�8�������| �f��x��F��iwR�&quot;�/:;��&lt;����# �d�&lt;z���êi�[��e2�y����K�[���5��,���5�;�+Q��nm���(&#x3D;�p�t|�&lt;��|�F��E�z��;Ӷ�{����ş�����k�&amp;�H!9�&amp;�n�N�O.�@&gt;I�Τ��FA��z����6�M���+J��N�&gt;��� j^_�c��mD��#r�N��8�54�ᎆ���{+��ۤVѷB� ��q�ϰ��� n����TյojrO���M�zӽ��n�+������� |�g5�Q�-�ԕ��{v�|�#��J-���7���B/�)�Û�a�t{_k���Ŷ�&quot;���L�� �k�&gt;�y���6I��$�Kk��Ƞ�8���_�����;�3�帿ү�d����c��YT��ԫ��~���lt�	&amp;M&lt;Z�2�%uu,0zc����9�p�ukU��Q��[�9&gt;�g�TiGዔݴ]�͛�����~&quot;x��^�~�F�Z����}&#x3D;K�1cV�H�8�&lt;�� �H?;|[� �S|�[[���\Ziw��٠�f�*�m�?*F�gh�����w�^��:s5���U���;בkߵ��Qs���v�E.�Eu-ߨ&gt;��|ѫW)���k&amp;��t~��m*���Mǣ��������&amp;O�f���mR��Y���;fA�G�2��� M�$s�9���!��z_ß�ڧ�m7�Ѵ�O�M��&#x27;�͏*W�X��d�d�X����k��&gt;#麧�}�,�-&gt;�0���pp&gt;Q�����#��&#x27;�7�)��&gt;�&#x3D;NM�o!{~啕������ ���Ÿ��x��M���d�ݿK�?�ܲ|~�k�Z�E(��[�-U쭫vwѳ�_�&amp;o�y���:�����ޠ]�\H�*̇�����w��m�	��������Xu�-�Im㉧V�T;���_q������íKÚN��k�Y|� �g�O&amp;��d��&#x3D;7�*�h�w
+        �� ��� �P�?&#x60;��oM����_B���(Ԇ��iڅّ��nK\J��F�e�� �/)�W&lt;�!8ϗ]�������|?q�1�u0r��W�nV�O]lܺi�&quot;~�Z/�?�&amp;���o��9�� �����%ޗ-�ֳį&amp;ɂ��E�
+        �-�X�5�3��r/�ח&gt;��j�_]J�����a%/�,�bT�A�� :����(���ƾ(կ����-+TK$�k&#x60;J�ܔv�n)Ԯ����C�&#x27;��ω�V�^_xW�+�.�,�u�ù��&quot;�r�2��1 �2A��,��f+7�IY-#��w�K���v?&gt;�qb�*^�r�RQ��3is-��Mۢ��&amp;�܍&#x27;I�&#x27;�|!�Cmc%���c���Ǔ*�T�$p:m9�My��h�����j�f���l$�o*?�Sv�^0y�������?&gt;�:��q�ϣ�-4��[Zbr�eO�����ciC�Bj���3��_�������qI���E�K�!�W,��CR�Q��2�����E�6��&gt;�v��VW��w�4�Qv�I�5��[[6����J;u�ǧxkD���jZ��C4r�aE �ڠ��pr~Q_�� �UO�&gt;�W��u�Xh�X^�� e2|�UĀ��&lt;����ӿlG�Q�s\��n����v
+        Y�m�
+        $f y��q� �1_0~�&gt;]CźW�4_
+        Yk�C#ω���
+        J�R���~UBĩ��^� xmĘ�g�a�&quot;��պ{��� 3�+�|���g�|��}륣Z{�-Z������5�;�7�)�Z����%���Oq3�����x��W�x��� ���O �c�:����)k�o畭b��&quot;�vƪ�+� 7�rzW�� �Hn����M/�&gt;�m��&quot;��^�uie��2&#x27;�ȇh#p.�&lt;G���R������$��&#x27;�&#x27;?1?�5�mZy�MJ�J7�����$sn�*a�:N�n��^�����C���&#x27;��&quot;:V�c�x�R�Ƌn&#x60;ӭuk��6�ei]P1!Q���b�K��5����Ő�Ԟ&amp;�C�����KY5Q7�vC���&quot;�v��˃�B�W��ß� ?�;���|Ay��ט���Ġ���Č� (��S�W����5�#��:&lt;�mƾV���Y��8]�Y�
+        C�Up�9����X�5��Y?~��;��3���jm�&#x3D;o��?�/۷�O�� ���_fG�]k�?m�9X��XbX)*O&#x27;ץx��J�Y���}���~�|G� �~ӿ&gt;3x�V_�ZYj:����.5ke�ty�L9b&#x3D;�~u���� ��W�-&gt;�6�so�iz������ �NZ�rv�A�:����ޓj�vV�y���y]z�z��n����Vt��ݤ�&amp;껺�� *���3}Ne���K� ���?�m?Wo�ѨD�[&gt;�v���{��m?�*Hcԯ#� Hܱ�!�p	Ǩ{��Y���)e���\�iZJZ�*[�LD�A� �ǡ��$?5?�2��P�uGԬ^��V�H俜�_^ۀ�����lvG��գ8�t�����u?��g&quot;�&gt;*�sP�i%y�zn������������U�mBk�;�ل�3��eA �&lt;��~���F|t�\&gt;��k_�P���M7F�y����2���f5f&lt;g5����;O��J��q3����9S�F������_���x6��Z&gt;�u��������N�e�N
+        * 	��F�%5�?s��ӥ*Q�����[�o}�\MxKZQSv������n7߯��_�g�E��q������zE��}���]� ��HQ�8��b4����͍�����{�e�����m[�^*�㸎�K��SGx���xp&lt;�)&#x27;�2@�|������Y��/Ş#�1Ϫ��o��_,�7meY���ی}&#x3D;�*~��o�۩&lt;}�Mg����՝�N�J^y?�8bNq��&lt;��Y���f�iE��YE]7%g��������%��a�$��$���d��)]�r�ܫM/t�&gt;�����)%����-�Y�&#x27;����� �ׅ&lt;���ȯ�_�{���� ���
+        ����]�����w ���y�8���)g�v��V�_� �(�&lt;;�V���%��ˋ�U�2��eT��۴&#x60;�j���&#x27;�����߈|;�j^,� �[�K��^��+�&gt;�7�#P�r�e�H
+        �9RF��YƦ&amp;�ZRѮ�������&lt;_R�2IW�y�/��N/_&#x3D;�&gt;��/�G&#x3D;Υg����X�Yo&amp;-���$3�]�q�*v��#�2F:w������éh���j�m�ķvw!��&lt;�P�ޫ�A���[���K���{��J�6�R��ӱխex���R�����;w���Ԓr+����k�
+        ����W���R�Eֵ(ͼЂ�XJ&gt;R�ʃ�N	�W޾g��09��z�ui4� N�����||���g._z7굶�t���E�Ï7��}4;Ÿ�h����&#x60;[Z�&amp;�&#x60;�a����$�3�_���rg�O��|k�¾�����߇��&#x27;��t���ik�.5�Ą7�r�g���5j�\�&lt;Ao�	5���QO�]̛o@	#9a�����	w���7�ψ����;&#x3D;cH��&amp;&gt;���j˶Q�+a�� �x�a�&lt;d�\�P����ݦ��-{5��ϰ�L4hS��������������o{���O�\��i�������ZGc�i�qyv�Q�h�\��;$�Ϡ����#������	�
+        ����N�w�O^�:\F�L�[N�����e��_�� ��&amp;�&lt;y� W!�~���� �N{���]�&quot;�Z�N���4�:�+3(f��&#x3D;G��1������?���:st�e+&#x27;vӽ����x&lt;&#x27;�����l�NPי��E�eeӲ9?��� �����IԵ�.º�曦Z���M��U*U������k��k����7~&quot;�f��O�����Ie�}�U���a$HŲ� ���Z��So��ؗ�e������k;չ�&lt;�[�$+�1FV&#x60;dH@�/&lt;��g���-ů��6�uo�-��Z;%@Hm�� ����&lt;~p�M�ꙆiS�ӌ�2Qm�\��ֲZ����x��+�xf��hB�&amp;����~�8�%�II�׾��G�t��&#x27;��A۩x�Kӿ~.�9�$�&#x60;9����ót6 ���/�U�� ��~���J���oX�IL�a���\bAd�m��� �����
+        ����&#x3D;}��&amp;פ��L.���#����
+        �����7�ϗq�!�V�����.�4�s&#x3D;�KspIe;َ0^f8 e�k�l�E�a��O�A;+-�Z��ۿkZ���9�&gt;���4��9�ӫ-\n��m�t�[_}��dѫ�&lt;�;&lt;���(æ�z��5�ۣwu&lt;��33]�۝Ğ��_���[�	˥���l�׭Cx�����ݵU_� �I� �&quot;|+���O
+        �U���n��R�ݝ|ɋ C0�r&gt;����߮��-쒯�$a��B���~�g8L�.y&#x27;���OV��e�?�x��ü�xƢ�������Z_��Ⱦ��W*m��o���Efx��v~:��n..&quot;�L�A1����#�Ưx��6:|PƲ��p� : s��/� ���X���/�?�1�����}i#���Ƃ�8ᐮ�U\�Mİ&#x27;��
+        �ظU�hIi�����V��pv���}I� �� ���+��{�|&#x3D;�gq��JH�β��k}��$�IJ�8�g��7�g�y�bx������&lt;q~�wֶ�gmkm�kj�����!K��luf&#x3D;  P���\]x��o�f��R򓸞O\�%�^I�^����&lt;E�j���z���#8�d��#C.�ʻWi_N���&#x27;��1t�0�,e$���v7�a��&amp;���K�ּd&amp;���&#x60;��D!�p�� @{�Q_n�d���|3��J�&#x27;A��y�n��2�&#x60;s��u�lQ_�G2ϳV�Ty���]?��/	�GІ2�8Ե� y��K���t?�z����B�
+        �5��s���RG����:�~Ǎ�R�Rtk+���c2\lq�&#x27;iG��&gt;�񏎴_xf�U��C�n�]�������P�S�
+        K����6�T��M�!hd�]pCg�|�o}%�2����g�C�kţ�8EN��W��&#x3D;�s�3�V&quot;�3j��~�ݛ[_]O�� ��������[)䵄G$���2����xeV_��?�?�m��_��&#x3D;��%���n&lt;�h�AS�рNA���u����Đ�XL˰������������������;�BM s�2 ����b�	K0���7׫��O�rߤ	dM�!�ҟ+��N������?��&gt;%����K�&amp;���[ct-ե�9�ˑ�.�G�f�&amp;���f�Y&lt;&#x3D;����-���n��l�&#x60;Dy\n��,x��(�-�q}cv�C&#x27;�#pXH�-2���V�okn�%�K�q$����~��ê0� �eo��hͳg��Y�m���-޷տ&#x3D;~F����؞3�[P���L�#�M#+H���S$n��2�I5��|9�G�d�|E�k~�u �9��uë�+�ܓ�1�I �?b�!?�o�׺G�-�U�}�I渲���&quot;��b0��B��̓�+�~/� �:&gt;$�W�:&gt;��xcK� ���26	��k{|:}�,Hɳ�&#x60;�ϸ_���8�J�-Ug����c�B�t��;������� �~סi4y��w;l�vZ6s�_�v�Y� x�����|�o �\x_Y�mO�-�����I.�r	�2�&lt;J�e���a/�^��o��� �g����կ�K��3�سs�chuM����_�d�ZЬ�(���O1db0X/&#x60;p8��_̾&amp;�L&gt;g����m-�W���_q�a��]��Xe^Q�	Y�$ӊ�-�q�]�}C�W���#/�� ڳ�W��Hl�+�K�8��b?:Ay܊�E}��)�L|k�~Ȟ�_�u�o�M�\# ��9UKg��pF�_z�c�
+        o�i�4���|C�C��������P����m��T�Vj�g�&#x3D;��}��* �2� 
+        9�(�ѫ���&lt;qQR�2k��Y�7&gt;+)�C���fϗ���k~e$���&#x27;ש�g�� ~���W|o x��K�Yd�I����q���Fk�WL����n?�@�U�� �j�7��ힵ�q,��&lt;�&gt;��d�,���å�K�v|��u,�^�r��h�;��I]��gI�?C%�qG�3�Fq_T�ϿWO��B��)�6&gt;¼k�}�tږ�
+        ���WS|��{��/���-�a��/mW��f���0�b��������,Σ��;���	xF.��jB�Z��_�v}���;BӴ&#x3D;7�*�b��m��Mt� �0&lt;�&#x60;&#x60;��ڼ� ��� ���]�Y|�Y��E�&quot;?�Dq%����E~w��?�S��xg³�ܐ�D�����5�%��&#x3D;Z�R��n�Y����wד����u12����K�yly�o�I��1�I,MZo�vp�쵳��˥�?P|5� �w��]{gg�Rf�����H�x�� 9�gֿo_��+�e�ՠ�v֋���#*�c�8����h��� 
+        �W�R��#H�ˌ��O�^�����^淳�&#x3D;�U�Iwy�؏@&#x3D;vT��^˄N�|_��/��/�eP��F�f�ڏ.�mk.��s�~-��&gt;��Zy�d����X&quot;m�Tq߷�p��T����J�I��P� H�ʴt�sל�J����K�o�v��7�gٌE b�Gs��:���5&quot;&lt;���v���U�VaQ��qM�/�?+�_2l-j��pq�Kr��Y������ga�k���G�)�umFG��ZQl�lA�}��&#x60;���h�����FΔTWd9f�+]�q�I�w&#x27;vQElqQ@Q@&gt;	9Ve��(�?�C������ �m��jW�i�,v?�Gqe�pq�Qؑ��5���ŧ�[�+��Z���%�?�d��F��N6�FrX~�2� b{�x�5�mm�m&gt;�ě�^#��� Ü�v���_�CH�]��%�~d�k H�����Xg�1�:W&gt;;�0�{�5*sN��������9�k��ѣC����\�����}C�?�*�P�:�B�oI�]�L�v�q�w {��� �?�X|3���jR&gt;��!t�y�
+        {�Ƽ��G�y�߄����jڥ���&amp;9-����K�+�&lt;c��}���us1�3���{J�����#���C�z��~}Ͽ��8K�Q�W^i��S�����}�K�kx��C��5��Ti$�Y9U?u3�{W2�&#x3D;x�6���t�N*VH�?����*���&amp;�}[aW�&amp;����^;�
+        t3$;UJ7V3���u�F{�&gt;(���%�o,��m8g�&#x27;���_�~��E���R5$*��y���o�b}a[��W��G�O��Fg�v�ێ�y
+        �s��y++�R��VJ����8�;�RYV\���n��#��K��I��$��vڗ��1��o�Y�˥��H�7Q!� �����G�a�����^(V�n�������!O6)r����d�$s^�:Г�&amp;�4|v+-��R�V��[J2i��f��^��e����{l�J��+cϔ�/��QA!EPEP�f�s�jZY��uuu&quot;�0�y%v8
+        �9$� ���L� �8|k��y�|kcៅ&gt;�.����������K0l	�1��j� �u|c�������g��Vw�0�ӡ� �h܀�gR�.���k��������� ��|W�g�_ۦ��X���±iv���E��h�0��Pt���0c��^�k��؊���h%�95{��U�}ߞ��r��&amp;��vV�?3��O� ��7��I��&gt;���/ƚ�j_�/O�&lt;��J ������\����� ��	&gt;#k�� [mk�Z��]�+&quot;ȱO��IV���A�i� �u~�&gt;��&gt;0��u���º����jZZ��&quot;��el�C)?Aֿ@�b؟����W�.��&gt;*���f��?��9&#x60;���/����-�?͍Ғ7o8&#x27;k���r��#^n|�O�F�Wo��o�h���1��R�,�ڽ��Wj����䶏���&quot;������r��g7�2��_�T���� �k8�	v�Jm��t
+        ]�����_��ƿ�_�f��_|B�����L�5Y��M(�eH!�&amp;U@�B�2H�$�k�+�����������!�ok�+¶���x�8��S��&lt;/&lt;��m�$����Y�s_{H+I��m��W�}��2&lt;���4䢛������~	��u�?xKj��R�]�����3�ӹ��9���Sx���q��jM��ۮ�!��I��{{t��� ��~ѷ�?co��zj̱ûQSp�oev�^Q��� �H,}M|�� 2��q��
+        9��建��kmB+�c��;���U�0��9 �&#x3D;@�7,�����RN��vn� }m�ݴ&#x3D;���3�]xdҨ�v*+Ef�����ϔn&lt;)����M��Ƌ�g�e��T�����a�)&amp;��w3&#x60;+��(� �;��?o߈�xS��G�SF���5����Ɍ�Xw�{s��nO�x��� �7���w��M/�� |�֝�]�4��NKO�&#x27;��
+        �d#�&#x27;.��{53��hR�W��jr��rWWVW]���|U��j�0���N���/^����!Z�� �N�� ��������m��&amp;B)�p_�s_�_�Y��� X��φ���n��e�L�[�t���n�� e���|�����{�����~�|37�|O�߅�K�j�^�v��O8��
+        �JM¨,�g��Nђ(�s�ؼ&lt;k�i]7k˥���z��B�e/YѨ�M.��]���OP�.��n�n-Y�B�BG�56��}KV��t�똳�|P3�}2~�~ٟ�P��ǯ|���{;/L��xK�v?���[x���s��c�s ��m�^?�9�?�� �M� 	�x�|?�K&#x3D;w�:��/!���x��K)&quot;0H��U�Ab�	a�&#x27;�éե�RJ.1oI)[ᕷW�Z��&#x3D;�����K�NK����Q�ܖ��K|N�]����?���$�Ŧj(��K�𾅤6�9�����%Fv[��D�I FH8�|c�,���&gt;�g�i?g�7K�Q��i�x!�~]Ĩ��n�f����� k&#x3D;W����O�������&amp;��$S�^)#+&#x60;UX �����G���� �n��7J���i&lt;I&amp;�?�-֫�Zɦ�]���Ȏ7
+        ;d�&#x27;����a��^�LW���*�M/&#x3D;Z��^�q�c��*9^IMƝe�R������4�cי�ρ��M��ߴN���_�Hn�;65[�V3��Uv�%6��:�\O�]jO�?/�cp���l�V2d�TF��\�\�rk�����
+        �� ��%���v����f����1������[F~Q��8&lt;���&gt;*|8�+� �����W�����Vx�|�[��84�Bh�o:��?�,���������z+6�S�%���(ڝ���u�[���{�&gt;/-�,$�8iF\�R�$���MA�&amp;�u);��~j� ��� �&#x27;R� �g� 
+        O�B����_�� �_��E����ࢾ&gt;���/j��ƭ���	&#x27;ai�b5��D@��f�Ğ�� �/�j���ۏ�k/�F�oV�����5U��D�W��Iu�P0Te@1]?�5�.XISW�T�NMk�H��s��R凎*/ݔ�U�^����si��RC*}�u*��������~џ�Ox�SmcĚь�޴I\�H��@�����q��&amp;�:�sr�}��U]?$y���(���Q@�Mr��Z����uqc}j�Hn-�1���0A��� ��+��M7¿4�c]wM�&amp;��Y#d&#x60;��,�&gt;���毃�Y�U�ml��G��xl~#�hͤ�]������� n{�Ԛ��~�C�$��7M-��Uln I9 ������5O����#�|IyV�HB[�q�kFrB��윌�&lt;א��o��w�Y,�
+        ������oV�mo������q�9ڌ_2J�I���������J���;�k�|+}�^��������/d&#x3D;^H����v�$���R���hx��o�t� ����/O*@��k[YU[v�m�#d�w1����y	9��e�x��_�k����O�U�q�NvR��+���U��&gt;���� ��w�4]���&#x27;�i� X����L_ N�Υ�U���m���拨�sᯂ�����h��䑦��o1�b��������9NS�J&gt;�]�]����*Y�5���~�����Z���Y[��������3�7�&amp;�&gt;�&gt;�[�$O4����#
+        	�nUq�8�*�Ŀ�W�t�7C�M����Sg���M����m�y8,py&lt;א�ZG.î_w����z]�|���b���ۛ�J��J� 3�O�_��~���x��߄�W�#x�����V*X~��s���zW7����xzM/��tQ��Hj&#x60;�It��H�*��$�� �y}��zQP������u�:��*��J�NN�|�������_~,\~���_����5~xa����X���H�B�gW�]~�:ρ4��&#x3D;����~�a&gt;�enF��J�&#x60;IC���el���b9F��A������k&#x27;i!�����l-��{��y���Ͻc��i�0�&quot;�b��mZֳZ&#x3D;�z�n}*T�ƥYBUd���9+J�i�*���lݛ�#��� �޻��_
+        ���~�瀦��	�Qk��5D�w�#�e��y@�GJ�Y� m/�N	���-�&gt;2�&lt;�ۋ���&gt;O�p���Mg^����Z����ԟzY�2;}I�V4�:�SW&#x27;v�i_���7�H��q�hQ�/\����vsqz8��F�b��R��|J��� ?���.��6�u	�W��P�m�U؃9U��&lt;f�?�����o�;�v��][�Z���b6�&lt;�H&lt;����0�� ��k�(�BXp���&gt;���7O1��T�e�O�E����S�?e/��R��&lt;G�k.���Z��hl[攬p�#���:���NO�3x����&lt;g�K�j�
+        �w�jwo}u#_jaf�ܻ��.	&#x27;�1�^CEL�4WZ��Vm6��hʆi���R��M&amp;�{�S��&gt;)x�&gt;&amp;x��Z�G�t�6m��!�mm¢�rq��&gt;��?E���F;#��INNr��QEQ!EPEPEPEPEPEPEPEPEPEPEPEPEP��</code></pre>
+                                        </div>
+                                        <div class="card-footer">
+                                            <button class="btn btn-outline-secondary btn-sm copyButton" type="button" data-clipboard-action="copy" data-clipboard-target="#copyText-c788b24f-d320-4076-beba-4e413e23fc4d">Copy to Clipboard</button>
+                                        </div>
+                                </div>
+                            </div>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="card border-info">
+                                <div class="card-body">
+                                <h5 class="card-title text-uppercase text-white text-center bg-info">Test Information</h5>
+                                    <h5 class="alert alert-success text-uppercase text-center">No Tests for this request</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.2.1/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.datatables.net/v/bs4/dt-1.10.18/datatables.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/remarkable/1.7.1/remarkable.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.2/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<!-- Set slider initial position depending on the localstorage state -->
+
+<script>
+(function () {
+  var sliderChecked = true;
+  if (localStorage.getItem('theme') === 'theme-light') {
+    setTheme('theme-light');
+    sliderChecked = false;
+  } else {
+    setTheme('theme-dark');
+    sliderChecked = true;
+  }
+  $(document).ready( function () {
+    document.getElementById('slider').checked = sliderChecked;
+  });
+})();
+</script>
+
+<!-- Data Table Configuration -->
+
+<script>
+$(document).ready( function () {
+    $('.datatable').DataTable({
+        "retrieve": true,
+        "paging": false,
+        "info": false,
+        "fixedColumns":   {
+            "heightMatch": 'none'
+        }
+    });
+});
+</script>
+
+<!-- Tooltip Configuration -->
+
+<script>
+$(document).ready(function() {
+    $('[data-toggle="tooltip"]').tooltip({
+        trigger : 'hover'
+    })
+})
+</script>
+
+<!-- Show/Hide The Folders -->
+
+<script>
+$('#openAll').on('click', function(e) {
+let clickCount = $(this).data("clickCount") || 1
+switch (clickCount){
+    case 1:
+            $('#folder-30579390-d8bb-4fe5-bac7-51705896ac7a-iteration-0').removeClass('collapsed')
+            $('#folder-collapse-30579390-d8bb-4fe5-bac7-51705896ac7a-iteration-0').addClass('show')
+        $('#openAll').html("Collapse Folders");
+        break;
+    case 2:
+            $('#folder-30579390-d8bb-4fe5-bac7-51705896ac7a-iteration-0').addClass('collapsed')
+            $('#folder-collapse-30579390-d8bb-4fe5-bac7-51705896ac7a-iteration-0').removeClass('show')
+        $('#openAll').html("Expand Folders");
+        break;
+}
+clickCount = clickCount > 1 ? 1 : ++clickCount;
+$(this).data("clickCount", clickCount)
+})
+</script>
+
+<!-- Show/Hide The Requests -->
+
+<script>
+$('#openAllRequests').on('click', function(e) {
+let clickCount = $(this).data("clickCount") || 1
+switch (clickCount){
+    case 1:
+            $('#requests-cc96a45c-b7ad-4766-b5d6-668860caadb5').removeClass('collapsed')
+            $('#collapse-cc96a45c-b7ad-4766-b5d6-668860caadb5').removeClass('collapsed')
+            $('#requests-cc96a45c-b7ad-4766-b5d6-668860caadb5').addClass('show')
+            $('#collapse-cc96a45c-b7ad-4766-b5d6-668860caadb5').addClass('show')
+            $('#requests-01e5998a-c8c8-4fb5-9363-e93ee14f7840').removeClass('collapsed')
+            $('#collapse-01e5998a-c8c8-4fb5-9363-e93ee14f7840').removeClass('collapsed')
+            $('#requests-01e5998a-c8c8-4fb5-9363-e93ee14f7840').addClass('show')
+            $('#collapse-01e5998a-c8c8-4fb5-9363-e93ee14f7840').addClass('show')
+            $('#requests-ab5dd0b6-519c-4a31-8381-ba36fb1a92ae').removeClass('collapsed')
+            $('#collapse-ab5dd0b6-519c-4a31-8381-ba36fb1a92ae').removeClass('collapsed')
+            $('#requests-ab5dd0b6-519c-4a31-8381-ba36fb1a92ae').addClass('show')
+            $('#collapse-ab5dd0b6-519c-4a31-8381-ba36fb1a92ae').addClass('show')
+            $('#requests-0f46c76f-ff59-4d77-ac31-ed8e4119196b').removeClass('collapsed')
+            $('#collapse-0f46c76f-ff59-4d77-ac31-ed8e4119196b').removeClass('collapsed')
+            $('#requests-0f46c76f-ff59-4d77-ac31-ed8e4119196b').addClass('show')
+            $('#collapse-0f46c76f-ff59-4d77-ac31-ed8e4119196b').addClass('show')
+        $('#openAllRequests').html("Collapse Requests");
+        break;
+    case 2:
+            $('#requests-cc96a45c-b7ad-4766-b5d6-668860caadb5').addClass('collapsed')
+            $('#collapse-cc96a45c-b7ad-4766-b5d6-668860caadb5').addClass('collapsed')
+            $('#requests-cc96a45c-b7ad-4766-b5d6-668860caadb5').removeClass('show')
+            $('#collapse-cc96a45c-b7ad-4766-b5d6-668860caadb5').removeClass('show')
+            $('#requests-01e5998a-c8c8-4fb5-9363-e93ee14f7840').addClass('collapsed')
+            $('#collapse-01e5998a-c8c8-4fb5-9363-e93ee14f7840').addClass('collapsed')
+            $('#requests-01e5998a-c8c8-4fb5-9363-e93ee14f7840').removeClass('show')
+            $('#collapse-01e5998a-c8c8-4fb5-9363-e93ee14f7840').removeClass('show')
+            $('#requests-ab5dd0b6-519c-4a31-8381-ba36fb1a92ae').addClass('collapsed')
+            $('#collapse-ab5dd0b6-519c-4a31-8381-ba36fb1a92ae').addClass('collapsed')
+            $('#requests-ab5dd0b6-519c-4a31-8381-ba36fb1a92ae').removeClass('show')
+            $('#collapse-ab5dd0b6-519c-4a31-8381-ba36fb1a92ae').removeClass('show')
+            $('#requests-0f46c76f-ff59-4d77-ac31-ed8e4119196b').addClass('collapsed')
+            $('#collapse-0f46c76f-ff59-4d77-ac31-ed8e4119196b').addClass('collapsed')
+            $('#requests-0f46c76f-ff59-4d77-ac31-ed8e4119196b').removeClass('show')
+            $('#collapse-0f46c76f-ff59-4d77-ac31-ed8e4119196b').removeClass('show')
+        $('#openAllRequests').html("Expand Requests");
+        break;
+}
+clickCount = clickCount > 1 ? 1 : ++clickCount;
+$(this).data("clickCount", clickCount)
+})
+</script>
+
+<!-- Show/Hide The Skipped Tests -->
+
+<script>
+$('#openAllSkipped').on('click', function(e) {
+let clickCount = $(this).data("clickCount") || 1
+switch (clickCount){
+    case 1:
+            $('#skipped-cc96a45c-b7ad-4766-b5d6-668860caadb5').removeClass('collapsed')
+            $('#skipped-collapse-cc96a45c-b7ad-4766-b5d6-668860caadb5').removeClass('collapsed')
+            $('#skipped-cc96a45c-b7ad-4766-b5d6-668860caadb5').addClass('show')
+            $('#skipped-collapse-cc96a45c-b7ad-4766-b5d6-668860caadb5').addClass('show')
+            $('#skipped-01e5998a-c8c8-4fb5-9363-e93ee14f7840').removeClass('collapsed')
+            $('#skipped-collapse-01e5998a-c8c8-4fb5-9363-e93ee14f7840').removeClass('collapsed')
+            $('#skipped-01e5998a-c8c8-4fb5-9363-e93ee14f7840').addClass('show')
+            $('#skipped-collapse-01e5998a-c8c8-4fb5-9363-e93ee14f7840').addClass('show')
+            $('#skipped-ab5dd0b6-519c-4a31-8381-ba36fb1a92ae').removeClass('collapsed')
+            $('#skipped-collapse-ab5dd0b6-519c-4a31-8381-ba36fb1a92ae').removeClass('collapsed')
+            $('#skipped-ab5dd0b6-519c-4a31-8381-ba36fb1a92ae').addClass('show')
+            $('#skipped-collapse-ab5dd0b6-519c-4a31-8381-ba36fb1a92ae').addClass('show')
+            $('#skipped-0f46c76f-ff59-4d77-ac31-ed8e4119196b').removeClass('collapsed')
+            $('#skipped-collapse-0f46c76f-ff59-4d77-ac31-ed8e4119196b').removeClass('collapsed')
+            $('#skipped-0f46c76f-ff59-4d77-ac31-ed8e4119196b').addClass('show')
+            $('#skipped-collapse-0f46c76f-ff59-4d77-ac31-ed8e4119196b').addClass('show')
+        $('#openAllSkipped').html("Collapse All Skipped Tests");
+        break;
+    case 2:
+            $('#skipped-cc96a45c-b7ad-4766-b5d6-668860caadb5').addClass('collapsed')
+            $('#skipped-collapse-cc96a45c-b7ad-4766-b5d6-668860caadb5').addClass('collapsed')
+            $('#skipped-cc96a45c-b7ad-4766-b5d6-668860caadb5').removeClass('show')
+            $('#skipped-collapse-cc96a45c-b7ad-4766-b5d6-668860caadb5').removeClass('show')
+            $('#skipped-01e5998a-c8c8-4fb5-9363-e93ee14f7840').addClass('collapsed')
+            $('#skipped-collapse-01e5998a-c8c8-4fb5-9363-e93ee14f7840').addClass('collapsed')
+            $('#skipped-01e5998a-c8c8-4fb5-9363-e93ee14f7840').removeClass('show')
+            $('#skipped-collapse-01e5998a-c8c8-4fb5-9363-e93ee14f7840').removeClass('show')
+            $('#skipped-ab5dd0b6-519c-4a31-8381-ba36fb1a92ae').addClass('collapsed')
+            $('#skipped-collapse-ab5dd0b6-519c-4a31-8381-ba36fb1a92ae').addClass('collapsed')
+            $('#skipped-ab5dd0b6-519c-4a31-8381-ba36fb1a92ae').removeClass('show')
+            $('#skipped-collapse-ab5dd0b6-519c-4a31-8381-ba36fb1a92ae').removeClass('show')
+            $('#skipped-0f46c76f-ff59-4d77-ac31-ed8e4119196b').addClass('collapsed')
+            $('#skipped-collapse-0f46c76f-ff59-4d77-ac31-ed8e4119196b').addClass('collapsed')
+            $('#skipped-0f46c76f-ff59-4d77-ac31-ed8e4119196b').removeClass('show')
+            $('#skipped-collapse-0f46c76f-ff59-4d77-ac31-ed8e4119196b').removeClass('show')
+        $('#openAllSkipped').html("Expand All Skipped Tests");
+        break;
+}
+clickCount = clickCount > 1 ? 1 : ++clickCount;
+$(this).data("clickCount", clickCount)
+})
+</script>
+
+<!-- Show/Hide The Failures -->
+
+<script>
+$('#openAllFailed').on('click', function(e) {
+let clickCount = $(this).data("clickCount") || 1
+let failedItemContent
+let failedItemHeading
+switch (clickCount){
+    case 1:
+        $('#openAllFailed').html("Collapse All Failed Tests");
+        break;
+    case 2:
+        $('#openAllFailed').html("Expand All Failed Tests");
+        break;
+}
+clickCount = clickCount > 1 ? 1 : ++clickCount;
+$(this).data("clickCount", clickCount)
+})
+</script>
+
+<!-- Pretty Print the Response Body-->
+
+<script>
+function isJSON(data)
+{
+    var ret = true;
+    try {
+            JSON.parse(data);
+    }catch(e) {
+            ret = false;
+    }
+    return ret;
+}
+
+function isXML(data)
+{
+    return (data.length > 0 && data[0] === '<');
+}
+
+// see https://gist.github.com/sente/1083506/d2834134cd070dbcc08bf42ee27dabb746a1c54d#gistcomment-2254622
+function formatXML(data) {
+    const PADDING = ' '.repeat(2); // set desired indent size here
+    const reg = /(>)(<)(\/*)/g;
+    let pad = 0;
+    xml = data.replace(reg, '$1\r\n$2$3');
+
+    return xml.split('\r\n').map((node, index) => {
+        let indent = 0;
+        if (node.match(/.+<\/\w[^>]*>$/)) {
+            indent = 0;
+        } else if (node.match(/^<\/\w/) && pad > 0) {
+            pad -= 1;
+        } else if (node.match(/^<\w[^>]*[^\/]>.*$/)) {
+            indent = 1;
+        } else {
+            indent = 0;
+        }
+
+        pad += indent;
+        return PADDING.repeat(pad - indent) + node;
+    }).join('\r\n');
+}
+
+$(".prettyPrint").each(function () {
+        var data = $(this).text();
+        // Verify whether data is JSON
+        if(isJSON(data))
+        {
+                obj = JSON.parse(data);
+                data = JSON.stringify(obj, null, 2);
+        }
+        else if(isXML(data)) {
+            data = formatXML(data);
+        }
+        $(this).text(data);
+});
+</script>
+
+
+<!-- Copy Response Body To Clipboard -->
+
+<script>
+    var clipboard = new ClipboardJS('.copyButton');
+
+    clipboard.on('success', function(e) {
+        e.clearSelection();
+        $(".copyButton").addClass("bg-success text-white")
+        e.trigger.textContent = '✔ Copied!';
+        window.setTimeout(function() {
+            $(".copyButton").removeClass("bg-success text-white")
+            e.trigger.textContent = 'Copy to Clipboard';
+        }, 2000);
+    });
+    clipboard.on('error', function(e) {
+        e.clearSelection();
+        $(".copyButton").addClass("bg-danger text-white")
+        e.trigger.textContent = '✗ Not Copied';
+        window.setTimeout(function() {
+            $(".copyButton").removeClass("bg-danger text-white")
+            e.trigger.textContent = 'Copy to Clipboard';
+        }, 2000);
+    });
+
+</script>
+
+<!-- Render the Description Markdown and link in the test failures -->
+
+<script>
+    const remarkable = new Remarkable();
+
+    const descriptions = document.querySelectorAll(".renderMarkdown");
+    descriptions.forEach(description => {
+        description.innerHTML = renderHtmlFromMarkdown(description.textContent);
+    });
+    function renderHtmlFromMarkdown(markdown) {
+        return remarkable.render(trim(markdown));
+    }
+    function trim(string) {
+        return string ? string.replace(/^ +| +$/gm, "") : string;
+    }
+</script>
+
+<!-- Show/Hide The Toggles When Scrolling The Page -->
+
+<script>
+window.onscroll = function() {scrollFunction()};
+
+function scrollFunction() {
+  if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+    document.getElementById("topOfRequestsScreen").style.display = "block";
+    document.getElementById("topOfFailuresScreen").style.display = "block";
+    document.getElementById("topOfSkippedScreen").style.display = "block";
+    document.getElementById("openAll").style.display = "none";
+    document.getElementById("openAllRequests").style.display = "none";
+
+
+  } else {
+    document.getElementById("topOfRequestsScreen").style.display = "none";
+    document.getElementById("topOfFailuresScreen").style.display = "none";
+    document.getElementById("topOfSkippedScreen").style.display = "none";
+    document.getElementById("openAll").style.display = "block";
+    document.getElementById("openAllRequests").style.display = "block";
+
+  }
+}
+
+function topFunction() {
+  document.body.scrollTop = 0;
+  document.documentElement.scrollTop = 0;
+}
+</script>
+
+<!-- Creates The Iteration Tabs -->
+
+<script type="text/javascript">
+    "use strict";
+
+window.onload = function () {
+
+  // set display for all blocks of response
+  var allItems = document.querySelectorAll('[class*=iteration-]');
+  allItems.forEach(function(elem){
+    elem.style.display = 'block';
+  });
+
+   
+  let totalIterations = 1;
+   
+
+  let menu = document.querySelector('#execution-menu .nav');
+
+  for(var i = 0; i < totalIterations; i++)
+  {
+    let li = document.createElement('li');
+    li.appendChild(document.createTextNode((i + 1)));
+    li.setAttribute('id', 'iteration-' + i);
+    li.classList.add("custom-tab");
+    li.classList.add("itPassed");
+
+    li.addEventListener('click', function() {
+      //set display to none for all except row
+      let allItems = document.querySelectorAll('[class*=iteration-]:not(.row)');
+      allItems.forEach(function(elem) {
+        elem.style.display = 'none';
+      })
+
+      let allMenus = document.querySelectorAll('[id*=iteration-]');
+      allMenus.forEach(function(elem){
+        elem.style.borderBottom = 'none';
+      })
+
+      this.style.borderBottom = 'solid 3px #032a33';
+
+      let items = document.querySelectorAll("." + this.id + ':not(.row)');
+      items.forEach(function(elem) {
+        elem.style.display = elem.style.display == 'block' ? 'none' : 'block';
+      })
+    });
+    menu.appendChild(li);
+  }
+
+  //shows first tab data
+  document.getElementById('iteration-0').click();
+  document.getElementById('iterationSelected').innerHTML = `Iteration ${document.getElementById('iteration-0').innerHTML} selected`
+
+}
+</script>
+
+<!-- Create the Selected Iteration Label -->
+
+<script>
+$(document).ready(function(){
+    $(function() {
+        $("#iterationList li").click(function() {
+            document.getElementById('iterationSelected').innerHTML = "Iteration " + this.innerHTML + " selected"
+        });
+    });
+});
+</script>
+
+<!-- Filter Action for the Iterations -->
+
+<script>
+$("#filterInput").on("input paste", function() {
+    var value = $(this).val();
+    $("#iterationList li").filter(function() {
+	    $("#showOnlyFailures").data("clickCount") ? $("#showOnlyFailures").click():null;
+        $(this).toggle($(this).text().indexOf(value) > -1)
+    });
+});
+</script>
+
+<!-- Showing the Failed Interations -->
+
+<script>
+$('#showOnlyFailures').on('click', function(e) {
+    let clickCount = $(this).data("clickCount") || 1
+	$("#filterInput").val()!="" && clickCount==1 ? $("#filterInput").val('').trigger('input'): null;
+    let selectedIteration = $('#iterationList li').filter(function () {
+        return $(this).css('border-bottom').indexOf("solid") > -1 && $(this).hasClass('itFailed');
+    });
+    selectedIteration.length || clickCount > 1 ? null : $("#iterationList li.itFailed")[0].click()
+    $("#iterationList li.itPassed").toggle()
+    $("div.bg-success [id*=requests]").parents('[class^="row iteration-"]').toggle();
+    clickCount = clickCount > 1 ? 1 : ++clickCount;
+    clickCount > 1 ? $("#showOnlyFailures").html("Show All Iterations") : $("#showOnlyFailures").html("Show Failed Iterations");
+    $(this).data("clickCount", clickCount)
+})
+</script>
+</body>
+</html>
