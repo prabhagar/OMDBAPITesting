@@ -8,6 +8,52 @@
 	"item": [
 		{
 			"name": "GuardianOfTheGalaxy",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"",
+							"pm.test(\"Response status code is 200\", function () {",
+							"    pm.expect(pm.response.code).to.equal(200);",
+							"});",
+							"",
+							"",
+							"pm.test(\"The Ratings array should exist\", function () {",
+							"    const responseData = pm.response.json();",
+							"",
+							"    pm.expect(responseData.Ratings).to.exist;",
+							"    pm.expect(responseData.Ratings).to.be.an('array');",
+							"});",
+							"",
+							"pm.test(\"Title field is a non-empty string\", function () {",
+							"    const responseData = pm.response.json();",
+							"",
+							"    pm.expect(responseData).to.be.an(\"object\");",
+							"    pm.expect(responseData.Title).to.be.a(\"string\").and.to.have.lengthOf.at.least(1, \"Value should not be empty\");",
+							"});",
+							"",
+							"",
+							"pm.test(\"The Year field should be a valid year format\", function () {",
+							"    const responseData = pm.response.json();",
+							"",
+							"    pm.expect(responseData).to.be.an('object');",
+							"    pm.expect(responseData.Year).to.match(/^\\d{4}$/, \"Year should be a four-digit number\");",
+							"});",
+							"",
+							"",
+							"pm.test(\"The Runtime field is in a valid format\", function () {",
+							"    const responseData = pm.response.json();",
+							"",
+							"    pm.expect(responseData.Runtime).to.match(/^\\d+ (min|h \\d+ min)$/);",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "GET",
 				"header": [],
@@ -102,7 +148,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://img.omdbapi.com/?i=tt11663228&apikey=357d6210",
+					"raw": "http://img.omdbapi.com/?i=tt0113189&apikey=357d6210",
 					"protocol": "http",
 					"host": [
 						"img",
@@ -115,7 +161,7 @@
 					"query": [
 						{
 							"key": "i",
-							"value": "tt11663228"
+							"value": "tt0113189"
 						},
 						{
 							"key": "apikey",
